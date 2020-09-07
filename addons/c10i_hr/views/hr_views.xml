@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Full Overide untuk memudahkan edit, Karena Modul Base akan dimodifikasi untuk menyesuaikan HR di Indonesia-->
+        <!-- Top menu item -->
+        <menuitem id="hr.menu_hr_root" name="Karyawan" groups="hr.group_hr_manager,hr.group_hr_user,base.group_user" web_icon="hr,static/description/icon.png" sequence="75"/>
+
+        <!-- HR Jobs -->
+        <record id="hr.view_hr_job_form" model="ir.ui.view">
+            <field name="name">hr.job.form</field>
+            <field name="model">hr.job</field>
+            <field name="arch" type="xml">
+                <form string="Job">
+                    <header>
+                        <button name="set_recruit" string="Rekrutmen Dijalankan" states="open" type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button name="set_open" string="Rekrutmen Telah Berakhir" states="recruit" type="object" groups="base.group_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="recruit,open"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label name="label_name_job" string="Nama Pekerjaan" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Bagian Administrasi Gudang"/></h1>
+                        </div>
+                        <group name="employee_data">
+                            <group>
+                                <field name="department_id" string="Departemen"/>
+                                <field name="no_of_recruitment" string="Jumlah Rekrutmen"/>
+                            </group>
+                        </group>
+                        <div attrs="{'invisible': [('state', '!=', 'recruit')]}">
+                            <label string="Deskripsi"/>
+                            <field name="description"/>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr.view_hr_job_tree" model="ir.ui.view">
+            <field name="name">hr.job.tree</field>
+            <field name="model">hr.job</field>
+            <field name="arch" type="xml">
+                <tree string="Pekerjaan" decoration-bf="message_needaction==True">
+                    <field name="name" string="Nama Pekerjaan"/>
+                    <field name="department_id" string="Departemen"/>
+                    <field name="no_of_employee" string="Karyawan Aktif"/>
+                    <field name="no_of_recruitment" string="Jumlah Pelamar"/>
+                    <field name="expected_employees" string="Perkiraan Total Karyawan"/>
+                    <field name="no_of_hired_employee" string="Lamaran Diterima"/>
+                    <field name="state" string="Status"/>
+                    <field name="message_needaction" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr.view_job_filter" model="ir.ui.view">
+            <field name="name">hr.job.search</field>
+            <field name="model">hr.job</field>
+            <field name="arch" type="xml">
+                <search string="Jobs">
+                    <field name="name" string="Pekerjaan"/>
+                    <filter domain="[('state','=','open')]" string="In Position"/>
+                    <filter domain="[('state','=','recruit')]" string="In Recruitment" name="in_recruitment"/>
+                    <field name="department_id"/>
+                    <separator/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Departement" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Perusahaan" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="hr.action_hr_job" model="ir.actions.act_window">
+            <field name="name">Posisi</field>
+            <field name="res_model">hr.job</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr.view_job_filter"/>
+            <field name="context">{"search_default_Current":1}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan posisi pekerjaan baru.
+              </p><p>
+                Digunakan untuk mendefinisikan pekerjaan dan kebutuhan mereka. Anda dapat melacak jumlah karyawan yang Anda miliki per posisi pekerjaan dan ikuti perubahan sesuai dengan apa yang anda rencanakan untuk kedepannya.
+              </p><p>
+                Anda dapat melampirkan survei ke posisi pekerjaan. Ini akan digunakan diproses rekrutmen untuk mengevaluasi pelamar untuk posisi pekerjaan.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="hr.action_hr_job" id="hr.menu_c10i_hr_job" parent="hr.menu_hr_root" sequence="91" groups="hr.group_hr_user"/>
+
+        <!-- HR Employee-->
+        <record id="hr.view_employee_form" model="ir.ui.view">
+            <field name="name">view.c10i.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">17</field>
+            <field name="arch" type="xml">
+                <form string="Karyawan">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Nama Karyawan"/>
+                            </h1>
+                        </div>
+                        <field name="category_ids" widget="many2many_tags" placeholder="Kategori Karyawan" options="{'no_create_edit': True}" groups="hr.group_hr_user"/>
+                        <notebook>
+                            <page name="public" string="Informasi Umum">
+                                <group>
+                                    <group string="Data Karyawan" name="employee_data_info">
+                                        <field name="no_induk"/>
+                                        <field name="department_id" string="Departemen"/>
+                                        <field name="job_id" string="Posisi"/>
+                                        <field name="parent_id" string="Nama Manajer"/>
+                                        <field name="coach_id" string="Nama Kepala Bagian"/>
+                                        <field name="work_location"/>
+                                    </group>
+                                </group>
+                                <field name="notes" placeholder="Informasi Lain ..." colspan="4"/>
+                            </page>
+                            <page name="personal_information" string="Data Pribadi" groups="hr.group_hr_user">
+                                <group>
+                                    <group string="Kewarganegaraan &amp; Data Lainnya">
+                                        <field name="nationality_id" options='{"no_open": True, "no_create": True}' string="Kewarganegaraan"/>
+                                        <field name="identification_id" groups="hr.group_hr_user" string="No. KTP"/>
+                                        <field name="npwp"/>
+                                        <field name="bpjs_kesehatan"/>
+                                        <field name="bpjs_ketenagakerjaan"/>
+                                        <field name="passport_id" groups="hr.group_hr_user" string="No. Passport"/>
+                                        <field name="bank_account_id" context="{'default_partner_id': address_home_id}" string="Rekening Bank"/>
+                                    </group>
+                                    <group string="Data Diri">
+                                        <field name="birthday" string="Tanggal Lahir" required="1"/>
+                                        <field name="gender" string="Jenis Kelamin" required="1"/>
+                                        <field name="religion" required="1"/>
+                                        <field name="marital" required="1"/>
+                                        <field name="ptkp_id" domain="[('marital','=',marital)]" options="{'no_create_edit': True}" required="1"/>
+                                        <label for="street" string="Alamat"/>
+                                        <div class="o_address_format">
+                                            <field name="street" placeholder="Alamat..." class="o_address_street"/>
+                                            <field name="street2" placeholder="Alamat 2..." class="o_address_street"/>
+                                            <field name="city_id" placeholder="Kota" style="width:50%;" options='{"no_open": True}'/>
+                                            <field name="state_id" style="width:32%;" placeholder="Provinsi" options='{"no_open": True}'/>
+                                            <field name="zip" placeholder="Kode Pos" style="width:18%;"/>
+                                            <field name="country_id" placeholder="Negara" class="o_address_country" options='{"no_open": True}'/>
+                                        </div>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="education_information" string="Pendidikan" groups="hr.group_hr_user">
+                                <group>
+                                    <field name="education_ids" nolabel="1">
+                                        <tree string="Pendidikan" editable="bottom">
+                                            <field name="level"/>
+                                            <field name="name"/>
+                                            <field name="major"/>
+                                            <field name="start_year"/>
+                                            <field name="end_year"/>
+                                            <field name="note"/>
+                                        </tree>
+                                        <form>
+                                            <sheet>
+                                                <div class="oe_title">
+                                                    <label for="Name" class="oe_edit_only"/>
+                                                    <h1>
+                                                        <field name="name" placeholder="Nama Sekolah"/>
+                                                    </h1>
+                                                </div>
+                                                <group>
+                                                    <group>
+                                                        <field name="level"/>
+                                                        <field name="major"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="start_year"/>
+                                                        <field name="end_year"/>
+                                                    </group>
+                                                </group>
+                                                <field name="note" nolabel="1" colspan="4"/>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="license_information" string="SIM" groups="hr.group_hr_user">
+                                <group>
+                                    <field name="license_ids" nolabel="1">
+                                        <tree string="SIM" editable="bottom">
+                                            <field name="license_type"/>
+                                            <field name="name"/>
+                                            <field name="expiry_date"/>
+                                            <field name="note"/>
+                                        </tree>
+                                        <form>
+                                            <sheet>
+                                                <div class="oe_title">
+                                                    <label for="Name" class="oe_edit_only"/>
+                                                    <h1>
+                                                        <field name="name" placeholder="No. SIM"/>
+                                                    </h1>
+                                                </div>
+                                                <group>
+                                                    <group>
+                                                        <field name="license_type"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="expiry_date"/>
+                                                    </group>
+                                                </group>
+                                                <field name="note" nolabel="1" colspan="4"/>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="experience_information" string="Pengalaman Kerja" groups="hr.group_hr_user">
+                                <group>
+                                    <field name="experinece_ids" nolabel="1">
+                                        <tree string="Pengalaman Kerja" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="job_name"/>
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                            <field name="note"/>
+                                        </tree>
+                                        <form>
+                                            <sheet>
+                                                <div class="oe_title">
+                                                    <label for="Name" class="oe_edit_only"/>
+                                                    <h1>
+                                                        <field name="name" placeholder="No. SIM"/>
+                                                    </h1>
+                                                </div>
+                                                <group>
+                                                    <group>
+                                                        <field name="start_date"/>
+                                                        <field name="job_name"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="end_date"/>
+                                                    </group>
+                                                </group>
+                                                <field name="note" nolabel="1" colspan="4"/>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="ptkp_information" string="PTKP History" groups="hr.group_hr_user">
+                                <group>
+                                    <field name="ptkp_history_ids" nolabel="1" readonly="1">
+                                        <tree>
+                                            <field name="date"/>
+                                            <field name="ptkp_id"/>
+                                        </tree>
+                                        <form>
+                                            <group>
+                                                <field name="date"/>
+                                                <field name="ptkp_id"/>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="hr_settings" string="Pengaturan HR" groups="hr.group_hr_user">
+                                <group>
+                                    <group string="Pengaturan Umum" name="active_group">
+                                        <field name="address_home_id" context="{'show_address': 1}" options='{"always_reload": True, "highlight_first_line": True}' string="Alamat Rumah"/>
+                                        <field name="user_id" string="Relasi User"/>
+                                        <field name="calendar_id" string="Jam Kerja"/>
+                                    </group>
+                                    <group string="Data Perusahaan">
+                                        <field name="company_id" readonly="1" string="Nama Perusahaan"/>
+                                        <field name="address_id" context="{'show_address': 1}" options='{"always_reload": True, "highlight_first_line": True}' string="Alamat Perusahaan"/>
+                                        <field name="mobile_phone"/>
+                                        <field name="work_phone"/>
+                                        <field name="work_email" widget="email"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+            <field name="name">Karyawan</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik tombol untuk menambahkan karyawan baru.
+              </p><p>
+                Dengan hanya melihat sekilas pada layar karyawan Odoo, Anda
+                dapat dengan mudah menemukan semua informasi yang Anda butuhkan untuk setiap orang berupa
+                data kontak, posisi pekerjaan, ketersediaan, dll.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="hr.menu_open_view_employee_list_my" action="hr.open_view_employee_list_my" parent="hr.menu_hr_root" sequence="3"/>
+
+        <!-- HR Department -->
+        <record id="hr.open_module_tree_department" model="ir.actions.act_window">
+            <field name="name">Departemen</field>
+            <field name="res_model">hr.department</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="hr.view_department_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a department.
+              </p><p>
+                Odoo's department structure is used to manage all documents
+                related to employees by departments: expenses, timesheets,
+                leaves and holidays, recruitments, etc.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="hr.open_module_tree_department" id="hr.menu_hr_department_tree" parent="hr.menu_hr_root" sequence="90" groups="hr.group_hr_user"/>
+
+        <!-- Employee Category Ovveride-->
+        <record id="hr.view_employee_category_form" model="ir.ui.view">
+            <field name="name">hr.employee.category.form</field>
+            <field name="model">hr.employee.category</field>
+            <field name="arch" type="xml">
+                <form string="Tag Karyawan">
+                    <group>
+                        <field name="name" string="Nama"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr.view_employee_category_list" model="ir.ui.view">
+            <field name="name">hr.employee.category.list</field>
+            <field name="model">hr.employee.category</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Tag Karyawan">
+                    <field name="name" string="Nama"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr.open_view_categ_form" model="ir.actions.act_window">
+            <field name="name">Tag Karyawan</field>
+            <field name="res_model">hr.employee.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr.menu_view_employee_category_form" action="hr.open_view_categ_form" parent="hr.menu_human_resources_configuration" groups="base.group_no_one" sequence="1"/>
+
+        <!-- Employee PTKP-->
+        <record id="view_ptkp_form" model="ir.ui.view">
+            <field name="name">view.ptkp.form</field>
+            <field name="model">hr.ptkp</field>
+            <field name="arch" type="xml">
+                <form string="PTKP">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code" required="1"/>
+                                <field name="name" required="1"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="children" required="1"/>
+                                <field name="marital" required="1"/>
+                                <field name="value" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_ptkp_tree" model="ir.ui.view">
+            <field name="name">view.ptkp.tree</field>
+            <field name="model">hr.ptkp</field>
+            <field name="arch" type="xml">
+                <tree string="PTKP">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="marital"/>
+                    <field name="value"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_ptkp_filter" model="ir.ui.view">
+            <field name="name">view.ptkp.filter</field>
+            <field name="model">hr.ptkp</field>
+            <field name="arch" type="xml">
+                <search string="PTKP">
+                    <field name="name" string="Nama PTKP" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <field name="marital" string="Status Pernikahan"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <filter string="Active" name="inactive" domain="[('active','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status Pernikahan" domain="[]" context="{'group_by':'marital'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_ptkp" model="ir.actions.act_window">
+            <field name="name">PTKP</field>
+            <field name="res_model">hr.ptkp</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_ptkp_filter"/>
+        </record>
+
+        <menuitem id="menu_ptkp" action="action_ptkp" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="21"/>
+
+        <!-- Employee Insurance-->
+        <record id="view_insurance_form" model="ir.ui.view">
+            <field name="name">view.insurance.form</field>
+            <field name="model">hr.insurance</field>
+            <field name="arch" type="xml">
+                <form string="Asuransi">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="potongan" required="1"/>
+                                <field name="date_from" required="1" attrs="{'readonly': [('old_id', '!=', False)]}"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="type" required="1"/>
+                                <field name="tunjangan" required="1"/>
+                                <field name="date_to" required="1"/>
+                                <field name="old_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Accounting">
+                                <group>
+                                    <group name="pl_account">
+                                        <field name="tunjangan_account_id" />
+                                    </group>
+                                    <group name="bs_account">
+                                        <field name="setoran_account_id" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_insurance_tree" model="ir.ui.view">
+            <field name="name">view.insurance.tree</field>
+            <field name="model">hr.insurance</field>
+            <field name="arch" type="xml">
+                <tree string="Asuransi">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="potongan"/>
+                    <field name="tunjangan"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_insurance_filter" model="ir.ui.view">
+            <field name="name">view.insurance.filter</field>
+            <field name="model">hr.insurance</field>
+            <field name="arch" type="xml">
+                <search string="Asuransi">
+                    <field name="name" string="Nama Asuransi"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <filter string="Active" name="inactive" domain="[('active','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Tipe" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_insurance" model="ir.actions.act_window">
+            <field name="name">Asuransi</field>
+            <field name="res_model">hr.insurance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'readonly_by_pass': ['old_id','date_from']}</field>
+            <field name="search_view_id" ref="view_insurance_filter"/>
+        </record>
+
+        <menuitem id="menu_insurance" action="action_insurance" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="22"/>
+
+        <!-- Employee UMR-->
+        <record id="view_minimum_wage_form" model="ir.ui.view">
+            <field name="name">view.minimum.wage.form</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="arch" type="xml">
+                <form string="UMR">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="active,notactive"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="UMR-0001" required="1"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="year" required="1"/>
+                                <field name="date_from" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="umr_month" required="1"/>
+                                <field name="date_to" required="1"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_minimum_wage_tree" model="ir.ui.view">
+            <field name="name">view.minimum.wage.tree</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="arch" type="xml">
+                <tree string="UMR">
+                    <field name="name"/>
+                    <field name="year"/>
+                    <field name="umr_month"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="state"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_minimum_wage_filter" model="ir.ui.view">
+            <field name="name">view.minimum.wage.filter</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="arch" type="xml">
+                <search string="UMR">
+                    <field name="name" string="Nama UMR"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_minimum_wage" model="ir.actions.act_window">
+            <field name="name">UMR</field>
+            <field name="res_model">hr.minimum.wage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'readonly_by_pass': True}</field>
+            <field name="search_view_id" ref="view_minimum_wage_filter"/>
+        </record>
+
+        <menuitem id="menu_minimum_wage" action="action_minimum_wage" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="23"/>
+
+        <!-- Employee Overtime-->
+        <record id="view_overtime_form" model="ir.ui.view">
+            <field name="name">view.overtime.form</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <form string="Lembur">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="hours" required="1"/>
+                                <field name="normal_day" required="1"/>
+                                <field name="holiday" required="1"/>
+                            </group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="work_hours" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_overtime_tree" model="ir.ui.view">
+            <field name="name">view.overtime.tree</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Lembur">
+                    <field name="name"/>
+                    <field name="hours"/>
+                    <field name="normal_day"/>
+                    <field name="holiday"/>
+                    <field name="work_hours"/>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_overtime_filter" model="ir.ui.view">
+            <field name="name">view.overtime.filter</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <search string="Lembur">
+                    <field name="name" string="Nama Lembur"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <filter string="Active" name="inactive" domain="[('active','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_overtime" model="ir.actions.act_window">
+            <field name="name">Lembur</field>
+            <field name="res_model">hr.overtime</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_overtime_filter"/>
+        </record>
+
+        <menuitem id="menu_overtime" action="action_overtime" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="24"/>
+
+        <!-- Employee Nature-->
+        <record id="view_nature_form" model="ir.ui.view">
+            <field name="name">view.nature.form</field>
+            <field name="model">hr.nature</field>
+            <field name="arch" type="xml">
+                <form string="Natura">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="ptkp_id" required="1"/>
+                                <field name="nature" required="1"/>
+                                <field name="potongan_kg" required="1"/>
+                                <field name="weight" required="1"/>
+                                <field name="weight_married" attrs="{'invisible':[('married','=',False)],'required':[('married','!=',False)]}"/>
+                                <field name="weight_children" attrs="{'invisible':[('children','=',0)],'required':[('children','&gt;',0)]}"/>
+                            </group>
+                            <group>
+                                <field name="married" readonly="1"/>
+                                <field name="children" readonly="1"/>
+                                <field name="value_rp" readonly="1"/>
+                                <field name="potongan_rp" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_nature_tree" model="ir.ui.view">
+            <field name="name">view.nature.tree</field>
+            <field name="model">hr.nature</field>
+            <field name="arch" type="xml">
+                <tree string="Natura">
+                    <field name="name"/>
+                    <field name="ptkp_id"/>
+                    <field name="nature"/>
+                    <field name="married"/>
+                    <field name="children"/>
+                    <field name="weight"/>
+                    <field name="weight_married"/>
+                    <field name="weight_children"/>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_nature_filter" model="ir.ui.view">
+            <field name="name">view.nature.filter</field>
+            <field name="model">hr.nature</field>
+            <field name="arch" type="xml">
+                <search string="Natura">
+                    <field name="name" string="Nama Natura"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <filter string="Active" name="inactive" domain="[('active','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_nature" model="ir.actions.act_window">
+            <field name="name">Natura</field>
+            <field name="res_model">hr.nature</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_nature_filter"/>
+        </record>
+
+        <menuitem id="menu_nature" action="action_nature" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="25"/>
+
+        <!-- Employee Religion-->
+        <record id="view_employee_religion_form" model="ir.ui.view">
+            <field name="name">view.employee.religion.form</field>
+            <field name="model">hr.employee.religion</field>
+            <field name="arch" type="xml">
+                <form string="Agama">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_religion_tree" model="ir.ui.view">
+            <field name="name">view.employee.religion.tree</field>
+            <field name="model">hr.employee.religion</field>
+            <field name="arch" type="xml">
+                <tree string="Agama">
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_employee_religion_filter" model="ir.ui.view">
+            <field name="name">view.employee.religion.filter</field>
+            <field name="model">hr.employee.religion</field>
+            <field name="arch" type="xml">
+                <search string="Agama">
+                    <field name="name" string="Agama" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <filter string="Active" name="inactive" domain="[('active','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+
+        <record id="action_employee_religion" model="ir.actions.act_window">
+            <field name="name">Agama</field>
+            <field name="res_model">hr.employee.religion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_employee_religion_filter"/>
+        </record>
+
+        <menuitem id="menu_employee_religion" action="action_employee_religion" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="26"/>
+    </data>
+</odoo>

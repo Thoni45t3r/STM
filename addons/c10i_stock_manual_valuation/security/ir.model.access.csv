@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_manual_valuation_1,product_valuation product_valuation_user,model_product_valuation,group_stock_manual_valuation,1,1,1,0
+access_manual_valuation_2,account.account  product_valuation_user,account.model_account_account,group_stock_manual_valuation,1,0,0,0
+access_manual_valuation_3,account.journal product_valuation_user,account.model_account_journal,group_stock_manual_valuation,1,0,0,0
+access_manual_valuation_4,account.move product_valuation_user,account.model_account_move,group_stock_manual_valuation,1,1,1,1
+access_manual_valuation_5,account.move.line product_valuation_user,account.model_account_move_line,group_stock_manual_valuation,1,1,1,1

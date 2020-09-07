@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="header_logo" pageWidth="567" pageHeight="50" columnWidth="567" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="90851fd9-e691-4de6-b755-58f40ce8ff72">
+	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SJAI Lokal Server"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="Company_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT rp."name"
+, rp.street
+, rp.street2
+, rc.rml_header1
+, rp.city
+, rp.phone
+, rp.fax
+, rp.email
+, rp.website
+, rcs.name AS state
+, rcy.name AS country
+, rp.zip AS zip
+, rp.vat AS tax
+FROM res_company rc
+INNER JOIN res_partner rp ON rp."id" = rc.partner_office_id
+LEFT OUTER JOIN res_country rcy ON rcy."id" = rp.country_id
+LEFT OUTER JOIN res_country_state rcs ON rcs."id" = rp.state_id
+WHERE rc."id" = $P{Company_ID}]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="street" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="street"/>
+	</field>
+	<field name="street2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="street2"/>
+	</field>
+	<field name="rml_header1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="rml_header1"/>
+	</field>
+	<field name="city" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="city"/>
+	</field>
+	<field name="phone" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="phone"/>
+	</field>
+	<field name="fax" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="fax"/>
+	</field>
+	<field name="email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="email"/>
+	</field>
+	<field name="website" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="website"/>
+	</field>
+	<field name="state" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="state"/>
+	</field>
+	<field name="country" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="country"/>
+	</field>
+	<field name="zip" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="zip"/>
+	</field>
+	<field name="tax" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="tax"/>
+	</field>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<image scaleImage="RetainShape">
+				<reportElement x="0" y="0" width="50" height="50" uuid="cfdcd2e6-da6e-4d35-bb66-4866de8cf0ca"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/logo.png"]]></imageExpression>
+			</image>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="282" y="1" width="285" height="48" uuid="5adb3bdc-2484-49a5-942c-73b85832d6d4"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="294" y="5" width="160" height="10" uuid="f82c63ce-3181-4c09-9258-ec02a12b9592"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{street} == null ? "" : $F{street}) + " " + ($F{street2} == null ? "" : $F{street2})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="15" width="100" height="10" uuid="489686c9-20dd-421c-ac13-adb8e0d19ef2"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{website} == null ? "-" : $F{website}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="5" width="100" height="10" uuid="03ff9704-0cda-43a7-9c01-733485e08007"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fax} == null ? "" : $F{fax}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="294" y="15" width="160" height="10" uuid="636e8442-27e0-46fa-95ce-9e028ded5101"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{city} == null ? "" : $F{city}) + ", " + ($F{state} == null? "" : $F{state})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="294" y="35" width="160" height="10" uuid="fc813424-9b4a-45a5-bea4-9aa5249f9d9d"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{phone} == null ? "" : $F{phone}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="284" y="5" width="10" height="10" uuid="986347c5-46b7-4f68-801a-e0949d106e8f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/address.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="284" y="35" width="10" height="10" uuid="4cba142a-8569-4e55-ab52-2c1e7ec1705f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/phone.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="454" y="5" width="10" height="10" uuid="df90bcb2-ad8e-43ee-b687-ba6996b64c80"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/fax.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="454" y="15" width="10" height="10" uuid="69f13edb-668b-44ea-90ee-44b8e93ddeb1"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/website.png"]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="294" y="25" width="160" height="10" uuid="133aa359-f64e-40de-b83b-382ec5515504"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{country} == null ? "" : $F{country})  + ",  " + ($F{zip} == null? "" :  $F{zip})]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="454" y="25" width="10" height="10" uuid="dbb04c4a-6adf-4112-aa8e-ffb97085eb02"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/email.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="25" width="100" height="10" uuid="fcc8564b-aad1-441a-8635-5d0933e0db1c"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email} == null ? "-" : $F{email}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="454" y="35" width="10" height="10" uuid="898c1a14-dac9-4741-8f23-33097e6c16e9"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/tax.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="35" width="100" height="10" uuid="4cf9dc07-d233-46b6-9c6f-1432844a7bda"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tax} == null ? "-" : $F{tax}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

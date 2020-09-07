@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="default_potongan_lain_data" model="plantation.allowance.type">
+            <field name="name">Potongan Lainnya</field>
+            <field name="code">PTL</field>
+            <field name="potongan" eval="True"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record id="default_koperasi_data" model="plantation.allowance.type">
+            <field name="name">Potongan Koperasi</field>
+            <field name="code">PTK</field>
+            <field name="koperasi" eval="True"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record id="default_tunjangan_lain_data" model="plantation.allowance.type">
+            <field name="name">Tunjangan Lainnya</field>
+            <field name="code">TJL</field>
+            <field name="tunjangan" eval="True"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record id="default_thr_data" model="plantation.allowance.type">
+            <field name="name">Tunjangan Hari Raya</field>
+            <field name="code">THR</field>
+            <field name="rapel" eval="True"/>
+        </record>
+    </data>
+</odoo>

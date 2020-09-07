@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the wizard View==================-->
+        <record id='wizard_report_stock_card_form_view' model="ir.ui.view">
+            <field name="name">Report Stock Card</field>
+            <field name="model">wizard.report.stock.card</field>
+            <field name="arch" type="xml">
+	          	<form string="Report Stock Card">
+	          		<notebook tabpos="up" colspan="4">
+	          			<page string="Basic">
+	           				<group>
+		           				<group>
+				                 	<field name="from_date" required="1"/>
+			         		   		<field name="product_id" required="True"/>
+                                    <field name="company_id" required="True" readonly="True"/>
+                                    <field name="username" readonly="True"/>
+                                </group>
+                                <group>
+                                    <field name="to_date" required="1"/>
+			         		   		<field name="report_type"/>
+                                    <field name="show_value" widget="radio" attrs="{'invisible': [('report_type','=','pdf')]}"/>
+		           				</group>
+	                      	</group>
+	                      	<group string="Location" name="location">
+	         		   			<field name="location_id" nolabel="1" required="1" domain="[('usage', '=', 'internal'),('company_id','child_of',company_id)]"/>		           				
+							</group>
+	          			</page>
+	          		</notebook>	         		   
+	                <footer>
+					<button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+	                    or 
+	                <button icon="fa-close" string="Cancel" class="oe_link" special="cancel" />
+	                </footer>	        		   	           
+	         	 </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_stock_card">
+            <field name="name">Report Stock Card</field>
+            <field name="res_model">wizard.report.stock.card</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>  
+        <!--====================Specifying the report========================-->
+        <report string  = "Stock Card"
+		        model   = "wizard.report.stock.card"
+                auto    = "True"
+		        name    = "report_stock_card"
+		        rml     = "c10i_stock/report/report_stock_card.jrxml"
+		        id      = "report_stock_card"
+		        menu    = "False"
+		/>
+        <report string  = "Stock Card Excel Edition"
+		        model   = "wizard.report.stock.card"
+                auto    = "True"
+		        name    = "report_stock_card_xls"
+		        rml     = "c10i_stock/report/report_stock_card_xls.jrxml"
+		        id      = "report_stock_card_xls"
+		        menu    = "False"
+		/>
+
+        <menuitem   id          = "menu_report_stock_card"
+		 		    name        = "Stock Card"
+                    action      = "action_report_stock_card"
+					parent      = "stock.menu_warehouse_report"
+					sequence    = "170"
+		 />
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_invoice_advance_uinvoice,account.invoice.advance,model_account_invoice_advance,account.group_account_invoice,1,1,1,1
+access_account_invoice_advance_line_uinvoice,account.invoice.advance.line,model_account_invoice_advance_line,account.group_account_invoice,1,1,1,1
+access_account_invoice_advance_tax_uinvoice,account.invoice.advance.tax,model_account_invoice_advance_tax,account.group_account_invoice,1,1,1,1
+access_account_invoice_advance_group_invoice,account.invoice.advance group invoice,model_account_invoice_advance,account.group_account_invoice,1,1,1,1
+access_account_invoice_advance_user,account.invoice.advance user,model_account_invoice_advance,base.group_user,1,0,0,0
+access_account_invoice_advance_user,account.invoice.advance.line user,model_account_invoice_advance_line,base.group_user,1,0,0,0
+access_account_invoice_advance_accountant,account.invoice.advance accountant,model_account_invoice_advance,account.group_account_user,1,0,0,0
+access_account_invoice_advance_tax_accountant,account.invoice.advance.tax accountant,model_account_invoice_advance_tax,account.group_account_user,1,0,0,0
+access_account_invoice_advance_line_accountant,account.invoice.advance.line accountant,model_account_invoice_advance_line,account.group_account_user,1,0,0,0
+access_invoice_register_advance_uinvoice,account.invoice.register.advance,model_account_invoice_register_advance,account.group_account_invoice,1,1,1,1
+access_invoice_register_advance_user,account.invoice.register.advance user,model_account_invoice_register_advance,base.group_user,1,0,0,0
+access_invoice_register_advance_accountant,account.invoice.register.advance accountant,model_account_invoice_register_advance,account.group_account_user,1,0,0,0

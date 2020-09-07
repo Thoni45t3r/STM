@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="wizard_cash_bank_book_form">
+        <field name="name">wizard.cash.bank.book.form</field>
+        <field name="model">wizard.cash.bank.book</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="journal_id" options="{'no_create': True}" />
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="date_start" />
+                        <field name="date_stop" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_report" string="Excel" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_wizard_cash_bank_book" model="ir.actions.act_window">
+        <field name="name">Bank/Cash Book</field>
+        <field name="res_model">wizard.cash.bank.book</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="wizard_cash_bank_book_form"/>
+        <field name="target">new</field>
+   </record>
+
+   <menuitem id="menu_wizard_cash_bank_book" parent="account.menu_finance_legal_statement" sequence="5" action="action_wizard_cash_bank_book" name="Bank/Cash Book"/>
+
+   <report string   = "Bank/Cash Book"
+            model   = "wizard.cash.bank.book"
+            auto    = "True"
+            name    = "cash_bank_book_gl"
+            rml     = "c10i_account/report/cash_bank_book.jrxml"
+            id      = "cash_bank_book_gl"/>
+</odoo>

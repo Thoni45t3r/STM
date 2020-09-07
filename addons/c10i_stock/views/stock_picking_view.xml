@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vpicktree_inhrt_custom" model="ir.ui.view">
+            <field name="name">stock.picking.tree.inhrt.custom</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <field name="backorder_id" position="after">
+                    <field name="date_done" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_stock_picking_inherit_form" model="ir.ui.view">
+            <field name="name">view.stock.picking.inherit.form</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="min_date" position="before">
+                    <field name="date"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_move_picking_inherit_tree" model="ir.ui.view">
+            <field name="name">view.move.picking.inherit.tree</field>
+            <field name="model">stock.move</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <field name="note"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

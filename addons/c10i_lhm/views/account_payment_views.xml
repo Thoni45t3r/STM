@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Report Payment"
+				model	= "account.payment"
+				auto	= "True"
+				name	= "report_payment_cash_bank"
+				rml		= "c10i_lhm/report/report_payment.jrxml"
+				id		= "c10i_account.report_payment_cash_bank"
+                menu    = "False"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_attendance_view_config_inherit" model="ir.ui.view">
+            <field name="name">base.config.setting.hr.form.attendance.inherit</field>
+            <field name="model">base.config.settings</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_config"/>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group[1]" position="after">
+                    <group string="Worked Hour By Day">
+                        <field name="work_time_sunday" widget="float_time"/>
+                        <field name="work_time_monday" widget="float_time"/>
+                        <field name="work_time_tuesday" widget="float_time"/>
+                        <field name="work_time_wednesday" widget="float_time"/>
+                        <field name="work_time_thursday" widget="float_time"/>
+                        <field name="work_time_friday" widget="float_time"/>
+                        <field name="work_time_saturday" widget="float_time"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

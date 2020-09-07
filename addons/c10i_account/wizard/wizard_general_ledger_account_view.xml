@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_general_ledger_account' model="ir.ui.view">
+            <field name="name">Report General Ledger By Account</field>
+            <field name="model">wizard.general.ledger.account</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report General Ledger By Account">
+                    <group>
+                        <group>
+                            <field name="from_date" required='1'/>
+                            <field name="report_type" required="1"/>
+                            <field name="target_move" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <notebook tabpos="up" colspan="4">
+                        <page string="Account" >
+                            <field name="account_ids" domain="[]" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_general_ledger_by_account">
+            <field name="name">Report General Ledger By Account</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.general.ledger.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_general_ledger_account"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="account.menu_general_ledger" name="General Ledger" parent="account.menu_finance_legal_statement" action="account.action_account_general_ledger_menu" groups="account.group_account_manager,account.group_account_user" sequence="8"/>
+        <menuitem name="General Ledger by Account" parent="account.menu_finance_legal_statement" action="action_report_general_ledger_by_account" id="menu_general_ledger_account" icon="fa-print" sequence="9"/>
+        <!--====================Specifying the report========================-->
+        <report string="Report General Ledger By Account"
+            model="report.general.ledger.account"
+            auto="True"
+            name="report_general_ledger_account"
+            rml="c10i_account/report/report_general_ledger_account.jrxml"
+            id="report_general_ledger_account"
+            menu="False"
+            />
+
+		<report string="Report General Ledger By Account Excel Edition"
+			model="report.general.ledger.account"
+			auto="True"
+			name="report_general_ledger_account_xls"
+			rml="c10i_account/report/report_general_ledger_account_xls.jrxml"
+			id="report_general_ledger_account_xls"
+			menu="False"
+			/>		
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        
+    	<record id="view_invoice_form_vendor_landed_accounting" model="ir.ui.view">
+			<field name="name">account.invoice.supplier.landed.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='origin']" position="after">
+                    <field name="landed_id" groups="account.group_account_manager" attrs="{'invisible': [('landed_id', '=', False)]}"/>
+	    		</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="before">
+	                <field name="inland_type" invisible="1"/>
+            		<field name="weight" invisible="context.get('show_advance')" groups="base.group_no_one" sum="Weight"/>
+            		<field name="volume" invisible="1" groups="base.group_no_one" sum="Volume"/>
+                	<field name="tot_weight" groups="base.group_no_one" sum="Total Weight"/>
+	                <field name="inland_unit" invisible="context.get('show_advance')" groups="base.group_no_one"/>
+	                <field name="inland_value" invisible="context.get('show_advance')" groups="base.group_no_one" sum="Amount Inland"/>
+	                <field name="subtotal" invisible="context.get('show_advance')" sum="Subtotal"/>
+				</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="attributes">
+            		<attribute name="groups">base.group_no_one</attribute>
+	                <attribute name="sum">Net Total</attribute>
+	                <attribute name="string">Net Total</attribute>
+				</xpath>
+				<field name="amount_tax" position="after">
+					<field name="amount_inland_total" invisible="context.get('show_advance')"/>
+				</field>
+			</field>
+		</record>
+		
+    </data>
+</odoo> 

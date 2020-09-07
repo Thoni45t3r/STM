@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_stock_card_xls_subreport1" pageWidth="975" pageHeight="594" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="975" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="82ed9ccd-0509-4040-b74c-1508b268cecb">
+	<property name="ireport.zoom" value="0.8264462809917373"/>
+	<property name="ireport.x" value="491"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="STI Lokal Server"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="product_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[2661]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2019-01-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2019-01-31"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="location_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[15]]></defaultValueExpression>
+	</parameter>
+	<parameter name="company_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="initbalance" class="java.math.BigDecimal">
+		<parameterDescription><![CDATA[initbalance]]></parameterDescription>
+		<defaultValueExpression><![CDATA[BigDecimal.ZERO]]></defaultValueExpression>
+	</parameter>
+	<parameter name="show_value" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT '2TRX'::TEXT datatype
+, internalloc.id AS internallocid
+, internalloc.name AS locname
+, CASE internalloc.id
+	WHEN smove.location_id THEN 'out'
+	WHEN smove.location_dest_id THEN 'in'
+	ELSE 'unknown' END AS movetype
+, smove.company_id
+, smove.name AS smovename
+, SUBSTRING(src.complete_name FROM POSITION('/' IN src.complete_name) +1) AS sourceloc
+, SUBSTRING(dest.complete_name FROM POSITION('/' IN dest.complete_name) +1) AS destloc
+, internalloc.complete_name AS internal_loc
+, COALESCE(spick.name, inventory.name, smove.name, '#NO-REF') AS reference
+, smove.origin
+, partner.ref AS partnerref
+, partner.name AS partnername
+, item.default_code
+, categ.name AS categname
+, smove.product_qty
+, smove.product_uom_qty AS trans_qty
+, uom.name AS uomname
+, COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+	WHERE aml.ref = spick.name 
+	AND aml.product_id = smove.product_id
+	AND aml.quantity = smove.product_qty
+	AND balance > 0),
+	(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+	WHERE aml.name = smove.name
+	AND aml.product_id = smove.product_id
+	AND aml.quantity = smove.product_qty
+	AND balance > 0), smove.price_unit,
+	(SELECT AVG(squant.cost) FROM stock_move innersm 
+	INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+	INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	WHERE innersm.id = smove.id)) * smove.product_qty AS cost
+, (SELECT string_agg(splot.name, ',') FROM stock_move innersm 
+	LEFT OUTER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id 
+	LEFT OUTER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	LEFT OUTER JOIN stock_production_lot splot ON splot.id = squant.lot_id
+	WHERE innersm.id = smove.id) AS lotnumber
+, (SELECT string_agg(sqpack.name, ',') FROM stock_move innersm 
+	LEFT OUTER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id 
+	LEFT OUTER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	LEFT OUTER JOIN stock_quant_package sqpack ON sqpack.id = squant.package_id
+	WHERE innersm.id = smove.id) AS packagenumber
+, smove.date + interval '7 hours' AS date
+, smove.date_expected
+--, transuom.name AS trans_uom
+FROM stock_move smove
+INNER JOIN stock_location internalloc ON internalloc.id in (smove.location_id, smove.location_dest_id)
+	AND internalloc.id = $P{location_id}   -- << change here << --
+	AND internalloc.usage = 'internal'
+INNER JOIN product_product item ON item.id = smove.product_id
+INNER JOIN product_template itemtmpl ON itemtmpl.id = item.product_tmpl_id
+INNER JOIN product_category categ ON categ.id = itemtmpl.categ_id
+INNER JOIN stock_location src ON src.id = smove.location_id
+INNER JOIN stock_location dest ON dest.id = smove.location_dest_id
+INNER JOIN product_uom uom ON uom.id = itemtmpl.uom_id
+/** look-up in standard operational */
+LEFT JOIN stock_picking spick ON spick.id = smove.picking_id
+/** lookup in Physical Inventory */
+LEFT JOIN stock_inventory inventory ON inventory.id = smove.inventory_id
+LEFT OUTER JOIN res_partner partner ON partner.id = spick.partner_id
+-- << this script are WHEN uom_conversion installed >> --
+--LEFT OUTER JOIN product_uom transuom ON transuom.id = smove.product_uom
+WHERE smove.product_id = $P{product_id} -- << change here << --
+AND smove.state = 'done'
+AND smove.company_id =  $P{company_id}  -- << change here << --
+AND (smove.date + interval '7 hours')::TIMESTAMP BETWEEN ( $P{from_date} ||' 00:00:01')::TIMESTAMP AND ( $P{to_date} || ' 23:59:59')::TIMESTAMP -- << change here << --
+AND smove.location_id != smove.location_dest_id -- << eliminate wrong stock_move >> --
+ORDER BY smove.date, smove.id]]>
+	</queryString>
+	<field name="datatype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="datatype"/>
+	</field>
+	<field name="internallocid" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="internallocid"/>
+	</field>
+	<field name="locname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="locname"/>
+	</field>
+	<field name="movetype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="movetype"/>
+	</field>
+	<field name="company_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="company_id"/>
+	</field>
+	<field name="smovename" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="smovename"/>
+	</field>
+	<field name="sourceloc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="sourceloc"/>
+	</field>
+	<field name="destloc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="destloc"/>
+	</field>
+	<field name="internal_loc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="internal_loc"/>
+	</field>
+	<field name="reference" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="reference"/>
+	</field>
+	<field name="origin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="origin"/>
+	</field>
+	<field name="partnerref" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="partnerref"/>
+	</field>
+	<field name="partnername" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="partnername"/>
+	</field>
+	<field name="default_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="default_code"/>
+	</field>
+	<field name="categname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="categname"/>
+	</field>
+	<field name="product_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="product_qty"/>
+	</field>
+	<field name="trans_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="trans_qty"/>
+	</field>
+	<field name="uomname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uomname"/>
+	</field>
+	<field name="cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="cost"/>
+	</field>
+	<field name="lotnumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="lotnumber"/>
+	</field>
+	<field name="packagenumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="packagenumber"/>
+	</field>
+	<field name="date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+	</field>
+	<field name="date_expected" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="date_expected"/>
+	</field>
+	<variable name="balance" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{balance}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : $F{product_qty}.negate())
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[$P{initbalance} == null ? BigDecimal.ZERO : $P{initbalance}]]></initialValueExpression>
+	</variable>
+	<variable name="balancein" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{balancein}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : BigDecimal.ZERO)
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
+	</variable>
+	<variable name="balanceout" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{balanceout}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : BigDecimal.ZERO)
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[$P{initbalance} == null ? BigDecimal.ZERO : $P{initbalance}]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy HH:mm:ss" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="30" y="0" width="95" height="14" uuid="ccefeaa0-e55e-481b-91b0-20fd96f59bd7">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date} == null ? "-" : $F{date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="275" y="0" width="150" height="14" uuid="7b0af964-1dc0-4ad2-9dd5-53d7e31c8f5a">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{partnerref} == null ? "" : "[" + $F{partnerref} + "] ")+ 
+($F{partnername} == null ? "" : $F{partnername} )+
+($F{lotnumber} == null ? "" :" LOT "+ $F{lotnumber}) +
+($F{packagenumber} == null ? "" :" PACK "+ $F{packagenumber})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="125" y="0" width="150" height="14" isPrintWhenDetailOverflows="true" uuid="c87ab427-735b-4b4f-b1db-8982f79f72e8">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reference} == null ? " " : $F{reference}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="30" height="14" uuid="ccefeaa0-e55e-481b-91b0-20fd96f59bd7"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="425" y="0" width="100" height="14" uuid="7b0af964-1dc0-4ad2-9dd5-53d7e31c8f5a"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movetype}.equals("in") ? ($F{sourceloc} == null ? " " : $F{sourceloc}) :($F{destloc}== null ? " " : $F{destloc})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="525" y="0" width="100" height="14" uuid="67369e1c-131a-40de-b665-2c6691d88183"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movetype}.equals("in") ? $F{product_qty} : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="625" y="0" width="100" height="14" uuid="00b0d834-e188-40b5-8cda-cbe46f7f4bab"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movetype}.equals("out") ? $F{product_qty} : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="725" y="0" width="110" height="14" uuid="ae381a69-a246-4eb2-8e4f-2a0cd676a093"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{balance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="875" y="0" width="100" height="14" uuid="625f80d2-d1f0-4d6c-9ae0-e56f69fd6ba0">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="835" y="0" width="40" height="14" uuid="dfced7a8-8806-4ca5-9d04-d2a7304a3a02"/>
+				<box topPadding="0" leftPadding="1" bottomPadding="0" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uomname}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

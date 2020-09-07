@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report WP Cost -->
+        <record id="view_report_wp_cost_form" model="ir.ui.view">
+            <field name="name">view.report.wp.cost.form</field>
+            <field name="model">report.wp.cost</field>
+            <field name="arch" type="xml">
+                <form string="Report WP Cost">
+                    <header>
+                        <button name="print_report" icon="fa-print" string="Print" type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="account_period_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Details">
+                                <field name="line_ids">
+                                    <tree edit="false" colors="blue:level == 'level3';red:level == 'level4' " decoration-bf="level in ['level0','level1']" decoration-success="level in ['level2']" string="Detail WP Cost">
+                                        <field name="name"/>
+                                        <field name="level" string="Views"/>
+                                        <field name="symbol"/>
+                                        <field name="inti"/>
+                                        <field name="plasma"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_report_wp_cost_tree" model="ir.ui.view">
+            <field name="name">view.report.wp.cost.tree</field>
+            <field name="model">report.wp.cost</field>
+            <field name="arch" type="xml">
+                <tree string="Report WP Cost">
+                    <field name="name"/>
+                    <field name="account_period_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_report_wp_cost_filter" model="ir.ui.view">
+            <field name="name">view.report.wp.cost.filter</field>
+            <field name="model">report.wp.cost</field>
+            <field name="arch" type="xml">
+                <search string="Report WP Costt">
+                    <field name="name" string="Name"/>
+                    <field name="account_period_id" string="Period"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Period" domain="[]" context="{'group_by':'account_period_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_report_wp_cost" model="ir.actions.act_window">
+            <field name="name">Report WP Cost</field>
+            <field name="res_model">report.wp.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_report_wp_cost_filter"/>
+            <field name="domain">[]</field>
+            <field name="context">{'readonly_by_pass': True}</field>
+        </record>
+        <menuitem id="menu_report_wp_cost" name="Report WP Cost" action="action_report_wp_cost" parent="account.menu_finance_reports" sequence="10"/>
+        <!-- End Of Report WP Cost -->
+
+        <!-- ========== Spesifikasi Report WP Cost========== -->
+        <report string	= "Report WP Cost"
+				model	= "report.wp.cost"
+				auto	= "True"
+				name	= "report_wp_cost"
+				rml		= "c10i_lhm/report/report_wp_cost.jrxml"
+				id		= "report_wp_cost"
+        />
+    </data>
+</odoo>

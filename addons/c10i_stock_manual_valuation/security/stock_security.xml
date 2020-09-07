@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+	    <record id="group_stock_manual_valuation" model="res.groups">
+	        <field name="name">Group Manual Product Valuation</field>
+	        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        	<field name="category_id" ref="base.module_category_hidden"/>
+	    </record>
+	</data>
+</openerp>

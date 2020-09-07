@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_request_to_rfq" model="ir.ui.view">
+            <field name="name">Purchase Request To RFQ</field>
+            <field name="model">wizard.request.to.rfq</field>
+            <field name="arch" type="xml">
+                <form string="RFQ Create">
+                    <p class="oe_grey">
+                        Each State must be Approve, Vendor must be same, and picking type must be same.
+                    </p>
+                    <group>
+                    	<field name="partner_ids" widget="many2many_tags" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1"/>
+                    </group>
+                    <field name="line_ids" nolabel="1" colspan="8" readonly="1">
+                        <tree editable="bottom" delete="false" create="false">
+                            <field name="product_id" readonly="1"/>
+                            <field name="last_purchase_price" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="product_uom_id" readonly="1"/>
+                            <field name="scheduled_date" invisible="1"/>
+                            <field name="request_id" readonly="1"/>
+                            <field name="request_line_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="create_request_for_quotation" string="Create RFQ" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ========== Spesifikasi Action Wizard ========== -->
+        <record id="action_wizard_request_to_rfq" model="ir.actions.act_window">
+            <field name="name">Report Purchase Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.request.to.rfq</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_request_to_rfq"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>
+
+        <act_window id  = "act_wizard_request_to_rfq"
+            name        = "Make RFQ"
+            src_model   = "purchase.request"
+            res_model   = "wizard.request.to.rfq"
+            view_type   = "form"
+            view_mode   = "form"
+            key2        = "client_action_multi"
+            target      = "new"
+            />
+
+    </data>
+</odoo>

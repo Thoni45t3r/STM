@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--<record model="ir.ui.view" id="purchase_rfq_form_inherit">-->
+            <!--<field name="name">purchase.rfq.inherit</field>-->
+            <!--<field name="model">purchase.rfq</field>-->
+            <!--<field name="priority">20</field>-->
+            <!--<field name="inherit_id" ref="c10i_purchase_request.view_purchase_rfq_form"/>-->
+            <!--<field name="arch" type="xml">-->
+            <!--</field>-->
+        <!--</record>-->
+    </data>
+</odoo>

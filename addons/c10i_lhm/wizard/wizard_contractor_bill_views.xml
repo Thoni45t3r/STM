@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='lhm_contractor_bill_wizard_view'>
+            <field name="name">lhm.contractor.bill.wizard.view</field>
+            <field name="model">lhm.contractor.bill.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generate Contractor Wizard" version="7.0" create="false" edit="false">
+                    <header>
+                        <button name="process" class="oe_highlight" string="Create Invoice" type="object"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="contractor_id" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="start_period_id" domain="[('special','=',False)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="contractor_vehicle"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <separator string="Filter Buku Kontraktor" colspan="4"/>
+                    <field name="lhm_contractor_ids" domain="[('supplier_id','=',contractor_id), ('invoice_id','=',False)]" required="True"/>
+                    <group>
+                        <button name="generate_line" class="oe_highlight" string="Generate Summary" type="object" attrs="{'invisible': [('lhm_contractor_ids','=',[])]}"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_invoice"/>
+                        </group>
+                        <group>
+                            <field name="has_npwp" />
+                            <field name="taxes_id" domain="[('type_tax_use','=','purchase')]"/>
+                        </group>
+                    </group>
+                    <separator string="Total Buku Kontraktor" colspan="4"/>
+                    <field name="invoice_lines" mode="tree" >
+                        <tree string="Total Buku Kontraktor" editable="bottom" create="false">
+                            <field name="location_type_id"/>
+                            <field name="location_id"/>
+                            <field name="activity_id"/>
+                            <field name="amount" sum="amount"/>
+                        </tree>
+                    </field>
+                    <separator string="Detail Buku Kontraktor Alat" colspan="4"/>
+                    <field name="line_vehicle_ids" mode="tree" >
+                        <tree editable="bottom">
+                            <field name="name" invisible="1"/>
+                            <field name="date"/>
+                            <field name="vehicle_id" />
+                            <field name="start_value"/>
+                            <field name="end_value"/>
+                            <field name="difference_value"/>
+                            <field name="distance_value"/>
+                            <field name="location_type_id" />
+                            <field name="location_id" />
+                            <field name="activity_id" />
+                            <field name="uom_id" />
+                            <field name="nilai"/>
+                            <field name="uom2_id" />
+                            <field name="nilai2"/>
+                            <field name="unit_price"/>
+                            <field name="total"/>
+                            <field name="charge_id" invisible="1"/>
+                            <field name="uom_charge_id" invisible="1"/>
+                            <field name="type" invisible="1"/>
+                        </tree>
+                    </field>
+                    <separator string="Detail Buku Kontraktor" colspan="4"/>
+                    <field name="line_ids" mode="tree" >
+                        <tree editable="bottom">
+                            <field name="name" invisible="1"/>
+                            <field name="date"/>
+                            <field name="location_type_id" />
+                            <field name="location_id" />
+                            <field name="activity_id" />
+                            <field name="uom_id" />
+                            <field name="nilai" />
+                            <field name="uom2_id" />
+                            <field name="nilai2"/>
+                            <field name="unit_price"/>
+                            <field name="total"/>
+                            <field name="contractor_vehicle" invisible="1"/>
+                            <field name="type" invisible="1"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_lhm_contractor_bill'>
+            <field name="name">Generate Contractor Bill</field>
+            <field name="res_model">lhm.contractor.bill.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lhm_contractor_bill_wizard_view"/>
+            <field name="target">current</field>
+            <!-- <field name="target">new</field> -->
+        </record>
+
+        <menuitem id="menu_lhm_contractor_bill" 
+                  action="action_lhm_contractor_bill" parent="menu_plantation_transaction" groups="group_plantation_operator" sequence="51"/>
+
+        <!-- <act_window id="action_contractor_bill_from_lhm_contractor"
+            multi="True"
+            key2="client_action_multi" name="Create Contractor Bill"
+            res_model="lhm.contractor.bill.wizard" src_model="lhm.contractor"
+            view_mode="form" target="new" view_type="form" /> -->
+    </data>
+</odoo>

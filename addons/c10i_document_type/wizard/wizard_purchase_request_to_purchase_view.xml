@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_request_to_purchase_inherit" model="ir.ui.view">
+            <field name="name">view.wizard.request.to.purchase.inherit</field>
+            <field name="model">wizard.purchase.request.to.purchase</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="c10i_purchase_request.view_wizard_request_to_purchase"/>
+            <field name="arch" type="xml">
+                <field name="partner_ids" position="after">
+                    <field name="doc_type_id" domain="[('picking_type_id', '=', picking_type_id)]" options='{"always_reload": True, "no_create": True, "no_open": True}'/>
+                    <field name="picking_type_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

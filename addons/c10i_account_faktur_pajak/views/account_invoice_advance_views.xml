@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="faktur_pajak_adv_invoice_form_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.advance.faktur.pajak</field>
+        <field name="model">account.invoice.advance</field>
+        <field name="inherit_id" ref="c10i_account_invoice_advance.invoice_advance_form" />
+        <field name="arch" type="xml">
+            <page name="other_info" position="after">
+                <page name="tax" string="Faktur Pajak">
+                    <group>
+                    	<group>
+                        	<field name="kode_transaksi" attrs="{'required':[('faktur_keluaran_id','!=',False)]}"/>
+                        	<field name="kode_status_faktur" attrs="{'required':[('faktur_keluaran_id','!=',False)]}" />
+                        	<field name="faktur_keluaran_id" domain="[('state','=','available')]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                    	</group>
+                    	<group>
+                        	<field name="nomer_seri_faktur_pajak" attrs="{'invisible':[('faktur_keluaran_id','=',False)]}"/>
+                    	</group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_adv_invoice_supplier_form_inherit" model="ir.ui.view">
+        <field name="name">invoice.supplier.faktur.pajak</field>
+        <field name="model">account.invoice.advance</field>
+        <field name="inherit_id" ref="c10i_account_invoice_advance.invoice_advance_supplier_form" />
+        <field name="arch" type="xml">
+            <field name="reference" position="after">
+                <field name="nomer_seri_faktur_pajak_bill" placeholder="010.310-16.0012345" />
+                <field name="date_faktur_pajak_bill" />
+            </field>
+        </field>
+    </record>
+</odoo>

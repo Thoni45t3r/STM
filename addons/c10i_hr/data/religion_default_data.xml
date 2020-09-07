@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Employee Religion-->
+        <record id="default_religion_0" model="hr.employee.religion">
+            <field name="name">Islam</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_religion_1" model="hr.employee.religion">
+            <field name="name">Kristen Protestan</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_religion_2" model="hr.employee.religion">
+            <field name="name">Kristen Katolik</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_religion_3" model="hr.employee.religion">
+            <field name="name">Hindu</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_religion_4" model="hr.employee.religion">
+            <field name="name">Buddha</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_religion_5" model="hr.employee.religion">
+            <field name="name">Konghucu</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="ou_purchase_type_tree" model="ir.ui.view">
+        <field name="name">ou.purchase.type.tree</field>
+        <field name="model">purchase.type</field>
+        <field name="inherit_id" ref="c10i_purchase.view_purchase_type_tree" />
+        <field name="arch" type="xml">
+            <field name="company_id" position="before">
+                <field name="operating_unit_id" groups="operating_unit.group_multi_operating_unit"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="ou_purchase_type_form" model="ir.ui.view">
+        <field name="name">ou.purchase.type.form</field>
+        <field name="model">purchase.type</field>
+        <field name="inherit_id" ref="c10i_purchase.view_purchase_type_form" />
+        <field name="arch" type="xml">
+            <field name="company_id" position="before">
+                <field name="operating_unit_id" groups="operating_unit.group_multi_operating_unit" options="{'no_create':True, 'no_edit': True, 'no_open': True}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

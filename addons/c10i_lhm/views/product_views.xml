@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="views_lhm_product_form">
+            <field name="name">view.lhm.product.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="arch" type="xml">
+                <div name="options" position="before">
+                    <div name="lhm_options">
+                        <div>
+                            <field name="is_nab"/>
+                            <label for="is_nab"/>
+                        </div>
+                    </div>
+                </div>
+                <field name="supplier_taxes_id" position="after">
+                    <field name="capitalized_tax_id" colspan="2" widget="many2many_tags" attrs="{'readonly':[('purchase_ok','=',0)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="menu_master_lhm_product_action">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add an Product
+                    </p><p>
+                    Add Product
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_master_lhm_product" action="menu_master_lhm_product_action" parent="menu_lhm_master" groups="group_plantation_supervisor" sequence="13"/>
+
+        <!-- <menuitem id="menu_plantation_pricelist" name="Plantation Pricelist" parent="menu_plantation_config" groups="group_plantation_manager" sequence="20"/> -->
+
+        <record id="product_pricelist_plantation_tree" model="ir.ui.view">
+            <field name="name">product.pricelist.plantation.tree</field>
+            <field name="model">product.pricelist</field>
+            <field name="arch" type="xml">
+                <tree string="Products Price List">
+                    <field name="sequence" widget="handle" />
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_pricelist_plantation_form" model="ir.ui.view">
+            <field name="name">product.pricelist.plantation.form</field>
+            <field name="model">product.pricelist</field>
+            <field name="arch" type="xml">
+                <form string="Products Price List">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                    options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="e.g. USD Retailers"/></h1>
+                        </div>
+                        <group>
+                            <field name="plantation_pricelist_type" readonly="1"/>
+                            <field name="partner_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="pks_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" attrs="{'invisible':[('plantation_pricelist_type','!=','pricelist_transport')]}"/>
+                            <field name="currency_id" groups="base.group_multi_currency" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <!-- <field name="country_group_ids"/> -->
+                        </group>
+                        <div groups="product.group_pricelist_item">
+                            <separator string="Pricelist Items"/>
+                            <field name="item_ids" nolabel="1" context="{'default_base':'list_price', 'default_applied_on': '1_product','default_compute_price': 'fixed'}">
+                                <tree string="Pricelist Items" editable="bottom">
+                                    <field name="name" string="Applicable On"/>
+                                    <field name="applied_on" invisible="0"/>
+                                    <field name="product_tmpl_id" domain="[('is_nab','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                    <!-- <field name="min_quantity"/> -->
+                                    <field name="date_start"/>
+                                    <!-- <field name="date_end"/> -->
+                                    <field name="compute_price" invisible="0"/>
+                                    <field name="fixed_price" string="Price"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_product_pricelist_transport">
+            <field name="name">Daftar Harga Transport</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.pricelist</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('plantation_pricelist_type','=','pricelist_transport')]</field>
+            <field name="context">{'plantation_pricelist_type': 'pricelist_transport'}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik Create untuk membuat Penghitungan Harga Plasma terbaru
+                </p>
+            </field>
+        </record>
+        <record id="action_product_pricelist_transport_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product_pricelist_plantation_tree"/>
+            <field name="act_window_id" ref="action_product_pricelist_transport"/>
+        </record>
+        <record id="action_product_pricelist_transport_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_pricelist_plantation_form"/>
+            <field name="act_window_id" ref="action_product_pricelist_transport"/>
+        </record>
+        <menuitem id="menu_pricelist_transport" action="action_product_pricelist_transport" parent="menu_lhm_master" groups="group_plantation_manager,account.group_account_invoice" sequence="122"/>
+
+        <record model="ir.actions.act_window" id="action_product_pricelist_plasma">
+            <field name="name">Daftar Harga Plasma</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.pricelist</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('plantation_pricelist_type','=','pricelist_plasma')]</field>
+            <field name="context">{'plantation_pricelist_type': 'pricelist_plasma'}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik Create untuk membuat Penghitungan Harga Plasma terbaru
+                </p>
+            </field>
+        </record>
+        <record id="action_product_pricelist_plasma_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product_pricelist_plantation_tree"/>
+            <field name="act_window_id" ref="action_product_pricelist_plasma"/>
+        </record>
+        <record id="action_product_pricelist_plasma_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_pricelist_plantation_form"/>
+            <field name="act_window_id" ref="action_product_pricelist_plasma"/>
+        </record>
+        <menuitem id="menu_pricelist_plasma" action="action_product_pricelist_plasma" parent="menu_lhm_master" groups="group_plantation_manager,account.group_account_invoice" sequence="122"/>
+    </data>
+</odoo>

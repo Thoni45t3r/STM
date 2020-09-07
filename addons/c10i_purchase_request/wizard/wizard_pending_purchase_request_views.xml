@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id='wizard_report_pending_purchase_request' model="ir.ui.view">
+            <field name="name">wizard.pending.purchase.request.form</field>
+            <field name="model">wizard.pending.purchase.request</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Pending Purchase Request">
+                    <group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                        </group>
+                        <group>
+                            <field name="report_type"  />
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_pending_purchase_request">
+            <field name="name">Pending Purchase Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.pending.purchase.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_pending_purchase_request"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Pending Purchase Request" parent="purchase.root_purchase_request_report" action="action_report_pending_purchase_request" id="menu_report_pending_purchase_request" icon="fa-print" sequence="20"/>
+    </data>
+</odoo>

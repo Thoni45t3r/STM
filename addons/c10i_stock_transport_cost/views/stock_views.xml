@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Stock Picking -->
+    <record id="stock_transport_cost_picking_form" model="ir.ui.view">
+        <field name="name">stock.transport.cost.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+
+            <page name="extra" position="after">
+                <page name="transporter_data" string="Transport Information">
+                    <group>
+                        <group>
+                            <field name="transporter_id"/>
+                            <field name="incoterm_id"/>
+                        </group>
+                        <group>
+                            <field name="driver_name"/>
+                            <field name="vehicle_number"/>
+                        </group>
+                    </group>
+                </page>
+            </page>
+
+        </field>
+    </record>
+
+</odoo>

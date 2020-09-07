@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record id="c10i_base_view_account_config_settings" model="ir.ui.view">
+            <field name="name">c10i.base.account settings</field>
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings" />
+            <field name="arch" type="xml">
+    			<xpath expr="//form/group[@name='multi_currency']/div[@name='group_multi_currency']" position="after">
+    				<field name="allow_inverse_currency_rate" />
+    			</xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

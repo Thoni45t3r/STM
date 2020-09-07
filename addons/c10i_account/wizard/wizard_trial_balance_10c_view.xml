@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_trial_balance_10c' model="ir.ui.view">
+            <field name="name">Report Trial Balance 10 Column</field>
+            <field name="model">wizard.trial.balance.10c</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report Trial Balance 10 Column">
+                    <group>
+                        <group>
+                            <field name="from_date" required='1'/>
+                            <!-- <field name="report_type"  /> -->
+                            <field name="target_move"  />
+                        </group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_trial_balance_10c">
+            <field name="name">Report Trial Balance 10 Column</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.trial.balance.10c</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_trial_balance_10c"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Trial Balance 10 Column" parent="account.menu_finance_legal_statement" action="action_report_trial_balance_10c" id="menu_trial_balance_10c" icon="fa-print" sequence="10"/>
+        <!--====================Specifying the report========================-->
+        <report string="Report Trial Balance 10 Column"
+            model="report.trial.balance.10c"
+            auto="True"
+            name="report_trial_balance_10c"
+            rml="c10i_account/report/report_trial_balance_10c.jrxml"
+            id="report_trial_balance_10c"
+            menu="False"
+            />
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id='wizard_general_ledger_account_ou' model="ir.ui.view">
+            <field name="name">Report General Ledger By Account</field>
+            <field name="model">wizard.general.ledger.account</field>
+         	<field name="type">form</field>
+            <field name="inherit_id" ref="c10i_account.wizard_general_ledger_account" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="operating_unit_ids" widget="many2many_tags" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />
+                </field>
+            </field>
+        </record>
+        
+        <!--====================Specifying the report========================-->
+        <!-- <report string="Report General Ledger By Account"
+            model="report.general.ledger.account"
+            auto="True"
+            name="report_general_ledger_account"
+            rml="c10i_account/report/report_general_ledger_account.jrxml"
+            id="report_general_ledger_account"
+            menu="False"
+            />
+
+		<report string="Report General Ledger By Account Excel Edition"
+			model="report.general.ledger.account"
+			auto="True"
+			name="report_general_ledger_account_xls"
+			rml="c10i_account/report/report_general_ledger_account_xls.jrxml"
+			id="report_general_ledger_account_xls"
+			menu="False"
+			/>		 -->
+    </data>
+</odoo>

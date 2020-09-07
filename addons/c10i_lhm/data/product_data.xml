@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="product_uom_categ_plantation" model="product.uom.categ">
+            <field name="name">Plantation</field>
+        </record>
+    </data>
+</odoo>

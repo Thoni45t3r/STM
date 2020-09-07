@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_faktur_pajak" name="Faktur Pajak" parent="account.menu_finance_configuration" sequence="8"/>
+    <menuitem id="submenu_faktur_pajak_keluar" name="Faktur Pajak Keluaran" parent="menu_faktur_pajak" sequence="10"/>
+    <menuitem id="submenu_faktur_pajak_masuk" name="Faktur Pajak Masukan" parent="menu_faktur_pajak" sequence="11"/>
+
+    <!-- Faktur Pajak Keluaran -->
+    <record id="faktur_pajak_keluaran_form" model="ir.ui.view">
+        <field name="name">faktur.pajak.keluaran.form</field>
+        <field name="model">faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <form string="Faktur Pajak Keluaran">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,available,invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group string="Information" name="info_base">
+                        <group>
+                            <field name="nomer_perusahaan" class="oe_edit_only" />
+                            <field name="tahun_buat" class="oe_edit_only" />
+                            <field name="nomer_seri" class="oe_edit_only" />
+                        </group>
+                        <group>
+                            <field name="batch_id" invisible="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Linked Invoices">
+                            <field name="invoice_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_keluaran_tree" model="ir.ui.view">
+        <field name="name">faktur.pajak.keluaran.tree</field>
+        <field name="model">faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <tree string="Faktur Pajak Keluaran" create="false" delete="false">
+                <field name="name"/>
+                <field name="invoice_id"/>
+                <field name="partner_id"/>
+                <field name="customer_npwp"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_keluaran_search" model="ir.ui.view">
+        <field name="name">faktur.pajak.keluaran.search</field>
+        <field name="model">faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <search string="Faktur Pajak Keluaran">
+                <field name="name" string="Search" filter_domain="[('name','ilike',self)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="State" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_faktur_pajak_keluaran" model="ir.actions.act_window">
+        <field name="name">Nomer Seri Faktur Pajak</field>
+        <field name="res_model">faktur.pajak.keluaran</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="faktur_pajak_keluaran_search"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Nomer Seri Faktur Pajak adalah nomer seri untuk mengeluarkan Faktur Pajak kepada Customer.
+            Untuk mendaftarkan NSFP ini Anda dapat menggunakan menu Generate NSFP
+          </p>
+        </field>
+    </record>
+    <menuitem id="menu_faktur_pajak_keluaran" name="Nomer Seri Faktur Pajak" action="action_faktur_pajak_keluaran" parent="submenu_faktur_pajak_keluar" sequence="11"/>
+    <!-- End of Faktur Pajak Keluaran -->
+
+    <!-- Daftar MFSP -->
+    <record id="batch_faktur_pajak_keluaran_form" model="ir.ui.view">
+        <field name="name">batch.faktur.pajak.keluaran.form</field>
+        <field name="model">batch.faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <form string="Generate NSFP">
+                <header>
+                    <button name="generate_faktur" string="Generate" states="draft" type="object" class="oe_highlight" />
+                    <button name="action_validate" string="Validate" states="draft" type="object" class="oe_highlight" />
+                    <button name="action_cancel" string="Cancel" states="validated" type="object" confirm="Yakin membatalkan dokumen ini?"/>
+                    <button name="action_set_to_draft" string="Set Draft" states="cancel" type="object" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validated"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group name="batch_header">
+                        <group string="Prefix">
+                            <field name="nomer_perusahaan" />
+                            <field name="tahun_buat" />
+                            <field name="create_date" readonly="1"/>                                
+                        </group>
+                        <group string="Series">
+                            <field name="nomer_awal"/>
+                            <field name="nomer_akhir"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nomer Faktur">
+                            <field name="faktur_keluaran_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="batch_faktur_pajak_keluaran_tree" model="ir.ui.view">
+        <field name="name">batch.faktur.pajak.keluaran.tree</field>
+        <field name="model">batch.faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <tree string="Generate NSFP">
+                <field name="name"/>
+                <field name="nomer_perusahaan"/>
+                <field name="tahun_buat"/>
+                <field name="nomer_awal"/>
+                <field name="nomer_akhir"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="batch_faktur_pajak_keluaran_search" model="ir.ui.view">
+        <field name="name">batch.faktur.pajak.keluaran.search</field>
+        <field name="model">batch.faktur.pajak.keluaran</field>
+        <field name="arch" type="xml">
+            <search string="Generate NSFP">
+                <field name="name" string="Search" filter_domain="[('name','ilike',self)]"/>
+                <field name="tahun_buat" string="Tahun" filter_domain="[('tahun_buat','=',self)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_batch_faktur_pajak_keluaran" model="ir.actions.act_window">
+        <field name="name">Generate NSFP</field>
+        <field name="res_model">batch.faktur.pajak.keluaran</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="batch_faktur_pajak_keluaran_search"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Klik untuk Mendaftarkan Nomer Seri Faktur Pajak baru
+          </p>
+        </field>
+    </record>
+    <menuitem id="menu_batch_faktur_pajak_keluaran" name="Generate NSFP" action="action_batch_faktur_pajak_keluaran" parent="submenu_faktur_pajak_keluar" sequence="10"/>
+    <!-- End Of Daftar NSFP --> 
+
+    <!-- Faktur Pajak Masukan -->
+    <record id="faktur_pajak_masukan_line_form" model="ir.ui.view">
+        <field name="name">faktur.pajak.masukan.line.form</field>
+        <field name="model">faktur.pajak.masukan.line</field>
+        <field name="arch" type="xml">
+            <form string="Detail Transaksi">
+                <sheet>
+                    <group name="info_base">
+                        <group>
+                            <field name="nama" />
+                            <field name="jumlahBarang" />
+                        </group>
+                        <group>
+                            <field name="hargaSatuan" />
+                            <field name="hargaTotal" />
+                            <field name="diskon" />
+                        </group>
+                    </group>
+                    <group name="info_amount">
+                        <group name="ppn" >
+                            <field name="dpp" />
+                            <field name="ppn" />
+                        </group>
+                        <group name="ppnbm"  >
+                            <field name="tarifPpnbm" />
+                            <field name="ppnbm" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_masukan_line_tree" model="ir.ui.view">
+        <field name="name">faktur.pajak.masukan.line.tree</field>
+        <field name="model">faktur.pajak.masukan.line</field>
+        <field name="arch" type="xml">
+            <tree string="Detail Transaksi">
+                <field name="nama" />
+                <field name="jumlahBarang" />
+                <field name="hargaSatuan" />
+                <field name="hargaTotal" />
+                <field name="diskon" />
+                <field name="dpp" />
+                <field name="ppn" />
+                <field name="tarifPpnbm" />
+                <field name="ppnbm" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_masukan_form" model="ir.ui.view">
+        <field name="name">faktur.pajak.masukan.form</field>
+        <field name="model">faktur.pajak.masukan</field>
+        <field name="arch" type="xml">
+            <form string="Faktur Pajak Masukan">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group name="info_base">
+                        <group>
+                            <field name="kdJenisTransaksi" />
+                            <field name="fgPengganti" />
+                            <field name="nomorFaktur" />
+                            <field name="tanggalFaktur" />
+                            <field name="referensi" />
+                        </group>
+                        <group>
+                            <field name="statusApproval" />
+                            <field name="statusFaktur" />
+                            <field name="invoice_id" />
+                        </group>
+                    </group>
+                    <group name="info_partner">
+                        <group name="penjual" string="Penjual" >
+                            <field name="npwpPenjual" />
+                            <field name="namaPenjual" />
+                            <field name="alamatPenjual" />
+                        </group>
+                        <group name="pembeli" string="Pembeli" >
+                            <field name="npwpLawanTransaksi" />
+                            <field name="namaLawanTransaksi"/>
+                            <field name="alamatLawanTransaksi" />
+                        </group>
+                    </group>
+                    <group name="info_amount">
+                        <group name="ppn" >
+                            <field name="jumlahDpp" />
+                            <field name="jumlahPpn" />
+                        </group>
+                        <group name="ppnbm"  >
+                            <field name="jumlahPpnBm" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detail Transaksi">
+                            <field name="detailTransaksi" nolabel="1"/>
+                        </page>
+                        <page string="QR URL">
+                            <field name="url" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_masukan_tree" model="ir.ui.view">
+        <field name="name">faktur.pajak.masukan.tree</field>
+        <field name="model">faktur.pajak.masukan</field>
+        <field name="arch" type="xml">
+            <tree string="Faktur Pajak masukan" >
+                <field name="name"/>
+                <field name="kdJenisTransaksi" invisible="1"/>
+                <field name="fgPengganti" invisible="1"/>
+                <field name="nomorFaktur" invisible="1"/>
+                <field name="tanggalFaktur" />
+                <field name="referensi" invisible="1"/>
+                <field name="statusApproval" invisible="1"/>
+                <field name="statusFaktur" invisible="1"/>
+                <field name="invoice_id" invisible="1"/>
+                <field name="npwpPenjual" />
+                <field name="namaPenjual" />
+                <field name="alamatPenjual" invisible="1"/>
+                <field name="npwpLawanTransaksi" invisible="1"/>
+                <field name="namaLawanTransaksi" invisible="1"/>
+                <field name="alamatLawanTransaksi" invisible="1"/>
+                <field name="jumlahDpp" />
+                <field name="jumlahPpn" />
+                <field name="jumlahPpnBm" invisible="1"/>
+                <field name="detailTransaksi" invisible="1"/>
+                <field name="url" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="faktur_pajak_masukan_search" model="ir.ui.view">
+        <field name="name">faktur.pajak.masukan.search</field>
+        <field name="model">faktur.pajak.masukan</field>
+        <field name="arch" type="xml">
+            <search string="Faktur Pajak masukan">
+                <field name="name" string="Search" filter_domain="[('name','ilike',self)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_faktur_pajak_masukan" model="ir.actions.act_window">
+        <field name="name">Scanned E-Faktur Pajak</field>
+        <field name="res_model">faktur.pajak.masukan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="faktur_pajak_masukan_search"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Scanned E-Faktur adalah nomer faktur pajak yang telah di Scan pada saat membuat transaksi di Vendor Bill
+          </p>
+        </field>
+    </record>
+    <menuitem id="menu_faktur_pajak_masukan" name="Scanned E-Faktur Pajak" action="action_faktur_pajak_masukan" parent="submenu_faktur_pajak_masuk" sequence="11"/>
+    <!-- End of Faktur Pajak Masukan -->
+</odoo>

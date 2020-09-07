@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <record model='ir.ui.view' id='wizard_report_cash_bank_form'>
+            <field name="name">Laporan Cash Bank Plantation</field>
+            <field name="model">wizard.report.cash.bank</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Cash Bank Plantation">
+                    <header>
+                        <button name="create_report" type="object" default_focus="1" string="Print" class="oe_highlight" icon="fa-get-pocket"/>
+                    </header>
+                    <sheet>
+                        <center><h1>Laporan Cash Bank Plantation</h1></center>
+                        <group>
+                            <label string="Periode Laporan"/>
+                            <div>
+                                <field name="from_date" class="oe_inline" nolabel="1" required="1" /> -
+                                <field name="to_date" nolabel="1" class="oe_inline" required="1" />
+                            </div>
+                            <field name="report_type" string="Tipe Laporan" required="1" colspand="8"/>
+                            <field name="name" string="Nama Laporan" required="1"/>
+                            <field name="journal_id" string="Journal Name"
+                                   domain="[('type','in',('cash','bank'))]"
+                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                   attrs="{'required':[('name', '=', 'cash_bank')], 'invisible': [('name', '=', 'invoice')]}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_wizard_report_cash_bank'>
+            <field name="name">Laporan Cash/Bank Plantation</field>
+            <field name="res_model">wizard.report.cash.bank</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_cash_bank_form"/>
+            <field name="target">current</field>
+        </record>
+
+        <!-- ========== Spesifikasi Menu ========== -->
+		<menuitem 	name	= "Cash Bank Plantation"
+					 action	= "action_wizard_report_cash_bank"
+					 id		= "c10i_report_cash_bank_plantation"
+					 parent	= "account.menu_finance_reports"
+					 sequence="161" />
+
+
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Laporan Kas Bank"
+				model	= "wizard.report.cash.bank"
+				auto	= "True"
+				name	= "report_cash_bank_cash_c10i"
+				rml		= "c10i_lhm/report/report_cash_bank_cash_c10i.jrxml"
+				id		= "report_cash_bank_cash_c10i"
+        />
+
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Daftar Invoice"
+				model	= "wizard.report.invoice"
+				auto	= "True"
+				name	= "report_cash_bank_invoice"
+				rml		= "c10i_lhm/report/report_cash_bank_invoice.jrxml"
+				id		= "report_cash_bank_invoice"
+        />
+
+	</data>
+</odoo>

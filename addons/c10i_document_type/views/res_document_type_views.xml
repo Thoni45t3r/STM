@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Document Type -->
+        <record id="view_res_document_type_form" model="ir.ui.view">
+            <field name="name">view.res.document.type.form</field>
+            <field name="model">res.document.type</field>
+            <field name="arch" type="xml">
+                <form string="Document Type">
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Local Sale" required="1"/></h1>
+                        </div>
+                        <group name="res_document_type">
+                            <group string="Sales &amp; Purchase">
+                                <field name="sales"/>
+                                <field name="spk"/>
+                                <field name="journal_id" required="1"/>
+                                <field name="account_id"/>
+                                <field name="payment_term_id"/>
+                            </group>
+                            <group string="Down Payment">
+                                <field name="auto_downpayment"/>
+                                <field name="downpayment_journal_id" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}" string="Journal"/>
+                                <field name="downpayment_account_id" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}" string="Account"/>
+                                <label string="Default Value" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                                <div class="o_row">
+                                    <field name="downpayment_default" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}"/>
+                                    <label string="%" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                                </div>
+                            </group>
+                            <group string="Sequence &amp; Reporting">
+                                <field name="sequence_id"/>
+                                <field name="report_id"/>
+                            </group>
+                            <group string="Stock &amp; Shipping">
+                                <field name="no_create_picking"/>
+                                <field name="incoterm_id"/>
+                                <field name="picking_type_id" required="1"/>
+                                <field name="shipping_partner_id" required="0" domain="[('type','=','delivery')]"/>
+                                <field name="invoice_partner_id" required="0" domain="[('type','=','invoice')]"/>
+                            </group>
+                            <group string="Purchase Report Sign" attrs="{'invisible':[('sales', '=', True)]}">
+                                <field name="purchase_report_sign_1"/>
+                                <field name="purchase_report_sign_2"/>
+                                <field name="purchase_report_sign_3"/>
+                                <field name="purchase_report_sign_4"/>
+                                <field name="purchase_report_sign_5"/>
+                                <field name="purchase_report_sign_6"/>
+                            </group>
+                            <group string="Other Settings">
+                                <field name="tolerance"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="users" string="Users">
+                                <field name="user_ids" nolabel="1" options='{"always_reload": True, "no_create": True, "no_open": True}'/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_res_document_type_tree" model="ir.ui.view">
+            <field name="name">view.res.document.type.tree</field>
+            <field name="model">res.document.type</field>
+            <field name="arch" type="xml">
+                <tree string="Document Type">
+                    <field name="name"/>
+                    <field name="sales"/>
+                    <field name="auto_downpayment"/>
+                    <field name="picking_type_id"/>
+                    <field name="report_id"/>
+                    <field name="sequence_id"/>
+                    <field name="journal_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_res_document_type_filter" model="ir.ui.view">
+            <field name="name">view.res.document.type.filter</field>
+            <field name="model">res.document.type</field>
+            <field name="arch" type="xml">
+                <search string="Document Type">
+                    <field name="name" string="Name" filter_domain="[('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="sales" string="Sales" domain="[('sales', '=', True)]"/>
+                    <filter name="purchase" string="Purchase" domain="[('sales', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Journal" domain="[]" context="{'group_by':'journal_id'}"/>
+                        <filter string="Account" domain="[]" context="{'group_by':'account_id'}"/>
+                        <filter string="Picking" domain="[]" context="{'group_by':'picking_type_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_res_document_type" model="ir.actions.act_window">
+            <field name="name">Document Type</field>
+            <field name="res_model">res.document.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_res_document_type_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add Document Type.
+              </p>
+            </field>
+        </record>
+        <menuitem name="Document Type" id="menu_res_document_type" action="action_res_document_type" parent="c10i_base.menu_c10i_management" sequence="15" groups="base.group_no_one"/>
+        <!-- End Of Document Type -->
+    </data>
+</odoo>

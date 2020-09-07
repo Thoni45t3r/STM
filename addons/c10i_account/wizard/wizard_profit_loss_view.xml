@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_profit_loss' model="ir.ui.view">
+            <field name="name">Report Profit Loss</field>
+            <field name="model">wizard.profit.loss</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report Profit Loss">
+                    <group>
+                        <group>
+                            <field name="period_id_curr" required="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <label string="Date Period"/>
+                            <div>
+                                <field name="from_date_curr" nolabel="1" class="oe_inline" required="1"/> -
+                                <field name="to_date_curr" nolabel="1" class="oe_inline" required="1"/>
+                            </div>
+                            <field name="report_type"/>
+                            <field name="report_group"/>
+                        </group>
+
+                        <group>
+                            <field name="period_id_prev" required="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <label string="Date Period"/>
+                            <div>
+                                <field name="from_date_prev" nolabel="1" class="oe_inline" required="1"/> -
+                                <field name="to_date_prev" nolabel="1" class="oe_inline" required="1"/>
+                            </div>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_profit_loss">
+            <field name="name">Report Profit Loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.profit.loss</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_profit_loss"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem name="Report Profit Loss" parent="account.menu_finance_legal_statement" action="action_report_profit_loss" id="menu_profit_loss" icon="fa-print" sequence="16"/> -->
+        <!--====================Specifying the report========================-->
+
+        <report string="Report Profit Loss Summary"
+            model="report.profit.loss"
+            auto="True"
+            name="report_profit_loss_summary"
+            rml="c10i_account/report/report_profit_loss_summary.jrxml"
+            id="report_profit_loss_summary"
+            menu="False"
+            />
+
+        <report string="Report Profit Loss Detail"
+            model="report.profit.loss"
+            auto="True"
+            name="report_profit_loss_detail"
+            rml="c10i_account/report/report_profit_loss_detail.jrxml"
+            id="report_profit_loss_detail"
+            menu="False"
+            />
+    </data>
+</odoo>

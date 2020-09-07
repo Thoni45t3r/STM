@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_view_currency_form" model="ir.ui.view">
+            <field name="name">c10i.res.currency.form</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <field name="rate" position="after" >
+                    <field name="allow_inverse_currency_rate" invisible="1"/>
+                    <field name="inverse_rate" attrs="{'invisible': [('allow_inverse_currency_rate','=',False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- <record id="c10i_view_currency_rate_tree" model="ir.ui.view">
+            <field name="name">c10i.res.currency.rate.tree</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="allow_inverse_currency_rate" invisible="1"/>
+                    <field name="inverse_rate" attrs="{'invisible': [('allow_inverse_currency_rate','=',False)]}"/>
+                </field>
+            </field>
+        </record> -->
+
+        <record id="c10i_view_currency_rate_form" model="ir.ui.view">
+            <field name="name">c10i.res.currency.rate.form</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="after" >
+                    <field name="inverse_rate" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- <act_window
+           id="act_view_currency_rates"
+           name="Currency Rates"
+           view_mode='tree,form'
+           view_id='view_currency_rate_tree'
+           domain="[('currency_id','=', active_id)]"
+           context="{'default_currency_id': active_id}"
+           res_model="res.currency.rate"/> -->
+    </data>
+</odoo>

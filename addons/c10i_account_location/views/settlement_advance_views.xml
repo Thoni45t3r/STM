@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="settlement_advance_plantation_form">
+        <field name="name">account.settlement.advance.plantation</field>
+        <field name="model">account.settlement.advance</field>
+        <field name="inherit_id" ref="c10i_employee_advance.settlement_advance_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/group/group[2]/field[@name='account_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/group/group[2]/field[@name='amount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/field[@name='split_line_ids']/tree/field[@name='account_id']" position="before">
+                <field name="account_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                <field name="account_location_id" domain="[('type_id','=',account_location_type_id)]" attrs="{'readonly': [('account_location_type_no_location', '=', True)], 'required': [('account_location_type_no_location', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                <field name="account_location_type_no_location" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

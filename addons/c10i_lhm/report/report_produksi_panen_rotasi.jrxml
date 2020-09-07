@@ -1,0 +1,2228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Rotasi Panen" language="groovy" pageWidth="1403" pageHeight="2808" columnWidth="1403" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="b0e95a63-3a3f-47ea-8291-f0ad58d698a3">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="mm"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="141"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="852"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="648"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="338"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="asl_server"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="mm"/>
+	<style name="default" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" hTextAlign="Left" hImageAlign="Left" vTextAlign="Top" vImageAlign="Top" isBlankWhenNull="true" fontName="SansSerif" fontSize="8">
+		<box leftPadding="2" rightPadding="2"/>
+	</style>
+	<style name="num1" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0.00;-#,##0.00"/>
+	<style name="num2" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0;-#,##0"/>
+	<style name="date1" style="default" pattern="dd-MM-yy HH:mm"/>
+	<style name="date2" style="default" pattern="dd-MMM-yy"/>
+	<style name="date3" style="default" pattern="dd/MM/yy"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" style="default" hTextAlign="Center" hImageAlign="Center">
+		<box leftPadding="0" rightPadding="0"/>
+	</style>
+	<parameter name="id" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select 
+ra.code as afdeling_code,lpb.code as block_code,lpb.section,luas,pokok,sph,wrprp.status,t00,
+t01,t02,t03,t04,t05,t06,t07,t08,t09,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,
+z01,z02,z03,z04,z05,z06,z07,z08,z09,z10,z11,z12,z13,z14,z15,z16,z17,z18,z19,z20,z21,z22,z23,z24,z25,z26,z27,z28,z29,z30,z31,
+wrp.date_start,wrp.date_end,
+rc.name as company_name
+from wizard_report_produksi_rotasi_panen wrprp
+left join lhm_plant_block lpb on lpb.id=wrprp.block_id
+left join res_afdeling ra on ra.id=lpb.afdeling_id
+left join wizard_report_produksi wrp on  wrp.id=wrprp.produksi_id
+left join res_company rc on rc.id=wrp.company_id
+where produksi_id= $P{id} 
+order by ra.code,lpb.section ,lpb.code]]>
+	</queryString>
+	<field name="afdeling_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="afdeling_code"/>
+	</field>
+	<field name="block_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="block_code"/>
+	</field>
+	<field name="section" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="section"/>
+	</field>
+	<field name="luas" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="luas"/>
+	</field>
+	<field name="pokok" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pokok"/>
+	</field>
+	<field name="sph" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="sph"/>
+	</field>
+	<field name="status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="status"/>
+	</field>
+	<field name="t00" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t00"/>
+	</field>
+	<field name="t01" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t01"/>
+	</field>
+	<field name="t02" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t02"/>
+	</field>
+	<field name="t03" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t03"/>
+	</field>
+	<field name="t04" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t04"/>
+	</field>
+	<field name="t05" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t05"/>
+	</field>
+	<field name="t06" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t06"/>
+	</field>
+	<field name="t07" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t07"/>
+	</field>
+	<field name="t08" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t08"/>
+	</field>
+	<field name="t09" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t09"/>
+	</field>
+	<field name="t10" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t10"/>
+	</field>
+	<field name="t11" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t11"/>
+	</field>
+	<field name="t12" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t12"/>
+	</field>
+	<field name="t13" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t13"/>
+	</field>
+	<field name="t14" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t14"/>
+	</field>
+	<field name="t15" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t15"/>
+	</field>
+	<field name="t16" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t16"/>
+	</field>
+	<field name="t17" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t17"/>
+	</field>
+	<field name="t18" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t18"/>
+	</field>
+	<field name="t19" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t19"/>
+	</field>
+	<field name="t20" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t20"/>
+	</field>
+	<field name="t21" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t21"/>
+	</field>
+	<field name="t22" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t22"/>
+	</field>
+	<field name="t23" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t23"/>
+	</field>
+	<field name="t24" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t24"/>
+	</field>
+	<field name="t25" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t25"/>
+	</field>
+	<field name="t26" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t26"/>
+	</field>
+	<field name="t27" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t27"/>
+	</field>
+	<field name="t28" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t28"/>
+	</field>
+	<field name="t29" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t29"/>
+	</field>
+	<field name="t30" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t30"/>
+	</field>
+	<field name="t31" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="t31"/>
+	</field>
+	<field name="z01" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z01"/>
+	</field>
+	<field name="z02" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z02"/>
+	</field>
+	<field name="z03" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z03"/>
+	</field>
+	<field name="z04" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z04"/>
+	</field>
+	<field name="z05" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z05"/>
+	</field>
+	<field name="z06" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z06"/>
+	</field>
+	<field name="z07" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z07"/>
+	</field>
+	<field name="z08" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z08"/>
+	</field>
+	<field name="z09" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z09"/>
+	</field>
+	<field name="z10" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z10"/>
+	</field>
+	<field name="z11" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z11"/>
+	</field>
+	<field name="z12" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z12"/>
+	</field>
+	<field name="z13" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z13"/>
+	</field>
+	<field name="z14" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z14"/>
+	</field>
+	<field name="z15" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z15"/>
+	</field>
+	<field name="z16" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z16"/>
+	</field>
+	<field name="z17" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z17"/>
+	</field>
+	<field name="z18" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z18"/>
+	</field>
+	<field name="z19" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z19"/>
+	</field>
+	<field name="z20" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z20"/>
+	</field>
+	<field name="z21" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z21"/>
+	</field>
+	<field name="z22" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z22"/>
+	</field>
+	<field name="z23" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z23"/>
+	</field>
+	<field name="z24" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z24"/>
+	</field>
+	<field name="z25" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z25"/>
+	</field>
+	<field name="z26" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z26"/>
+	</field>
+	<field name="z27" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z27"/>
+	</field>
+	<field name="z28" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z28"/>
+	</field>
+	<field name="z29" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z29"/>
+	</field>
+	<field name="z30" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z30"/>
+	</field>
+	<field name="z31" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="z31"/>
+	</field>
+	<field name="date_start" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="date_start"/>
+	</field>
+	<field name="date_end" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="date_end"/>
+	</field>
+	<field name="company_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="company_name"/>
+	</field>
+	<variable name="no_urut" class="java.math.BigDecimal" calculation="Count"/>
+	<pageHeader>
+		<band height="92">
+			<staticText>
+				<reportElement x="0" y="62" width="30" height="30" uuid="e193b035-2e9e-4899-82ab-30df4a9e05be"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="893" y="77" width="30" height="15" uuid="2b40bbd2-482f-41c8-9b3f-c0bbaa971637"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[15]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="62" width="60" height="30" uuid="4f849ad2-1528-4df7-9b98-8ced6dcc8849"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEKSI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="503" y="77" width="30" height="15" uuid="7677edc5-23a2-425e-9d09-59561cfce44c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="77" width="30" height="15" uuid="3f0d4b73-b2f8-4e45-aefa-6d3b7395cc35"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="62" width="60" height="30" uuid="91a85c4f-e68c-4789-baeb-c54a759a80f7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1193" y="77" width="30" height="15" uuid="82710ff9-9cb6-44b9-9a80-f711dcdcf5ad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[25]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="20" width="1403" height="20" uuid="0252497b-5755-4d65-8042-acb11d68b4ee"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ROTASI PANEN"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1013" y="77" width="30" height="15" uuid="83717012-06a1-4e37-b3bc-4e2c53ae9dec"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[19]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="623" y="77" width="30" height="15" uuid="706462fa-b072-4936-a08e-9eb4248a8273"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="773" y="77" width="30" height="15" uuid="a37719aa-8c47-4c57-9561-0d563f6f3ef5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[11]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="563" y="77" width="30" height="15" uuid="71244da6-2ca4-41aa-adb5-6e2c25fd45cf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="62" width="930" height="15" uuid="4677a658-0857-4007-ba54-30fc95875947"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TANGGAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1073" y="77" width="30" height="15" uuid="db64c27b-3cde-4827-a7e3-2e461e6467b9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[21]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="653" y="77" width="30" height="15" uuid="97ee9635-c53f-4300-854a-1c8f4769c70d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="533" y="77" width="30" height="15" uuid="786dfdb5-9ae9-4e40-bc43-cddfb17433db"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="77" width="30" height="15" uuid="971a6c70-5a9f-4f82-b148-0afad7810931"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="743" y="77" width="30" height="15" uuid="caa58ddf-53ae-49a7-bd58-7111904b4642"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="0" width="1403" height="20" uuid="fba0891c-7874-47f4-a1d8-f366adecaae1"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1223" y="77" width="30" height="15" uuid="b53eae0c-a7e5-4f2f-81d6-88191b3689ec"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[26]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="62" width="50" height="30" uuid="3039453a-8ff7-460b-a852-0c7e6b8f9320"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AFD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="62" width="50" height="30" uuid="add5a5dd-1745-4f93-bb21-03708f445733"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SPH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="833" y="77" width="30" height="15" uuid="f21cf4cd-b502-4f93-a3dc-ba16f4cbb867"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[13]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="863" y="77" width="30" height="15" uuid="64f932e9-42f1-4bf9-b37c-26ef4891a2aa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[14]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="62" width="60" height="30" uuid="f0e3e787-d920-4ad9-9c56-91ccc4f85ee0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LUAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1373" y="77" width="30" height="15" uuid="d2115813-5d75-48dd-96bc-167f005d5948"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[31]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="953" y="77" width="30" height="15" uuid="96e842f1-d716-47a3-9c7a-f64bc1791962"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[17]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="593" y="77" width="30" height="15" uuid="49a6baf8-481e-4656-8aaa-9f7df423940d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="713" y="77" width="30" height="15" uuid="5d2c59c8-6f51-4720-b859-8dbb613e33dc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[9]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="62" width="60" height="30" uuid="26305f38-e1d7-461a-b526-d49ee203d35d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[POKOK]]></text>
+			</staticText>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="40" width="1403" height="22" uuid="fcfcbc12-8dfc-4be3-8c5c-b4cf59a37c0d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periode  dari tanggal  : " + new SimpleDateFormat("dd/MM/yyyy").format($F{date_start})  + " s/d "+new SimpleDateFormat("dd/MM/yyyy").format($F{date_end})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="683" y="77" width="30" height="15" uuid="460ffc57-a686-4c45-b2b7-99111e974492"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[8]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1253" y="77" width="30" height="15" uuid="38ed2bc9-e88b-4afd-9d75-39b12e8fad9f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[27]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1043" y="77" width="30" height="15" uuid="95c9c58e-a48b-4cb0-a005-9628b866186a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="983" y="77" width="30" height="15" uuid="bd2a0e70-6fa9-44fd-a944-647153eabd0c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[18]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="62" width="50" height="30" uuid="39507329-9965-4097-811b-cf6731947282"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BLOK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1133" y="77" width="30" height="15" uuid="9e8cf9b4-6216-4b6d-9b8b-bb7f7794f0bf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[23]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1283" y="77" width="30" height="15" uuid="0fd2d6c6-8bbf-4a76-b0a0-ca80597265ad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[28]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="62" width="53" height="30" uuid="4016f841-5f61-49ca-a19e-ca4bbedc5e07"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ROTASI BLN LALU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1343" y="77" width="30" height="15" uuid="b45f57ea-d7b7-4346-8850-ed5827b9a0cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1313" y="77" width="30" height="15" uuid="c1228373-241f-43f1-838f-99a993211e32"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[29]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1163" y="77" width="30" height="15" uuid="2dd50dbd-4dd1-4883-84c4-4904222ae07b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[24]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1103" y="77" width="30" height="15" uuid="e5096fba-2149-4d2f-8cf7-5aaeba349fab"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[22]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="923" y="77" width="30" height="15" uuid="ee3ecac2-e6ec-43dc-b80c-9db48a2dca7a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[16]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="16">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="16" uuid="f58c728f-2277-4d4a-88be-e3c9f240baae"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="80" y="0" width="60" height="16" uuid="94a21bd6-83af-4555-8ac2-3f3c92bcfe37"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{section}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="503" y="0" width="30" height="16" uuid="7d6f0acb-39a5-4ff8-b06b-fc01b9f98742">
+					<printWhenExpression><![CDATA[$F{z02}!=1 || $F{z02}!=2 || $F{z02}!=3 || $F{z02}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t02}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="473" y="0" width="30" height="16" uuid="9284e92e-5aa2-442b-a911-898832db29f5">
+					<printWhenExpression><![CDATA[$F{z01}!=1 || $F{z01}!=2 || $F{z01}!=3 || $F{z01}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t01}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="533" y="0" width="30" height="16" uuid="67cd8cfc-d0c5-42e2-aeda-2b3301f10f28">
+					<printWhenExpression><![CDATA[$F{z03}!=1 || $F{z03}!=2 || $F{z03}!=3 || $F{z03}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t03}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="563" y="0" width="30" height="16" uuid="a01a89b2-29f2-4e18-9576-88f8d45ac671">
+					<printWhenExpression><![CDATA[$F{z04}!=1 || $F{z04}!=2 || $F{z04}!=3 || $F{z04}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t04}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="593" y="0" width="30" height="16" uuid="154c7620-adb6-44a2-874d-ea1a0304d191">
+					<printWhenExpression><![CDATA[$F{z05}!=1 || $F{z05}!=2 || $F{z05}!=3 || $F{z05}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t05}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="623" y="0" width="30" height="16" backcolor="#FFFFFF" uuid="b1629ad8-7238-4c59-8da7-175749145bb8">
+					<printWhenExpression><![CDATA[$F{z06}!=1 || $F{z06}!=2 || $F{z06}!=3 || $F{z06}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t06}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="683" y="0" width="30" height="16" uuid="6afd23fa-e817-4aaf-8da3-0c8575a948f5">
+					<printWhenExpression><![CDATA[$F{z08}!=1 || $F{z08}!=2 || $F{z08}!=3 || $F{z08}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t08}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="653" y="0" width="30" height="16" uuid="6d4a33a9-999b-4af1-aeb3-2a491ade94d4">
+					<printWhenExpression><![CDATA[$F{z07}!=1 || $F{z07}!=2 || $F{z07}!=3 || $F{z07}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t07}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="713" y="0" width="30" height="16" uuid="e39a1253-2411-45a2-8704-491d46edf9f0">
+					<printWhenExpression><![CDATA[$F{z09}!=1 || $F{z09}!=2 || $F{z09}!=3 || $F{z09}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t09}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="863" y="0" width="30" height="16" uuid="71bb61b6-3f33-4729-ac99-9fe71436dd84">
+					<printWhenExpression><![CDATA[$F{z14}!=1 || $F{z14}!=2 || $F{z14}!=3 || $F{z14}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t14}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="833" y="0" width="30" height="16" uuid="f74804b7-a10c-449e-aa24-8c6d60e45f8a">
+					<printWhenExpression><![CDATA[$F{z13}!=1 || $F{z13}!=2 || $F{z13}!=3 || $F{z13}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t13}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="893" y="0" width="30" height="16" uuid="fc8c4d3e-5ac6-480e-90a0-3e37fdd51a80">
+					<printWhenExpression><![CDATA[$F{z15}!=1 || $F{z15}!=2 || $F{z15}!=3 || $F{z15}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t15}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="923" y="0" width="30" height="16" uuid="5688a36d-46ac-46e0-bf21-785d0491c527">
+					<printWhenExpression><![CDATA[$F{z16}!=1 || $F{z16}!=2 || $F{z16}!=3 || $F{z16}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t16}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Transparent" x="743" y="0" width="30" height="16" backcolor="rgba(0, 0, 0, 0.0)" uuid="2207fc72-83a7-4a8a-91b7-064d6957c978">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z10}!=1 || $F{z10}!=2 || $F{z10}!=3 || $F{z10}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="803" y="0" width="30" height="16" uuid="1abf6192-bd75-47c6-ae98-6c132c58bdcf">
+					<printWhenExpression><![CDATA[$F{z12}!=1 || $F{z12}!=2 || $F{z12}!=3 || $F{z12}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t12}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1373" y="0" width="30" height="16" uuid="e17dc2b6-2a06-4f9e-9c01-ed41be328ac9">
+					<printWhenExpression><![CDATA[$F{z31}!=1 || $F{z31}!=2 || $F{z31}!=3 || $F{z31}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t31}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1253" y="0" width="30" height="16" uuid="51bd6818-4d27-4b91-ac03-8490287cc689">
+					<printWhenExpression><![CDATA[$F{z27}!=1 || $F{z27}!=2 || $F{z27}!=3 || $F{z27}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t27}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1013" y="0" width="30" height="16" uuid="7925854a-8c00-4fb9-937f-7b859630872b">
+					<printWhenExpression><![CDATA[$F{z19}!=1 || $F{z19}!=2 || $F{z19}!=3 || $F{z19}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t19}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1193" y="0" width="30" height="16" uuid="9668fc48-2c49-4938-9a8e-ce7a4bdbf693">
+					<printWhenExpression><![CDATA[$F{z25}!=1 || $F{z25}!=2 || $F{z25}!=3 || $F{z25}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t25}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1343" y="0" width="30" height="16" uuid="2226268b-907e-4eec-b62a-b39c01485764">
+					<printWhenExpression><![CDATA[$F{z30}!=1 || $F{z30}!=2 || $F{z30}!=3 || $F{z30}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t30}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1283" y="0" width="30" height="16" uuid="2abcfe0c-4c88-49d4-873f-88229281e0b4">
+					<printWhenExpression><![CDATA[$F{z28}!=1 || $F{z28}!=2 || $F{z28}!=3 || $F{z28}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t28}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1163" y="0" width="30" height="16" uuid="d57a7813-552a-4bab-9601-b9076e154c84">
+					<printWhenExpression><![CDATA[$F{z24}!=1 || $F{z24}!=2 || $F{z24}!=3 || $F{z24}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t24}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1223" y="0" width="30" height="16" uuid="028d3d29-281a-4ecc-8994-6d12d7ae28f8">
+					<printWhenExpression><![CDATA[$F{z26}!=1 || $F{z26}!=2 || $F{z26}!=3 || $F{z26}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t26}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1313" y="0" width="30" height="16" uuid="16422bac-c536-4b1c-b865-aa8e0ce46e6e">
+					<printWhenExpression><![CDATA[$F{z29}!=1 || $F{z29}!=2 || $F{z29}!=3 || $F{z29}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t29}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1043" y="0" width="30" height="16" uuid="62e3f517-c86e-4a3c-b422-0af0888db0de">
+					<printWhenExpression><![CDATA[$F{z20}!=1 || $F{z20}!=2 || $F{z20}!=3 || $F{z20}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t20}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="953" y="0" width="30" height="16" uuid="256de428-dcf8-4807-88ed-2ca8ca9b726d">
+					<printWhenExpression><![CDATA[$F{z17}!=1 || $F{z17}!=2 || $F{z17}!=3 || $F{z17}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t17}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1073" y="0" width="30" height="16" uuid="d0deda70-1bac-4c43-a6c4-efbeda044e48">
+					<printWhenExpression><![CDATA[$F{z21}!=1 || $F{z21}!=2 || $F{z21}!=3 || $F{z21}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t21}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1103" y="0" width="30" height="16" uuid="ebc166ae-98a0-4649-b506-bd9aa65fe95e">
+					<printWhenExpression><![CDATA[$F{z22}!=1 || $F{z22}!=2 || $F{z22}!=3 || $F{z22}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t22}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="983" y="0" width="30" height="16" uuid="c949227f-96da-4098-b7eb-aea286e860bb">
+					<printWhenExpression><![CDATA[$F{z18}!=1 || $F{z18}!=2 || $F{z18}!=3 || $F{z18}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t18}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="ElementGroupHeight" x="30" y="0" width="50" height="16" uuid="2e19f204-f549-4b22-843f-a52126e6c516"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{afdeling_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="1133" y="0" width="30" height="16" uuid="6357d795-c75d-4af6-bfff-8e858f4c7d33">
+					<printWhenExpression><![CDATA[$F{z23}!=1 || $F{z23}!=2 || $F{z23}!=3 || $F{z23}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t23}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="ElementGroupHeight" x="140" y="0" width="50" height="16" uuid="5bf611ca-96c4-41fb-a243-f11a74c90cd4"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{block_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="190" y="0" width="60" height="16" uuid="3d70c375-daaf-49fc-b1ea-6c72822a1a56"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{luas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="360" y="0" width="60" height="16" uuid="694a37ff-3967-45e8-8c47-2724d8a396ce"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" x="250" y="0" width="60" height="16" uuid="92747886-64af-44da-9680-08ac6d241a49"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pokok}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="ElementGroupHeight" x="310" y="0" width="50" height="16" uuid="87975702-47c8-426e-ac4b-5038c06e56f9"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sph}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="420" y="0" width="53" height="16" uuid="a8b91340-192e-4621-8058-fe0a1befe77d"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{t00}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Transparent" x="773" y="0" width="30" height="16" backcolor="rgba(0, 0, 0, 0.0)" uuid="3205b976-45d2-4973-80bf-2a20ab0082ee">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z11}!=1 || $F{z11}!=2 || $F{z11}!=3 || $F{z11}!=4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t11}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1103" y="0" width="30" height="16" backcolor="#FF99FF" uuid="97cf33ae-8273-4d5b-b3eb-53308cb05a05">
+					<printWhenExpression><![CDATA[$F{z22}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t22}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="473" y="0" width="30" height="16" backcolor="#FF99FF" uuid="104b7fcf-ac1f-41a5-8492-c759eff6c79e">
+					<printWhenExpression><![CDATA[$F{z01}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t01}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="833" y="0" width="30" height="16" backcolor="#FF99FF" uuid="fbf1a090-13c1-40ce-8a40-6c45dc13cc0b">
+					<printWhenExpression><![CDATA[$F{z13}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t13}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="893" y="0" width="30" height="16" backcolor="#FF99FF" uuid="590c0cfb-9864-4449-8380-466fc8526406">
+					<printWhenExpression><![CDATA[$F{z15}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t15}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1043" y="0" width="30" height="16" backcolor="#FF99FF" uuid="c6336c25-b6bb-4383-a4b0-28754ae5a763">
+					<printWhenExpression><![CDATA[$F{z20}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t20}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1073" y="0" width="30" height="16" backcolor="#FF99FF" uuid="207d1e5d-a8e8-4753-a8a7-94d438d326b4">
+					<printWhenExpression><![CDATA[$F{z21}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t21}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="863" y="0" width="30" height="16" backcolor="#FF99FF" uuid="3894b7b8-2492-4aec-9988-b58f32140fba">
+					<printWhenExpression><![CDATA[$F{z14}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t14}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="653" y="0" width="30" height="16" backcolor="#FF99FF" uuid="59f7170b-6f21-4ebf-bb36-fc33425b0fce">
+					<printWhenExpression><![CDATA[$F{z07}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t07}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1283" y="0" width="30" height="16" backcolor="#FF99FF" uuid="4766c5d1-224a-4ad5-bb1e-a52318b97472">
+					<printWhenExpression><![CDATA[$F{z28}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t28}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="563" y="0" width="30" height="16" backcolor="#FF99FF" uuid="e608a5d7-7f02-4cbb-a107-8522c6b32758">
+					<printWhenExpression><![CDATA[$F{z04}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t04}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Opaque" x="773" y="0" width="30" height="16" backcolor="#FF99FF" uuid="65bd2915-2964-4b0a-9c87-3dcdb32c2f15">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z11}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t11}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1313" y="0" width="30" height="16" backcolor="#FF99FF" uuid="3ebc843a-6868-4ae1-878c-b51f7a56f3fd">
+					<printWhenExpression><![CDATA[$F{z29}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t29}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="593" y="0" width="30" height="16" backcolor="#FF99FF" uuid="fb1ad302-2ee6-4d85-b521-2c2db83c2657">
+					<printWhenExpression><![CDATA[$F{z05}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t05}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="713" y="0" width="30" height="16" backcolor="#FF99FF" uuid="ce16868b-643d-4b5f-9aff-a44df9d4865e">
+					<printWhenExpression><![CDATA[$F{z09}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t09}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="953" y="0" width="30" height="16" backcolor="#FF99FF" uuid="9abee10b-e11d-4838-953b-ff1fc083b118">
+					<printWhenExpression><![CDATA[$F{z17}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t17}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1223" y="0" width="30" height="16" backcolor="#FF99FF" uuid="c4811713-1fa0-4cca-b0be-3ac045c1cce6">
+					<printWhenExpression><![CDATA[$F{z26}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t26}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1163" y="0" width="30" height="16" backcolor="#FF99FF" uuid="ecfe1b9a-9d10-4bdb-a0c6-d9875545628c">
+					<printWhenExpression><![CDATA[$F{z24}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t24}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="923" y="0" width="30" height="16" backcolor="#FF99FF" uuid="5a43c68d-d8ad-478b-98ab-4659bf05a3c5">
+					<printWhenExpression><![CDATA[$F{z16}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t16}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1253" y="0" width="30" height="16" backcolor="#FF99FF" uuid="73cbf2f1-b1ae-434c-b9b0-17980e4c49c0">
+					<printWhenExpression><![CDATA[$F{z27}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t27}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1133" y="0" width="30" height="16" backcolor="#FF99FF" uuid="98ee396b-695a-4dd4-b344-4bee3283a0d9">
+					<printWhenExpression><![CDATA[$F{z23}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t23}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="983" y="0" width="30" height="16" backcolor="#FF99FF" uuid="d1fd0b53-532e-42b2-800b-94e6984fa234">
+					<printWhenExpression><![CDATA[$F{z18}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t18}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Opaque" x="743" y="0" width="30" height="16" backcolor="#FF99FF" uuid="4acdb969-a2c1-4508-815f-6916cec21671">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z10}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1193" y="0" width="30" height="16" backcolor="#FF99FF" uuid="ee33ccc8-84f8-4df5-ab66-bf5c7cca2c87">
+					<printWhenExpression><![CDATA[$F{z25}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t25}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="683" y="0" width="30" height="16" backcolor="#FF99FF" uuid="88fa6e76-9d8e-438b-ab5d-de445e52f0d3">
+					<printWhenExpression><![CDATA[$F{z08}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t08}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="803" y="0" width="30" height="16" backcolor="#FF99FF" uuid="fa56a966-4220-4662-b257-f3c56c47dd71">
+					<printWhenExpression><![CDATA[$F{z12}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t12}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1343" y="0" width="30" height="16" backcolor="#FF99FF" uuid="bb53bd07-66e3-4ed8-a49f-4c06cd20b3b0">
+					<printWhenExpression><![CDATA[$F{z30}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t30}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="533" y="0" width="30" height="16" backcolor="#FF99FF" uuid="9ddeb16e-7ccc-481e-9933-08fa0fe56959">
+					<printWhenExpression><![CDATA[$F{z03}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t03}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1373" y="0" width="30" height="16" backcolor="#FF99FF" uuid="0f115a12-bec9-4e48-bfc8-b0ee2f9de070">
+					<printWhenExpression><![CDATA[$F{z31}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t31}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="623" y="0" width="30" height="16" backcolor="#FF99FF" uuid="bd16294e-3604-488b-8a25-666166a82064">
+					<printWhenExpression><![CDATA[$F{z06}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t06}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="503" y="0" width="30" height="16" backcolor="#FF99FF" uuid="658730cc-6096-41c2-aaec-1d99a6a4204f">
+					<printWhenExpression><![CDATA[$F{z02}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t02}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1013" y="0" width="30" height="16" backcolor="#FF99FF" uuid="f5e914ac-0ea7-45ce-8b30-bffe9a8fb122">
+					<printWhenExpression><![CDATA[$F{z19}==4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t19}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="893" y="0" width="30" height="16" backcolor="#99F76D" uuid="84dc94ac-8a05-4c6d-aadd-093b684a7791">
+					<printWhenExpression><![CDATA[$F{z15}>0 && $F{z15}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t15}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1163" y="0" width="30" height="16" backcolor="#99F76D" uuid="9f04ae85-b213-4b28-b7d9-43ef622353a9">
+					<printWhenExpression><![CDATA[$F{z24}>0 && $F{z24}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t24}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1073" y="0" width="30" height="16" backcolor="#99F76D" uuid="34dbede0-b176-46af-a11e-8fd9fb0915e0">
+					<printWhenExpression><![CDATA[$F{z21}>0 && $F{z21}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t21}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="533" y="0" width="30" height="16" backcolor="#99F76D" uuid="b4014c12-c581-4e22-8c70-6cea9eaf1d38">
+					<printWhenExpression><![CDATA[$F{z03}>0 && $F{z03}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t03}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="923" y="0" width="30" height="16" backcolor="#99F76D" uuid="333e7e7b-638c-4cc9-a114-238ca334dd7e">
+					<printWhenExpression><![CDATA[$F{z16}>0 && $F{z16}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t16}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="683" y="0" width="30" height="16" backcolor="#99F76D" uuid="07d653ef-2f55-4cd4-ab14-3ca5d0cdae1d">
+					<printWhenExpression><![CDATA[$F{z08}>0 && $F{z08}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t08}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1133" y="0" width="30" height="16" backcolor="#99F76D" uuid="0336cd84-e43b-4d3f-a7b6-fd9e1de3a0f6">
+					<printWhenExpression><![CDATA[$F{z23}>0 && $F{z23}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t23}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1103" y="0" width="30" height="16" backcolor="#99F76D" uuid="e337ac3c-508f-4dfd-8e9a-8a1fba71274e">
+					<printWhenExpression><![CDATA[$F{z22}>0 && $F{z22}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t22}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="953" y="0" width="30" height="16" backcolor="#99F76D" uuid="db6706cf-790e-42e2-9401-2d2e58477367">
+					<printWhenExpression><![CDATA[$F{z17}>0 && $F{z17}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t17}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1193" y="0" width="30" height="16" backcolor="#99F76D" uuid="8e136cd6-0577-4c94-a763-79ea11b77d54">
+					<printWhenExpression><![CDATA[$F{z25}>0 && $F{z25}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t25}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="713" y="0" width="30" height="16" backcolor="#99F76D" uuid="20a01837-10c3-494a-b9e0-5e29b8742df5">
+					<printWhenExpression><![CDATA[$F{z09}>0 && $F{z09}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t09}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="833" y="0" width="30" height="16" backcolor="#99F76D" uuid="4c6ece44-75bf-4808-b5f5-eefaa13f5481">
+					<printWhenExpression><![CDATA[$F{z13}>0 && $F{z13}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t13}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="563" y="0" width="30" height="16" backcolor="#99F76D" uuid="c912ba8e-6282-4ea7-9419-9fdac3b0e7c0">
+					<printWhenExpression><![CDATA[$F{z04}>0 && $F{z04}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t04}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1373" y="0" width="30" height="16" backcolor="#99F76D" uuid="849f81ec-a7bb-436b-9f1b-df5bb7e094a1">
+					<printWhenExpression><![CDATA[$F{z31}>0 && $F{z31}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t31}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1253" y="0" width="30" height="16" backcolor="#99F76D" uuid="2f07bca8-acd4-4b9b-aa78-afe90519db3e">
+					<printWhenExpression><![CDATA[$F{z27}>0 && $F{z27}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t27}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Opaque" x="743" y="0" width="30" height="16" backcolor="#99F76D" uuid="76d21857-256a-4e85-b56b-63e6bd739240">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z10}>0 && $F{z10}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="863" y="0" width="30" height="16" backcolor="#99F76D" uuid="c30a162a-43fb-455a-a71a-cc55ee924dfc">
+					<printWhenExpression><![CDATA[$F{z14}>0 && $F{z14}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t14}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1013" y="0" width="30" height="16" backcolor="#99F76D" uuid="9ab35fd8-ef2d-4627-815d-553d3e56a5c7">
+					<printWhenExpression><![CDATA[$F{z19}>0 && $F{z19}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t19}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1223" y="0" width="30" height="16" backcolor="#99F76D" uuid="07af47a9-b61d-44b9-b194-ff55c3254b51">
+					<printWhenExpression><![CDATA[$F{z26}>0 && $F{z26}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t26}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="653" y="0" width="30" height="16" backcolor="#99F76D" uuid="2b28c07f-5242-4a2e-846f-6bc40766be08">
+					<printWhenExpression><![CDATA[$F{z07}>0 && $F{z07}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t07}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="623" y="0" width="30" height="16" backcolor="#99F76D" uuid="028569db-c1ad-480a-b59a-8aba6652c16d">
+					<printWhenExpression><![CDATA[$F{z06}>0 && $F{z06}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t06}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="593" y="0" width="30" height="16" backcolor="#99F76D" uuid="1f08b284-3a5c-49fd-8100-5ce713c9e4b9">
+					<printWhenExpression><![CDATA[$F{z05}>0 && $F{z05}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t05}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement key="" stretchType="RelativeToBandHeight" mode="Opaque" x="773" y="0" width="30" height="16" backcolor="#99F76D" uuid="bad16c2b-5b90-4aa7-a71a-778642a46ee6">
+					<propertyExpression name="net.sf.jasperreports.style.backcolor"><![CDATA[]]></propertyExpression>
+					<propertyExpression name="net.sf.jasperreports.style.fill"><![CDATA[]]></propertyExpression>
+					<printWhenExpression><![CDATA[$F{z11}>0 && $F{z11}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t11}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="803" y="0" width="30" height="16" backcolor="#99F76D" uuid="f88e945b-f05e-4bbd-abad-8a1a3feb14dc">
+					<printWhenExpression><![CDATA[$F{z12}>0 && $F{z12}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t12}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1343" y="0" width="30" height="16" backcolor="#99F76D" uuid="2c5455c9-603d-44c5-a3b0-70569ebac979">
+					<printWhenExpression><![CDATA[$F{z30}>0 && $F{z30}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t30}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1283" y="0" width="30" height="16" backcolor="#99F76D" uuid="feb9ff7d-a01f-4f68-be55-42d52cf9d855">
+					<printWhenExpression><![CDATA[$F{z28}>0 && $F{z28}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t28}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="473" y="0" width="30" height="16" backcolor="#99F76D" uuid="3dac0c94-2057-470d-94f8-2443ee9121bd">
+					<printWhenExpression><![CDATA[$F{z01}>0 && $F{z01}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t01}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="983" y="0" width="30" height="16" backcolor="#99F76D" uuid="133bafc8-b533-4f07-b49e-b04071e12b9b">
+					<printWhenExpression><![CDATA[$F{z18}>0 && $F{z18}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t18}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1313" y="0" width="30" height="16" backcolor="#99F76D" uuid="80534ba2-4aec-40f6-a4e1-95230adf95aa">
+					<printWhenExpression><![CDATA[$F{z29}>0 && $F{z29}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t29}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="503" y="0" width="30" height="16" backcolor="#99F76D" uuid="76f45ddb-434e-4107-8b51-6a568aa32f66">
+					<printWhenExpression><![CDATA[$F{z02}>0 && $F{z02}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t02}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1043" y="0" width="30" height="16" backcolor="#99F76D" uuid="a14a8c82-95ed-4958-8dee-344e22ffa2d7">
+					<printWhenExpression><![CDATA[$F{z20}>0 && $F{z20}<4]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{t20}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

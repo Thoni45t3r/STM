@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report 
+            id="account_invoices_lhm"
+            model="account.invoice"
+            string="Invoices"
+            report_type="qweb-pdf"
+            name="c10i_lhm.report_invoice_lhm"
+            file="c10i_lhm.report_invoice_lhm"
+            attachment_use="False"
+        />
+    </data>
+</odoo>

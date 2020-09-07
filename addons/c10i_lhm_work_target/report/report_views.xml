@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<report string	= "Export Detail Upah"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_upah"
+				rml		= "c10i_lhm_work_target/report/report_export_data_upah.jrxml"
+				id		= "c10i_lhm.report_export_data_upah"
+        />
+    </data>
+</odoo>

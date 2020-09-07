@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Bea Cukai-->
+        <record id="view_other_stock_form" model="ir.ui.view">
+            <field name="name">view.other.stock.form</field>
+            <field name="model">other.stock</field>
+            <field name="arch" type="xml">
+                <form string="Bea Cukai">
+                    <header>
+                        <button name="action_done" string="Validate" type="object" states="draft" class="oe_highlight" />
+                        <button name="action_draft" string="Set to Draft" type="object" states="done" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Pemasukan 001" /></h1>
+                        </div>
+                        <group name="other_stock">
+                            <group>
+                                <field name="type" />
+                                <field name="company_id" groups="base.group_multi_company" />
+                            </group>
+                            <group>
+                                <field name="date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="product_id" />
+                                    <field name="product_uom" />
+                                    <field name="product_qty" />
+                                </tree>
+                            </field>
+                        </group>
+                        <!-- <field name="note" placeholder="Tulis Catatan Disini..." nolabel="1" colspan="8"/> -->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_other_stock_tree" model="ir.ui.view">
+            <field name="name">view.other.stock.tree</field>
+            <field name="model">other.stock</field>
+            <field name="arch" type="xml">
+                <tree string="Bea Cukai">
+                    <field name="type"/>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_other_stock_filter" model="ir.ui.view">
+            <field name="name">view.other.stock.filter</field>
+            <field name="model">other.stock</field>
+            <field name="arch" type="xml">
+                <search string="Bea Cukai">
+                    <field name="name"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="State" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_other_stock" model="ir.actions.act_window">
+            <field name="name">Stok Lainnya</field>
+            <field name="res_model">other.stock</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_other_stock_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Bea Cukai.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_other_stock_form" action="action_other_stock" parent="stock.menu_stock_inventory_control" sequence="200" />
+        <!-- End Of Bea Cukai-->
+    </data>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_view_account_payment_from_invoices" model="ir.ui.view">
+            <field name="name">c10i.account.register.payments.wizard</field>
+            <field name="model">account.register.payments</field>
+            <field name="inherit_id" ref="account.view_account_payment_from_invoices"/>
+            <field name="arch" type="xml">
+            	<field name="currency_id" position="after">
+		    		<label for="force_rate" groups="base.group_multi_currency"/>
+			    	<div name="amount_curr_div" class="o_row" groups="base.group_multi_currency">
+                    	<field name="is_force_curr"/>
+	                    <field name="force_rate" attrs="{'invisible': [('is_force_curr','=',False)]}" options="{'currency_field': 'company_currency_id'}"/>
+	                    <field name="company_currency_id" invisible="1" options="{'no_create': True, 'no_open': True}"/>
+	                </div>
+		    	</field>
+		    	<field name="communication" position="after">
+                    <field name="payment_adm" invisible="1"/>
+                    <label for="card_type" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}"/>
+                    <div name="card_type_div" class="o_row" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}">
+                        <field name="card_type"/>
+                        <field name="card_number" placeholder="Card Number"/>
+                    </div>
+                </field>
+            	<xpath expr="//group[1]" position="after">
+            		<field name="register_ids">
+            			<tree string="Invoice to Pay" editable="bottom" create="false">
+            				<field name="name"/>
+            				<field name="currency_invoice_id" invisible="1"/>
+            				<field name="invoice_id" readonly="1"/>
+            				<field name="amount_total" options="{'currency_field': 'currency_invoice_id'}" readonly="1"/>
+            				<field name="residual" options="{'currency_field': 'currency_invoice_id'}" readonly="1"/>
+            				<field name="currency_id" invisible="1"/>
+            				<field name="amount_to_pay" options="{'currency_field': 'currency_id'}"/>
+            				<field name="payment_difference"/>
+	                        <field name="payment_difference_handling"/>
+	                        <field name="writeoff_account_id"/>
+            			</tree>
+            		</field>
+            	</xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

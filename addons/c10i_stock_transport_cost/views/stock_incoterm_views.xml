@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Account Location -->
+    <record id="stock_transport_cost_incoterms_form" model="ir.ui.view">
+        <field name="name">stock.transport.cost.incoterms.form</field>
+        <field name="model">stock.incoterms</field>
+        <field name="inherit_id" ref="stock.stock_incoterms_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="transport_cost_sale"/>
+                <field name="sale_account_id" attrs="{'invisible': [('transport_cost_sale','=',False)], 'required': [('transport_cost_sale','=',True)]}"/>
+                <field name="transport_cost_purchase"/>
+                <field name="purchase_account_id" attrs="{'invisible': [('transport_cost_purchase','=',False)], 'required': [('transport_cost_purchase','=',True)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

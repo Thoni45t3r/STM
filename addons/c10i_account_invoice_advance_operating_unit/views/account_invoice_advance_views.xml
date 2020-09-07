@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ou_invoice_advance_supplier_form" model="ir.ui.view">
+            <field name="name">ou.account.invoice.advance.supplier.form</field>
+            <field name="model">account.invoice.advance</field>
+            <field name="inherit_id" ref="c10i_account_invoice_advance.invoice_advance_supplier_form" />
+            <field name="arch" type="xml">
+                <field name="journal_id" position="before">
+                    <field name="operating_unit_id" options="{'no_create': True, 'no_open': True}" groups="operating_unit.group_multi_operating_unit"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="ou_invoice_advance_form" model="ir.ui.view">
+            <field name="name">ou.account.invoice.advance.form</field>
+            <field name="model">account.invoice.advance</field>
+            <field name="inherit_id" ref="c10i_account_invoice_advance.invoice_advance_form" />
+            <field name="arch" type="xml">
+                <field name="journal_id" position="before">
+                    <field name="operating_unit_id" options="{'no_create': True, 'no_open': True}" groups="operating_unit.group_multi_operating_unit"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

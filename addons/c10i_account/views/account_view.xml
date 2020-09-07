@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_view_tax_form_inherited" model="ir.ui.view">
+            <field name="name">c10i.account.tax.form.inherited</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form" />
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='name']" position="after">
+                     <field name="report_name"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="c10i_view_account_invoice_form_inherited" model="ir.ui.view">
+            <field name="name">c10i.view.account.invoice.form.inherited</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                 <xpath expr="//button[@name='invoice_print']" position="replace">
+                     <button name="print_report_invoice" string="Print" type="object" icon="fa-print" states="open,paid"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="c10i_view_account_invoice_supplier_form_inherited" model="ir.ui.view">
+            <field name="name">c10i.view.account.invoice.form.supplier.inherited</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                 <xpath expr="//button[@name='action_invoice_cancel']" position="before">
+                     <button name="print_report_invoice" string="Print" type="object" icon="fa-print" states="open,paid"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="c10i_bank_statement_form_inherit_custom" model="ir.ui.view">
+            <field name="name">c10i.account.bank.statement.custom</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form" />
+            <field name="arch" type="xml">
+                <button name="check_confirm_bank" position="attributes">
+                    <attribute name='confirm'>Apakah Anda yakin memiliki Saldo Akhir tersebut?</attribute>
+                </button>
+            </field>
+        </record>
+
+        <record id="c10i_view_account_journal_form" model="ir.ui.view">
+            <field name="name">c10i.account.journal.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form" />
+            <field name="arch" type="xml">
+                <field name="refund_sequence" position="after">
+                    <field name="receipt_sequence" attrs="{'invisible': [('type', 'not in', ['cash', 'bank'])]}" groups="base.group_no_one"/>
+                </field>
+                <field name="refund_sequence_id" position="after">
+                    <field name="receipt_sequence_id" required="0" attrs="{'readonly': 1, 'invisible': ['|',('type', 'not in', ['cash', 'bank']), ('receipt_sequence', '!=', True)]}" groups="base.group_no_one"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Report Nota Invoice"
+				model	= "account.invoice"
+				auto	= "True"
+				name	= "report_nota_invoice"
+				rml		= "c10i_account/report/report_nota_invoice.jrxml"
+				id		= "report_nota_invoice"
+                menu    = "True"
+        />
+
+        <!-- ========== Remove Report ========== -->
+        <report
+            id              = "account_invoices"
+            model           = "account.invoice"
+            string          = "Invoices"
+            report_type     = "qweb-pdf"
+            name            = "account.report_invoice"
+            file            = "account.report_invoice"
+            attachment_use  = "True"
+            menu            = "False"
+            attachment      = "(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+    </data>
+</odoo>

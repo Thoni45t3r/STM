@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizard -->
+        <record model='ir.ui.view' id='wizard_report_report_monitor_du_select_form'>
+            <field name="name">Print Laporan Monitor DU Select</field>
+            <field name="model">wizard.report.monitor.du.select</field>
+            <field name="arch" type="xml">
+                <form string="Monitoring DU Harian">
+                    <center><h1>Select Report</h1></center>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="report_type" string="Report Type" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="create_report" type="object" default_focus="1" string="Print" class="oe_highlight" icon="fa-get-pocket"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" icon="fa-ban"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='wizard_report_monitor_du_select_action'>
+            <field name="name">Print Monitoring DU Harian</field>
+            <field name="res_model">wizard.report.monitor.du.select</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_report_monitor_du_select_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Reporting -->
+        <report string	= "Monitoring DU Harian"
+				model	= "wizard.report.monitor.du.select"
+				auto	= "True"
+				name	= "report_monitor_du"
+				rml		= "c10i_lhm/report/report_monitor_du.jrxml"
+				id		= "report_monitor_du"
+        />
+
+
+        <!-- Laporan monitor -->
+        <record model='ir.ui.view' id='wizard_report_monitor_view'>
+            <field name="name">wizard.report.monitor.view</field>
+            <field name="model">wizard.report.monitor</field>
+            <field name="arch" type="xml">
+                <form string="Monitoring DU Harian" version="7.0" create="false" edit="false">
+                    <header>
+                        <button name="generate_report" type="object" default_focus="1" string="Generate" class="oe_highlight" icon="fa-get-pocket"/>
+                        <button icon="fa-get-pocket" name="%(wizard_report_monitor_du_select_action)d" string="Print" type="action" target="new"/>
+                    </header>
+                    <sheet>
+                        <notebook>
+                            <page string="Parameter Laporan">
+                                <group colspan="8">
+                                    <group>
+                                        <label string="Periode Laporan"/>
+                                        <div>
+                                            <field name="date_start" class="oe_inline" nolabel="1" required="1" /> -
+                                            <field name="date_end" nolabel="1" class="oe_inline" required="1" />
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <field name="company_id" readonly="1" groups="base.group_no_one"/>
+                                        <field name="user_id" readonly="1" groups="base.group_no_one"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Kemandoran">
+                                        <field name="kemandoran_ids" nolabel="1">
+                                            <tree>
+                                                <field name="code"/>
+                                                <field name="name"/>
+                                            </tree>
+                                            <form>
+                                                <group>
+                                                    <field name="code"/>
+                                                    <field name="name"/>
+                                                </group>
+                                            </form>
+                                        </field>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Monitoring DU Harian">
+                                <field name="du_ids" mode="tree" >
+                                    <tree editable="bottom" create="false" readonly="1">
+                                        <field name="Kemandoran_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="nik"/>
+                                        <field name="employee_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="HT" sum="HT"/>
+                                        <field name="PT" sum="PT"/>
+                                        <field name="H01" sum="H01"/>
+                                        <field name="P01" sum="P01"/>
+                                        <field name="H02" sum="H02"/>
+                                        <field name="P02" sum="P02"/>
+                                        <field name="H03" sum="H03"/>
+                                        <field name="P03" sum="P03"/>
+                                        <field name="H04" sum="H04"/>
+                                        <field name="P04" sum="P04"/>
+                                        <field name="H05" sum="H05"/>
+                                        <field name="P05" sum="P05"/>
+                                        <field name="H06" sum="H06"/>
+                                        <field name="P06" sum="P06"/>
+                                        <field name="H07" sum="H07"/>
+                                        <field name="P07" sum="P07"/>
+                                        <field name="H08" sum="H08"/>
+                                        <field name="P08" sum="P08"/>
+                                        <field name="H09" sum="H09"/>
+                                        <field name="P09" sum="P09"/>
+                                        <field name="H10" sum="H10"/>
+                                        <field name="P10" sum="P10"/>
+                                        <field name="H11" sum="H11"/>
+                                        <field name="P11" sum="P11"/>
+                                        <field name="H12" sum="H12"/>
+                                        <field name="P12" sum="P12"/>
+                                        <field name="H13" sum="H13"/>
+                                        <field name="P13" sum="P13"/>
+                                        <field name="H14" sum="H14"/>
+                                        <field name="P14" sum="P14"/>
+                                        <field name="H15" sum="H15"/>
+                                        <field name="P15" sum="P15"/>
+                                        <field name="H16" sum="H16"/>
+                                        <field name="P16" sum="P16"/>
+                                        <field name="H17" sum="H17"/>
+                                        <field name="P17" sum="P17"/>
+                                        <field name="H18" sum="H18"/>
+                                        <field name="P18" sum="P18"/>
+                                        <field name="H19" sum="H19"/>
+                                        <field name="P19" sum="P19"/>
+                                        <field name="H20" sum="H20"/>
+                                        <field name="P20" sum="P20"/>
+                                        <field name="H21" sum="H21"/>
+                                        <field name="P21" sum="P21"/>
+                                        <field name="H22" sum="H22"/>
+                                        <field name="P22" sum="P22"/>
+                                        <field name="H23" sum="H23"/>
+                                        <field name="P23" sum="P23"/>
+                                        <field name="H24" sum="H24"/>
+                                        <field name="P24" sum="P24"/>
+                                        <field name="H25" sum="H25"/>
+                                        <field name="P25" sum="P25"/>
+                                        <field name="H26" sum="H26"/>
+                                        <field name="P26" sum="P26"/>
+                                        <field name="H27" sum="H27"/>
+                                        <field name="P27" sum="P27"/>
+                                        <field name="H28" sum="H28"/>
+                                        <field name="P28" sum="P28"/>
+                                        <field name="H29" sum="H29"/>
+                                        <field name="P29" sum="P29"/>
+                                        <field name="H30" sum="H30"/>
+                                        <field name="P30" sum="P30"/>
+                                        <field name="H31" sum="H31"/>
+                                        <field name="P31" sum="P31"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='wizard_report_monitor_action'>
+            <field name="name">Monitoring DU Harian</field>
+            <field name="res_model">wizard.report.monitor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_monitor_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="submenu_laporan_monitor"
+                  parent="submenu_proses_penggajian"
+                  name="Monitoring DU Harian"
+                  action="wizard_report_monitor_action"
+                  groups="group_plantation_supervisor,group_plantation_operator_can_see_salary,group_plantation_reporting_all"
+                  sequence="11"/>
+
+    </data>
+</odoo>

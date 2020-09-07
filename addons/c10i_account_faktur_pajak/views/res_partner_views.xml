@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_view_perpajakan" model="ir.ui.view">
+        <field name="name">res.partner.view.perpajakan</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <page name="accounting" position="after">
+                <page name="tax" string="Perpajakan">
+                    <group>
+                        <group>
+                            <label for="npwp_number"/>
+                            <div>
+                                <field name="has_npwp" nolable="1"/>
+                                <field name="npwp_number" nolable="1" attrs="{'invisible':[('has_npwp','=',False)], 'required':[('has_npwp','=',True)]}"/>
+                            </div>
+                            <label for="nppkp_number"/>
+                            <div>
+                                <field name="has_nppkp" nolable="1"/>
+                                <field name="nppkp_number" nolable="1" attrs="{'invisible':[('has_nppkp','=',False)], 'required':[('has_nppkp','=',True)]}"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="npwp_address" attrs="{'invisible':[('has_npwp','=',False)], 'required':[('has_npwp','=',True)]}"/>
+                            <field name="default_kode_transaksi" attrs="{'invisible':[('has_npwp','=',False), ('customer','=',False)]}" />
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>

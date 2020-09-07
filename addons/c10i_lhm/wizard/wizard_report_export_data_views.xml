@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizard -->
+        <record model='ir.ui.view' id='wizard_export_data_select_form'>
+            <field name="name">Laporan Export Select</field>
+            <field name="model">wizard.report.export.data.select</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Export Data">
+                    <header>
+                        <button name="create_report" type="object" default_focus="1" string="Print" class="oe_highlight" icon="fa-get-pocket"/>
+                    </header>
+                    <sheet>
+                        <center><h1>Laporan Export Data</h1></center>
+                        <group>
+                            <label string="Periode Laporan"/>
+                            <div>
+                                <field name="from_date" class="oe_inline" nolabel="1" required="1" /> -
+                                <field name="to_date" nolabel="1" class="oe_inline" required="1" />
+                            </div>
+                            <field name="report_type" string="Tipe Laporan" required="1" colspand="8"/>
+                            <field name="name" string="Nama Laporan" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='wizard_export_data_action'>
+            <field name="name">Laporan Export Data</field>
+            <field name="res_model">wizard.report.export.data.select</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_export_data_select_form"/>
+            <field name="target">current</field>
+        </record>
+
+
+        <menuitem id="submenu_export_data"
+                  name="Laporan Export Data"
+                  action="wizard_export_data_action"
+                  parent="menu_plantation_report"
+                  groups="group_plantation_supervisor,group_plantation_reporting_all"
+                  sequence="50"/>
+
+
+        <!-- Reporting -->
+        <report string	= "Export Progres LHM"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_lhm_progres"
+				rml		= "c10i_lhm/report/report_export_data_lhm_progres.jrxml"
+				id		= "report_export_data_lhm_progres"
+        />
+
+        <report string	= "Export Progres Buku Kontraktor"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_kontraktor"
+				rml		= "c10i_lhm/report/report_export_data_kontraktor.jrxml"
+				id		= "report_export_data_kontraktor"
+        />
+
+        <report string	= "Export Progres Buku Kontraktor Alat"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_kontraktor_alat"
+				rml		= "c10i_lhm/report/report_export_data_kontraktor_alat.jrxml"
+				id		= "report_export_data_kontraktor_alat"
+        />
+
+        <report string	= "Export Detail Upah"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_upah"
+				rml		= "c10i_lhm/report/report_export_data_upah.jrxml"
+				id		= "report_export_data_upah"
+        />
+
+        <report string	= "Export Data Upah - Rekap HK"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_rekap_hk"
+				rml		= "c10i_lhm/report/report_export_data_rekap_hk.jrxml"
+				id		= "report_export_data_rekap_hk"
+        />
+
+        <report string	= "Export Transaksi Detail LHM"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_lhm_detail"
+				rml		= "c10i_lhm/report/report_export_data_lhm_detail.jrxml"
+				id		= "report_export_data_lhm_detail"
+        />
+
+        <report string	= "Export Master DataKaryawan"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_karyawan"
+				rml		= "c10i_lhm/report/report_export_data_karyawan.jrxml"
+				id		= "report_export_data_karyawan"
+        />
+
+        <report string	= "Export Buku Kendaraan (VH)"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_vehicle"
+				rml		= "c10i_lhm/report/report_export_data_vehicle.jrxml"
+				id		= "report_export_data_vehicle"
+        />
+
+        <report string	= "Export Buku Mesin (MA)"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_machine"
+				rml		= "c10i_lhm/report/report_export_data_machine.jrxml"
+				id		= "report_export_data_machine"
+        />
+
+        <report string	= "Export Buku Workshop (WS)"
+				model	= "wizard.report.export.data.select"
+				auto	= "True"
+				name	= "report_export_data_workshop"
+				rml		= "c10i_lhm/report/report_export_data_workshop.jrxml"
+				id		= "report_export_data_workshop"
+        />
+
+    </data>
+</odoo>

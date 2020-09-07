@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="account_voucher.menu_action_sale_receipt" action="account_voucher.action_sale_receipt"
+            parent="account.menu_finance_receivables" sequence="10" groups="group_accounting_account_voucher"/>
+
+        <menuitem id="account_voucher.menu_action_purchase_receipt" action="account_voucher.action_purchase_receipt"
+            parent="account.menu_finance_payables" sequence="4" groups="group_accounting_account_voucher"/>
+
+        <record id="c10i_view_voucher_filter" model="ir.ui.view">
+            <field name="name">c10i.account.voucher.select</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter"/>
+            <field name="arch" type="xml">
+                <field name="number" position="after">
+                    <field name="name"/>
+                    <field name="amount"/>
+                </field>
+                <field name="journal_id" position="after">
+                    <field name="journal_id" widget="selection" />
+                </field>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_voucher_form">
+            <field name="name">account.voucher.form</field>
+            <field name="model">account.voucher</field>
+            <field name="arch" type="xml">
+                <form string="Direct Payments">
+                    <header>
+                        <button name="proforma_voucher" string="Validate" states="draft" class="oe_highlight" type="object"/>
+                        <button name="create_report" string="Print" icon="fa-print" type="object"/>
+                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="draft,proforma"/>
+                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="posted" confirm="Are you sure you want to cancel this receipt?"/>
+                        <button name="action_cancel_draft" type="object" states="cancel" string="Set to Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted" statusbar_colors='{"proforma":"blue"}'/>
+                    </header>
+                    <sheet string="Direct Payments">
+                        <label for="number" string="Direct Payment"/>
+                        <h1>
+                            <field name="number" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="voucher_type" widget="radio"/>
+                                <field name="currency_id" invisible="True"/>
+                                <field name="partner_id" string="Partner" context="{'show_address': 1}" options='{"always_reload": True, "no_create": True, "no_open": True}'/>
+                                <field name="pay_now" required="1"/>
+                                <field name="company_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_company"/>
+                                <field name="journal_report_type" invisible="1" />
+                            </group>
+                            <group>
+                                <field name="journal_id" domain="[('type','in',('cash','bank'))]" widget="selection" groups="account.group_account_user"/>
+                                <field name="transaction_type" invisible="1"/>
+                                <field name="date"/>
+                                <field name="account_date" string="Posting Date"/>
+                                <field name="date_due" attrs="{'invisible':[('pay_now','=','pay_now')]}"/>
+                                <field name="name" attrs="{'invisible': [('pay_now', '=', 'pay_later')]}"/>
+                                <field name="account_id" readonly="True"/>
+                                <field name="paid" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Direct Payments Information">
+                                <field name="line_ids">
+                                    <tree string="Voucher Lines" editable="bottom">
+                                        <!-- <field name="product_id" invisible="1" options="{'no_create': True, 'no_open': True}"
+                                            on_change="product_id_change(product_id, parent.partner_id, price_unit, company_id, parent.currency_id, parent.voucher_type)" /> -->
+                                        <field name="name"/>
+                                        <field name="account_id" domain="[('user_type_id.name','!=','View')]" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="account_analytic_id" domain="[('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="tax_ids" widget="many2many_tags" invisible="1" domain="[('type_tax_use','=','sale')]"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group class="oe_subtotal_footer oe_right">
+                                        <field name="tax_amount" invisible="1"/>
+                                        <field name="amount"/>
+                                    </group>
+                                    <field name="narration" placeholder="Internal Notes" nolabel="1"/>
+                                </group>
+                            </page>
+                            <page string="Journal Items" attrs="{'invisible': [('state','!=','posted')]}" groups="account.group_account_user,account.group_account_manager">
+                                <group>
+                                    <field name="move_id" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+            </field>
+        </record>
+
+        <record id="action_review_voucher_list_c10i" model="ir.actions.act_window">
+            <field name="name">Direct Payments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.voucher</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'default_pay_now': 'pay_now', 'readonly_by_pass':True}</field>
+            <field name="domain">[('pay_now','=','pay_now')]</field>
+            <field name="search_view_id" eval="False"/> <!-- Force empty -->
+            <field name="view_id" eval="False"/> <!-- Force empty -->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a voucher entries.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_c10i_account_voucher_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="account_voucher.view_voucher_tree"/>
+            <field name="act_window_id" ref="action_review_voucher_list_c10i"/>
+        </record>
+
+        <record id="action_c10i_account_voucher_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_voucher_form"/>
+            <field name="act_window_id" ref="action_review_voucher_list_c10i"/>
+        </record>
+
+        <menuitem id="voucher_entries_menu" action="action_review_voucher_list_c10i"
+            name="Direct Payments" parent="menu_finance_payment_bank_cash"
+            groups="group_accounting_account_voucher" sequence="5"
+            />
+
+        <record model="ir.ui.view" id="c10i_account_view_voucher_tree_purchase">
+            <field name="name">c10i.account.voucher.tree.supplier</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_tree_purchase"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="transaction_type" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Report Voucher"
+				model	= "account.voucher"
+				auto	= "True"
+				name	= "report_voucher_cash_bank"
+				rml		= "c10i_account/report/report_voucher.jrxml"
+				id		= "report_voucher_cash_bank"
+                menu    = "False"
+        />
+
+    </data>
+</odoo>

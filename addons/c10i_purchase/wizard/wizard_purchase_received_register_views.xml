@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id='wizard_report_purchase_received_register' model="ir.ui.view">
+            <field name="name">Purchase Received Register</field>
+            <field name="model">wizard.purchase.received.register</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Received Register">
+                    <group>
+                        <group>
+                            <field name="date_start" required='1'/>
+                            <field name="date_stop" required='1'/>
+                        </group>
+                        <group>
+                            <field name="report_type"  />
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_purchase_received_register">
+            <field name="name">Purchase Received Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.purchase.received.register</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_purchase_received_register"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Purchase Received Register" parent="purchase.root_purchase_report" action="action_report_purchase_received_register" id="menu_report_purchase_received_register" icon="fa-print" sequence="2"/>
+    </data>
+</odoo>

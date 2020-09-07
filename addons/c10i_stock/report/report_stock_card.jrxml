@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_stock_card" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="20" uuid="bbd5504c-f5f9-4e73-995d-fe9209694485">
+	<property name="ireport.zoom" value="1.6105100000000032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SJAI Server Live"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<style name="default" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" hTextAlign="Left" hImageAlign="Left" vTextAlign="Top" vImageAlign="Top" isBlankWhenNull="true" fontName="SansSerif" fontSize="8">
+		<box leftPadding="1" rightPadding="1"/>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<subDataset name="transaction" uuid="f5162643-3286-41d7-a388-4045aded1e82">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SJAI Lokal Server"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+		<parameter name="from_date" class="java.lang.String">
+			<parameterDescription><![CDATA[from_date]]></parameterDescription>
+			<defaultValueExpression><![CDATA["2019-01-01"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date" class="java.lang.String">
+			<parameterDescription><![CDATA[to_date]]></parameterDescription>
+			<defaultValueExpression><![CDATA["2019-02-01"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="location_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA[location_id]]></parameterDescription>
+			<defaultValueExpression><![CDATA[15]]></defaultValueExpression>
+		</parameter>
+		<parameter name="product_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA[product_id]]></parameterDescription>
+			<defaultValueExpression><![CDATA[2661]]></defaultValueExpression>
+		</parameter>
+		<parameter name="partner_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA[partner_id]]></parameterDescription>
+			<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+		</parameter>
+		<parameter name="initbalance" class="java.math.BigDecimal">
+			<parameterDescription><![CDATA[initbalance]]></parameterDescription>
+			<defaultValueExpression><![CDATA[BigDecimal.ZERO]]></defaultValueExpression>
+		</parameter>
+		<parameter name="company_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA[company_id]]></parameterDescription>
+			<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT '2TRX'::TEXT datatype
+, internalloc.id AS internallocid
+, internalloc.name AS locname
+, CASE internalloc.id
+	WHEN smove.location_id THEN 'out'
+	WHEN smove.location_dest_id THEN 'in'
+	ELSE 'unknown' END AS movetype
+, smove.company_id
+, smove.name AS smovename
+, SUBSTRING(src.complete_name FROM POSITION('/' IN src.complete_name) +1) AS sourceloc
+, SUBSTRING(dest.complete_name FROM POSITION('/' IN dest.complete_name) +1) AS destloc
+, internalloc.complete_name AS internal_loc
+, COALESCE(spick.name, inventory.name, smove.name, '#NO-REF') AS reference
+, smove.origin
+, partner.ref AS partnerref
+, partner.name AS partnername
+, item.default_code
+, categ.name AS categname
+, smove.product_qty
+, smove.product_uom_qty AS trans_qty
+, uom.name AS uomname
+, (SELECT (sum(squant.cost) / sum(squant.qty)) * smove.product_uom_qty FROM stock_move innersm 
+	INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+	INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	WHERE innersm.id = smove.id) AS cost
+, (SELECT string_agg(splot.name, ',') FROM stock_move innersm 
+	LEFT OUTER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id 
+	LEFT OUTER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	LEFT OUTER JOIN stock_production_lot splot ON splot.id = squant.lot_id
+	WHERE innersm.id = smove.id) AS lotnumber
+, (SELECT string_agg(sqpack.name, ',') FROM stock_move innersm 
+	LEFT OUTER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id 
+	LEFT OUTER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+	LEFT OUTER JOIN stock_quant_package sqpack ON sqpack.id = squant.package_id
+	WHERE innersm.id = smove.id) AS packagenumber
+, smove.date + interval '7 hours' AS date
+, smove.date_expected
+--, transuom.name AS trans_uom
+FROM stock_move smove
+INNER JOIN stock_location internalloc ON internalloc.id in (smove.location_id, smove.location_dest_id)
+	AND internalloc.id = $P{location_id}   -- << change here << --
+	AND internalloc.usage = 'internal'
+INNER JOIN product_product item ON item.id = smove.product_id
+INNER JOIN product_template itemtmpl ON itemtmpl.id = item.product_tmpl_id
+INNER JOIN product_category categ ON categ.id = itemtmpl.categ_id
+INNER JOIN stock_location src ON src.id = smove.location_id
+INNER JOIN stock_location dest ON dest.id = smove.location_dest_id
+INNER JOIN product_uom uom ON uom.id = itemtmpl.uom_id
+/** look-up in standard operational */
+LEFT JOIN stock_picking spick ON spick.id = smove.picking_id
+/** lookup in Physical Inventory */
+LEFT JOIN stock_inventory inventory ON inventory.id = smove.inventory_id
+LEFT OUTER JOIN res_partner partner ON partner.id = spick.partner_id
+-- << this script are WHEN uom_conversion installed >> --
+--LEFT OUTER JOIN product_uom transuom ON transuom.id = smove.product_uom
+WHERE smove.product_id = $P{product_id} -- << change here << --
+AND smove.state = 'done'
+AND smove.company_id =  $P{company_id}  -- << change here << --
+AND (smove.date + interval '7 hours')::TIMESTAMP BETWEEN ( $P{from_date} ||' 00:00:01')::TIMESTAMP AND ( $P{to_date} || ' 23:59:59')::TIMESTAMP -- << change here << --
+AND smove.location_id != smove.location_dest_id -- << eliminate wrong stock_move >> --
+ORDER BY smove.date, smove.id]]>
+		</queryString>
+		<field name="datatype" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="datatype"/>
+		</field>
+		<field name="internallocid" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="internallocid"/>
+		</field>
+		<field name="locname" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="locname"/>
+		</field>
+		<field name="movetype" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="movetype"/>
+		</field>
+		<field name="company_id" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="company_id"/>
+		</field>
+		<field name="smovename" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="smovename"/>
+		</field>
+		<field name="sourceloc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="sourceloc"/>
+		</field>
+		<field name="destloc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="destloc"/>
+		</field>
+		<field name="internal_loc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="internal_loc"/>
+		</field>
+		<field name="reference" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="reference"/>
+		</field>
+		<field name="origin" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="origin"/>
+		</field>
+		<field name="partnerref" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="partnerref"/>
+		</field>
+		<field name="partnername" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="partnername"/>
+		</field>
+		<field name="default_code" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="default_code"/>
+		</field>
+		<field name="categname" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="categname"/>
+		</field>
+		<field name="product_qty" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="product_qty"/>
+		</field>
+		<field name="trans_qty" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="trans_qty"/>
+		</field>
+		<field name="uomname" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="uomname"/>
+		</field>
+		<field name="cost" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.label" value="cost"/>
+		</field>
+		<field name="lotnumber" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="lotnumber"/>
+		</field>
+		<field name="packagenumber" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="packagenumber"/>
+		</field>
+		<field name="date" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.label" value="date"/>
+		</field>
+		<field name="date_expected" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.label" value="date_expected"/>
+		</field>
+		<variable name="balance" class="java.math.BigDecimal">
+			<variableExpression><![CDATA[$V{balance}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : $F{product_qty}.negate())
+)]]></variableExpression>
+			<initialValueExpression><![CDATA[$P{initbalance} == null ? BigDecimal.ZERO : $P{initbalance}]]></initialValueExpression>
+		</variable>
+		<variable name="balancein" class="java.math.BigDecimal">
+			<variableExpression><![CDATA[$V{balancein}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : BigDecimal.ZERO)
+)]]></variableExpression>
+			<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
+		</variable>
+		<variable name="balanceout" class="java.math.BigDecimal">
+			<variableExpression><![CDATA[$V{balanceout}.add(
+  $F{movetype} == null ? BigDecimal.ZERO :
+    ($F{movetype}.equals("in") ? $F{product_qty} : BigDecimal.ZERO)
+)]]></variableExpression>
+			<initialValueExpression><![CDATA[$P{initbalance} == null ? BigDecimal.ZERO : $P{initbalance}]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="username" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ADMINISTRATOR_X"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date" class="java.lang.String">
+		<parameterDescription><![CDATA[from_date]]></parameterDescription>
+		<defaultValueExpression><![CDATA["2019-01-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date" class="java.lang.String">
+		<parameterDescription><![CDATA[to_date]]></parameterDescription>
+		<defaultValueExpression><![CDATA["2019-04-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="product_id" class="java.lang.Integer">
+		<parameterDescription><![CDATA[product_id]]></parameterDescription>
+		<defaultValueExpression><![CDATA[2661]]></defaultValueExpression>
+	</parameter>
+	<parameter name="location_id" class="java.lang.String">
+		<parameterDescription><![CDATA[location_id]]></parameterDescription>
+		<defaultValueExpression><![CDATA["(15)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="location_query" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{location_id}.replace("[","(").replace("]",")").equals("()") || $P{location_id}.equals("")? "TRUE" :
+" internalloc.id in " + $P{location_id}.replace("[","(").replace("]",")")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="company_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select '1INIT' datatype
+, internalloc.id internallocid, internalloc.name locname
+, coalesce(smove.company_id, 1) company_id
+, internalloc.complete_name internal_loc
+, '#INIT'::VARCHAR reference
+, item.id itemid
+, item.default_code
+, itemtmpl.name AS itemname
+, categ.name categname
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			< ($P{from_date} || ' 00:00:01')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_id then -coalesce(smove.product_qty, 0)
+			when smove.location_dest_id then coalesce(smove.product_qty, 0)
+			else 0 end
+		else 0 end
+	) init_qty
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			<= ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_id then -coalesce(smove.product_qty, 0)
+			when smove.location_dest_id then coalesce(smove.product_qty, 0)
+			else 0 end
+		else 0 end
+	) ending_qty
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			<= ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_id then -coalesce(smove.product_uom_qty, 0)
+			when smove.location_dest_id then coalesce(smove.product_uom_qty, 0)
+			else 0 end
+		else 0 end
+	) ending_trans_qty
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			between ($P{from_date} || ' 00:00:01')::timestamp -- << change here << --
+			and ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_dest_id then coalesce(smove.product_qty, 0)
+			else 0 end
+		else 0 end
+	) balancein
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			between ($P{from_date} || ' 00:00:01')::timestamp -- << change here << --
+			and ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_id then coalesce(smove.product_qty, 0)
+			else 0 end
+		else 0 end
+	) balanceout
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			between ($P{from_date} || ' 00:00:01')::timestamp -- << change here << --
+			and ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_dest_id then coalesce(smove.product_uom_qty, 0)
+			else 0 end
+		else 0 end
+	) transbalancein
+, sum(
+	case when (smove.date + interval '7 hours')::timestamp
+			between ($P{from_date} || ' 00:00:01')::timestamp -- << change here << --
+			and ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+		then
+			case internalloc.id
+			when smove.location_id then coalesce(smove.product_uom_qty, 0)
+			else 0 end
+		else 0 end
+	) transbalanceout
+, uom.name uomname
+
+from product_product item
+left join stock_location internalloc
+	on $P!{location_query} -- << change here << --
+	and internalloc.usage = 'internal'
+left join stock_move smove on item.id = smove.product_id
+	and smove.state = 'done'
+	and (smove.date + interval '7 hours')::timestamp
+		<= ($P{to_date} || ' 23:59:59')::timestamp -- << change here << --
+	and internalloc.id in (smove.location_id, smove.location_dest_id)
+	and smove.location_id != smove.location_dest_id
+	and smove.company_id = $P{company_id} -- << change here << --
+
+inner join product_template itemtmpl on itemtmpl.id = item.product_tmpl_id
+inner join product_category categ on categ.id = itemtmpl.categ_id
+inner join product_uom uom on uom.id = coalesce(itemtmpl.uom_id, smove.product_uom)
+
+where item.id = $P{product_id} -- << change here << --
+
+group by internalloc.id, smove.company_id, item.id, categ.id, uom.id, itemtmpl.name
+
+order by internal_loc, categname, item.default_code;]]>
+	</queryString>
+	<field name="datatype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="datatype"/>
+	</field>
+	<field name="internallocid" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="internallocid"/>
+	</field>
+	<field name="locname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="locname"/>
+	</field>
+	<field name="company_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="company_id"/>
+	</field>
+	<field name="internal_loc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="internal_loc"/>
+	</field>
+	<field name="reference" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="reference"/>
+	</field>
+	<field name="itemid" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="itemid"/>
+	</field>
+	<field name="default_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="default_code"/>
+	</field>
+	<field name="itemname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="itemname"/>
+	</field>
+	<field name="categname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="categname"/>
+	</field>
+	<field name="init_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="init_qty"/>
+	</field>
+	<field name="ending_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ending_qty"/>
+	</field>
+	<field name="ending_trans_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ending_trans_qty"/>
+	</field>
+	<field name="balancein" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balancein"/>
+	</field>
+	<field name="balanceout" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balanceout"/>
+	</field>
+	<field name="transbalancein" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="transbalancein"/>
+	</field>
+	<field name="transbalanceout" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="transbalanceout"/>
+	</field>
+	<field name="uomname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uomname"/>
+	</field>
+	<group name="internalloc" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{internallocid}]]></groupExpression>
+		<groupHeader>
+			<band height="119">
+				<staticText>
+					<reportElement x="0" y="106" width="61" height="13" uuid="f0f888b7-2801-43e1-a120-3594e9b141b7"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[LOKASI]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="80" width="61" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="88275953-0211-4a8a-81e0-aece6b83da91"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[KATEGORI]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="93" width="497" height="13" uuid="07684f35-f9bc-4e78-ade2-ce18f09c8f15"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{default_code} == null ? $F{itemname} :
+$F{itemname} == null ? " - " :
+$F{default_code} == null && $F{itemname} == null ?
+" - " : "[" + $F{default_code} + "] " + $F{itemname}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="60" y="27" width="354" height="52" uuid="a0f21335-e498-4b92-bb44-1c88c16ff376"/>
+					<box>
+						<bottomPen lineWidth="0.0" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["KARTU STOK \n" +
+new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date}))+
+" s/d " +
+new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="0" y="93" width="61" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b5dd9a80-4951-44c1-abee-6aeb5b1a9224"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[PRODUK]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="80" width="497" height="13" uuid="4aae31a0-4acc-4de9-a306-2cc8082d9d5d"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{categname}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="61" y="80" width="9" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="88275953-0211-4a8a-81e0-aece6b83da91"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="61" y="106" width="9" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="88275953-0211-4a8a-81e0-aece6b83da91"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="61" y="93" width="9" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="88275953-0211-4a8a-81e0-aece6b83da91"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<subreport>
+					<reportElement x="0" y="0" width="567" height="52" uuid="ef001b3d-ad88-4d38-a589-ba5f4d289bc5"/>
+					<subreportParameter name="Company_ID">
+						<subreportParameterExpression><![CDATA[$F{company_id}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["../../jasper_reports/custom_reports/header_logo.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="106" width="497" height="13" uuid="ce8184a6-5441-4855-9ff6-b274ba1560ec"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{internal_loc}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="13">
+			<printWhenExpression><![CDATA[$V{internalloc_COUNT} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="70" y="0" width="100" height="13" uuid="d94eacb2-6c7f-42ee-b10e-9acf472469ee"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REFERENSI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="20" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="297" y="0" width="73" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MASUK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="0" width="50" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TGL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="443" y="0" width="124" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="73" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[KELUAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="127" height="13" uuid="d94eacb2-6c7f-42ee-b10e-9acf472469ee"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARTNER]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table" x="-2" y="26" width="567" height="0" uuid="e554e6eb-7a2b-48fb-b492-b46719806166">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="transaction" uuid="58f06fc8-53d8-4c68-b8ec-4ff73b916179">
+						<datasetParameter name="from_date">
+							<datasetParameterExpression><![CDATA[$P{from_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="to_date">
+							<datasetParameterExpression><![CDATA[$P{to_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="location_id">
+							<datasetParameterExpression><![CDATA[$F{internallocid}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="product_id">
+							<datasetParameterExpression><![CDATA[$F{itemid}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="initbalance">
+							<datasetParameterExpression><![CDATA[$F{init_qty}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="company_id">
+							<datasetParameterExpression><![CDATA[$P{company_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="20" uuid="5ccad5af-a1d0-4c13-a496-9468523e0f86">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="20" height="26" uuid="6d5806f4-20f4-47e1-a386-4d56a509501b"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="50" uuid="d8b9832e-e50d-44f5-8b32-f1235b21ce0d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="50" height="13" uuid="bcba7ef6-1b23-4a87-9d4f-435fb10b17c3"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" pattern="HH:mm:ss">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="13" width="50" height="13" uuid="db732a7c-730d-40f5-aef2-18e5f44d8152"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="3121148e-8fe6-4e68-aa57-2945eed62d21">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="26" uuid="f2356144-543e-4ee5-afe2-633767327f0f"/>
+								<textFieldExpression><![CDATA[$F{reference}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="127" uuid="d0e47cf6-cdeb-4a42-a077-07296c3487d5">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="127" height="26" uuid="1832b860-05d6-4b75-9e29-cf20917dd230"/>
+								<textFieldExpression><![CDATA[($F{partnerref} == null ? "" : "[" + $F{partnerref} + "] ")+ 
+($F{partnername} == null ? "" : $F{partnername} )+
+($F{lotnumber} == null ? "" :" LOT "+ $F{lotnumber}) +
+($F{packagenumber} == null ? "" :" PACK "+ $F{packagenumber})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="146" uuid="2ca9662a-9ade-4bee-b480-fb035cc14fd9">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="72" height="13" uuid="6dc5bfde-5738-4d61-b1e2-0b989d8fb8c6">
+									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								</reportElement>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$F{movetype}.equals("in") ? $F{product_qty} : ""]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="13" width="146" height="13" isPrintWhenDetailOverflows="true" uuid="66df1b32-126c-4a1b-a62f-0eceb2b5850c">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+									<printWhenExpression><![CDATA[$F{movetype}.equals("in")]]></printWhenExpression>
+								</reportElement>
+								<textFieldExpression><![CDATA[$F{sourceloc}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+								<reportElement stretchType="RelativeToBandHeight" x="72" y="0" width="74" height="13" uuid="6dc5bfde-5738-4d61-b1e2-0b989d8fb8c6">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								</reportElement>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$F{movetype}.equals("out") ? $F{product_qty} : ""]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="0" y="13" width="146" height="13" uuid="8e53cffa-e1f4-4997-9bea-f21240f707cb">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+									<printWhenExpression><![CDATA[$F{movetype}.equals("out")]]></printWhenExpression>
+								</reportElement>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$F{destloc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="91" uuid="1b5e1abf-059c-4d61-ad8b-7fc3894b8ee6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="91" height="26" uuid="6dc5bfde-5738-4d61-b1e2-0b989d8fb8c6"/>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$V{balance}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="33" uuid="1b9e8e46-6737-4dca-90ef-36597446086f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="table" height="26" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+							<box bottomPadding="0">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="33" height="26" uuid="da25cf10-74f7-44af-a2fc-b5f195acb5be"/>
+								<box>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textFieldExpression><![CDATA[$F{uomname}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="13" width="297" height="13" uuid="abdc6b3c-1e50-45a1-8a92-2ee753b6f3b0"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NILAI AWAL"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="443" y="13" width="91" height="13" uuid="41d39a7b-19c4-4338-823e-cc221f103e65"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{init_qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="534" y="13" width="33" height="13" uuid="a4b837db-1ed5-4570-a4c6-bf802e2ca1c7"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement markup="none">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uomname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="534" y="26" width="33" height="13" uuid="a4b837db-1ed5-4570-a4c6-bf802e2ca1c7"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement markup="none">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uomname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement positionType="FixRelativeToBottom" x="443" y="26" width="91" height="13" uuid="41d39a7b-19c4-4338-823e-cc221f103e65"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ending_qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="26" width="297" height="13" uuid="abdc6b3c-1e50-45a1-8a92-2ee753b6f3b0"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NILAI AKHIR"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="297" y="13" width="146" height="13" uuid="abdc6b3c-1e50-45a1-8a92-2ee753b6f3b0"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="0" width="50" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TGL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="20" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="73" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[KELUAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="443" y="0" width="124" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="297" y="0" width="73" height="13" uuid="822fbcf8-0cad-4527-bbae-c35c464b2d3d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MASUK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="127" height="13" uuid="d94eacb2-6c7f-42ee-b10e-9acf472469ee"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARTNER / LOT / PACK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="100" height="13" uuid="d94eacb2-6c7f-42ee-b10e-9acf472469ee"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REFERENSI]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement positionType="FixRelativeToBottom" x="297" y="26" width="73" height="13" uuid="0149ec8a-b681-44b7-84fd-81c2d36f1b35">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balancein}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement positionType="FixRelativeToBottom" x="370" y="26" width="73" height="13" uuid="0149ec8a-b681-44b7-84fd-81c2d36f1b35"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balanceout}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="534" y="0" width="33" height="11" uuid="d1f2f3e1-718f-4e89-a277-30788d869863"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="443" height="11" uuid="abcd4dfa-27e4-40a2-a726-c982e6cd1f38"/>
+				<textElement markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed by " + $P{username}.toUpperCase() + " on " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="443" y="0" width="91" height="11" uuid="8737ff09-0c8f-41a9-9bda-85b75f3562fa"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

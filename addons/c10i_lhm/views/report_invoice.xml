@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<template id="account_invoice_report_lhm" inherit_id="account.report_invoice_document" >
+    <xpath expr="//div/table" position="replace">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Tipe Lokasi</th>
+                    <th>Lokasi</th>
+                    <th>Activitas</th>
+                    <th class="hidden">Source Document</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Unit Price</th>
+                    <th t-if="display_discount" class="text-right">Disc.(%)</th>
+                    <th class="text-right">Taxes</th>
+                    <th class="text-right">Tax Excluded Price</th>
+                </tr>
+            </thead>
+            <tbody class="invoice_tbody">
+                <tr t-foreach="o.invoice_line_ids" t-as="l">
+                    <td><span t-field="l.name"/></td>
+                    <td><span t-field="l.plantation_location_type_id"/></td>
+                    <td><span t-field="l.plantation_location_id"/></td>
+                    <td><span t-field="l.plantation_activity_id"/></td>
+                    <td class="hidden"><span t-field="l.origin"/></td>
+                    <td class="text-right">
+                        <span t-field="l.quantity"/>
+                        <span t-field="l.uom_id"  groups="product.group_uom"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-field="l.price_unit"/>
+                    </td>
+                    <td t-if="display_discount" class="text-right">
+                        <span t-field="l.discount"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-field="l.price_subtotal" 
+                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </xpath>
+</template>
+
+<template id="report_invoice_lhm">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="c10i_lhm.account_invoice_report_lhm" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+</data>
+</odoo>

@@ -1,0 +1,27 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+syntax: glob
+*.pyc
+*.pyo
+*.log
+*.log.*
+*.orig
+*.db
+*.pid
+*.conf
+.local*
+.cache*
+.java*
+.bash*
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.wst.sse.core.prefs
+.pydevproject
+.project
+.git*
+.bzr
+/openerp-server.conf
+/openerp-jasper.pid
+openerp-server.conf
+attachfiles/filestore/*
+attachfiles/sessions/*
+.idea/*

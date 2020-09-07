@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="account_employee_payment" name="Employee" parent="account.menu_finance" sequence="3"/>
+        <record id="settlement_advance_tree" model="ir.ui.view">
+            <field name="name">account.settlement.advance.tree</field>
+            <field name="model">account.settlement.advance</field>
+            <field name="arch" type="xml">
+                <tree string="Settlement Advance">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="employee_id"/>
+                    <!-- <field name="amount_total"/> -->
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="settlement_advance_form" model="ir.ui.view">
+            <field name="name">account.settlement.advance.form</field>
+            <field name="model">account.settlement.advance</field>
+            <field name="arch" type="xml">
+                <form string="Settlement Advance">
+                    <header>
+                        <button name="settle" string="Validate" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,posted"/>
+                        <button name="action_draft" string="Set to Draft" type="object" states="cancel"/>
+                        <button name="%(action_settlement_return_payment)d" string="Create Return Payment" type="action" attrs="{'invisible': ['|',('state','!=','posted'), ('return_amount_total','=',0.0)]}" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="button_outstanding"
+                                string="O/S Advance" type="object" states="draft" 
+                                attrs="{'invisible': [('state','!=','draft')]}" icon="fa-refresh"/>
+                            <button class="oe_stat_button" name="button_vouchers"
+                                    string="Payments" type="object"
+                                    attrs="{'invisible':[('has_vouchers','=',False)]}" icon="fa-bars"/>
+                            <field name="has_vouchers" invisible="1"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group name="settlement_info">
+                            <group>
+                                <field name="employee_id" options="{'no_create':True}"/>
+                                <field name="employee_partner_id" invisible="0"/>
+                                <field name="journal_id" />
+                                <!-- <field name="amount_total" /> -->
+                            </group>
+                            <group>
+                                <field name="date" />
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <!-- <field name="rounding_account_id" /> -->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="settlemet_line" string="Detail Advance">
+                                <field name="settlement_line_ids" nolabel="1" >
+                                    <tree string="Outstanding Advance">
+                                        <field name="name"/>
+                                        <field name="advance_line_id"/>
+                                        <field name="move_line_id"/>
+                                        <field name="amount_total"/>
+                                        <field name="residual"/>
+                                        <field name="amount"/>
+                                    </tree>
+                                    <form string="Outstanding Advance">
+                                        <group>
+                                            <group string="Advance" name="source_adv">
+                                                <field name="advance_line_id" readonly="1"/>
+                                                <field name="move_line_id" readonly="1" required="True"/>
+                                                <field name="amount_total" readonly="1"/>
+                                                <field name="residual" readonly="1"/>
+                                            </group>
+                                            <group string="Realization" name="settlement_info">
+                                                <field name="name"/>
+                                                <field name="account_id"/>
+                                                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                                <field name="amount"/>
+                                            </group>
+                                        </group>
+                                        <label for="split_line_ids"/>
+                                        <field name="split_line_ids">
+                                            <tree editable="bottom">
+                                                <field name="name" required="1"/>
+                                                <field name="account_id" required="1"/>
+                                                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                                <field name="amount" required="1"/>
+                                            </tree>
+                                        </field>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="move" string="Journal Items" attrs="{'invisible': [('move_id','=',False)]}">
+                                <field name='move_id' />
+                                <field name='move_line_ids' nolabel="True"/>
+                            </page>
+                        </notebook>
+                        <group name="settlement_amount">
+                            <group>
+                            </group>
+                            <group>
+                                <field name="settlement_amount_total" />
+                                <field name="return_amount_total" attrs="{'invisible': [('return_amount_total','=',0.0)]}"/>
+                                <field name="return_account_id" attrs="{'invisible': [('return_amount_total','=',0.0)], 'required': [('return_amount_total','!=',0.0)]}" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_settlement_advance">
+            <field name="name">Settlement Advance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.settlement.advance</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik Create untuk membuat Penghitungan Harga Plasma terbaru
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_settlement_advance" action="action_settlement_advance" parent="account_employee_payment" sequence="1"/>
+    </data>
+</odoo>

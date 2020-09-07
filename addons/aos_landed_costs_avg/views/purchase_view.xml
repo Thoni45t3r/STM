@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+    
+    <record id="purchase_order_aos_landed_cost_jvp" model="ir.ui.view">
+        <field name="name">purchase.order.jvp.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']" position="attributes">
+            	<attribute name="context">{'parent': parent}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+            	<attribute name="domain">[('purchase_ok','=',True)]</attribute>
+            	<attribute name="options">{'no_open': True,'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+            		<field name="inland_type" invisible="1"/>
+            		<field name="weight" groups="aos_landed_costs_avg.group_landed_cost_by_weight_x,aos_landed_costs_avg.group_purchase_inland_costs"/>
+            		<field name="volume" groups="aos_landed_costs_avg.group_landed_cost_by_volume_x,aos_landed_costs_avg.group_purchase_inland_costs"/>
+                <field name="tot_weight" groups="aos_landed_costs_avg.group_landed_cost_by_weight_x,aos_landed_costs_avg.group_purchase_inland_costs" sum="Total Weight"/>
+                <field name="tot_volume" groups="aos_landed_costs_avg.group_landed_cost_by_volume_x,aos_landed_costs_avg.group_purchase_inland_costs" sum="Total Volume"/>
+                <field name="inland_unit" groups="aos_landed_costs_avg.group_purchase_inland_costs"/>
+                <field name="inland_value" groups="aos_landed_costs_avg.group_purchase_inland_costs" sum="Amount Inland"/>
+                <field name="subtotal" sum="Subtotal" groups="aos_landed_costs_avg.group_purchase_inland_costs"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <field name="discount"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="attributes">
+                <attribute name="sum">Qty</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="attributes">
+            	<attribute name="groups">aos_landed_costs_avg.group_purchase_inland_costs</attribute>
+                <attribute name="sum">Net Total</attribute>
+                <attribute name="string">Net Total</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                <field name="discount"/>
+            </xpath>
+			<field name="amount_tax" position="after">
+                <field name="amount_inland_total" groups="aos_landed_costs_avg.group_purchase_inland_costs" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+			</field>
+			<!-- <field name="amount_untaxed" position="attributes">
+				<attribute name="class">oe_subtotal_footer_separator</attribute>
+			</field> -->
+			<field name="amount_total" position="attributes">
+				<attribute name="class">oe_subtotal_footer_separator</attribute>
+			</field>
+			<xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="before">
+                <group name="purchase_inland" colspan="2" class="oe_inline" groups="aos_landed_costs_avg.group_purchase_inland_costs">
+                    <label string="Shipping Cost"/>		
+                    <div>
+                		<button name="compute_inland" type="object" string="Compute Ship. Cost" class="fa fa-refresh oe_inline" help="Compute Inland Amount"/>
+            			<field name="inland_type" invisible="1" class="oe_inline" style="width: 25%%"/>
+            			<field name="amount_inland" class="oe_inline" style="width: 25%%"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="purchase_order_line_form2_aos">
+        <field name="name">purchase_discount.order.line.form2</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <field name="price_unit" position="after">
+                <field name="discount"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="purchase_order_line_tree_aos">
+        <field name="name">purchase_discount.order.line.tree</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="price_unit" position="after">
+                <field name="discount"/>
+            </field>
+        </field>
+    </record>
+
+
+    </data>
+</odoo>

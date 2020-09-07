@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_company_base_form" model="ir.ui.view">
+            <field name="name">view.company.base.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="attributes">
+                    <attribute name="string">NPWP</attribute>
+                </xpath>
+                <field name="parent_id" position="before">
+                    <label for="partner_office_id"/>
+                    <div>
+                        <field name="has_office" nolabel="1"/>
+                        <field name="partner_office_id" nolabel="1" style="width:90%;" attrs="{'required':[('has_office','=',True)],'readonly': [('has_office','=',False)]}" domain="[('is_company','=', True)]"/>
+                    </div>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

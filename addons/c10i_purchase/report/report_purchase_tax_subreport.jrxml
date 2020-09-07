@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_purchase_tax_subreport1" pageWidth="261" pageHeight="802" columnWidth="261" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="032749b7-bd26-4e42-ab03-1d5081aab583">
+	<property name="ireport.zoom" value="2.5937424601000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SJIM Lokal"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="purchase_id" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT atx.report_name as name
+, SUM((atx.amount * pol.price_subtotal)/100) AS tax_amount
+FROM account_tax_purchase_order_line_rel atp
+LEFT OUTER JOIN purchase_order_line pol ON pol."id" = atp.purchase_order_line_id
+LEFT OUTER JOIN account_tax atx ON atx.id = atp.account_tax_id
+WHERE pol.order_id = $P{purchase_id} 
+GROUP BY atx.id
+ORDER BY atx.id]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="tax_amount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tax_amount"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="0" y="0" width="175" height="15" uuid="0b625d28-ace1-49be-9194-1a885985b7f9"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="175" y="0" width="86" height="15" uuid="6da0e18e-55eb-48fa-8bff-bccd6a482193"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{tax_amount}==null || $F{tax_amount}.doubleValue() == 0  ? "-" : $F{tax_amount})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

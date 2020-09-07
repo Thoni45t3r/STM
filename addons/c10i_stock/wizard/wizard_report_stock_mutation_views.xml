@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the wizard View==================-->
+        <record id='wizard_report_stock_mutation_form_view' model="ir.ui.view">
+            <field name="name">Report Stock Mutation</field>
+            <field name="model">wizard.report.stock.mutation</field>
+            <field name="arch" type="xml">
+	          	<form string="Report Stock Mutation">
+	          		<notebook tabpos="up" colspan="4">
+	          			<page string="Basic">
+	           				<group>
+		           				<group>
+				                 	<field name="from_date" required="1"/>
+			         		   		<field name="location_id" required="True" domain="[('usage', '=', 'internal'),('company_id','child_of',company_id)]"/>
+                                    <field name="company_id" required="True" readonly="True"/>
+                                </group>
+                                <group>
+                                    <field name="to_date" required="1"/>
+                                    <field name="username" readonly="True"/>
+                                    <!--<field name="report_type"/>-->
+                                    <field name="show_value" widget="radio"/>
+		           				</group>
+	                      	</group>
+                            <group string="Product" name="location">
+	         		   			<field name="product_id" nolabel="1"/>
+							</group>
+	          			</page>
+	          		</notebook>	         		   
+	                <footer>
+					<button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+	                    or 
+	                <button icon="fa-close" string="Cancel" class="oe_link" special="cancel" />
+	                </footer>	        		   	           
+	         	 </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_stock_mutation">
+            <field name="name">Report Stock Mutation</field>
+            <field name="res_model">wizard.report.stock.mutation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>  
+        <!--====================Specifying the report========================-->
+        <report string  = "Stock Mutation"
+		        model   = "wizard.report.stock.mutation"
+                auto    = "True"
+		        name    = "report_stock_mutation"
+		        rml     = "c10i_stock/report/report_stock_mutation.jrxml"
+		        id      = "report_stock_mutation"
+		        menu    = "False"
+		/>
+
+        <menuitem   id          = "menu_report_stock_mutation"
+		 		    name        = "Stock Mutation"
+                    action      = "action_report_stock_mutation"
+					parent      = "stock.menu_warehouse_report"
+					sequence    = "180"
+		 />
+    </data>
+</odoo>

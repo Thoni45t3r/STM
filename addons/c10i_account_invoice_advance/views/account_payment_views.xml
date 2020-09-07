@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_payment_line_advance" model="ir.ui.view">
+            <field name="name">account.payment.line.advance</field>
+            <field name="model">account.payment.line</field>
+            <field name="inherit_id" ref="c10i_account.c10i_view_account_payment_line_tree" />
+            <field name="arch" type="xml">
+                <field name="invoice_id" position="after">
+                    <field name="invoice_advance_id" readonly="1"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

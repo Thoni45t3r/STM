@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_hr_attendance_view_config_inherit" model="ir.ui.view">
+            <field name="name">base.config.setting.c10i.hr.form.attendance.inherit</field>
+            <field name="model">base.config.settings</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_config"/>
+            <field name="priority">101</field>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group[last()]" position="after">
+                    <group string="Default Attendance Payment">
+                        <field name="attendance_partner_id" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="attendance_partner_kesehatan" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="attendance_partner_ketenagakerjaan" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="attendance_partner_pensiun" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="attendance_partner_keselamatan" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

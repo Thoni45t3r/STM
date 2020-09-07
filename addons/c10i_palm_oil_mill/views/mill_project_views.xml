@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <!-- Master Mill Project-->
+        <record id="view_mill_project_form" model="ir.ui.view">
+            <field name="name">view.mill.project.form</field>
+            <field name="model">mill.project</field>
+            <field name="arch" type="xml">
+                <form string="Project">
+                    <header>
+                        <button name="button_progress" string="Proses" states="draft" type="object" class="oe_highlight" />
+                        <button name="button_done" string="Close" states="in_progress" type="object" class="oe_highlight" confirm="Yakin menutup dokumen ini?"/>
+                        <button name="button_cancel" string="Cancel" states="draft,in_progress" type="object" class="oe_highlight" confirm="Yakin membatalkan dokumen ini?"/>
+                        <button name="button_draft" string="Set Draft" states="cancel,in_progress" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,cancel,in_progress,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="PJ-00001" required="1"/></h1>
+                        </div>
+                        <group name="project_information">
+                            <group string="Project Information">
+                                <field name="categ_id" required="1"/>
+                                <field name="code" required="1"/>
+                                <field name="pk_number" required="0"/>
+                                <field name="executor"/>
+                                <field name="qty"/>
+                            </group>
+                            <group string="Lokasi &amp; Tanggal">
+                                <field name="location_code" invisible="1" readonly="1"/>
+                                <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="location_type_id" required="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('project','=',True)]"/>
+                                <field name="dest_location_type_id" required="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('project','!=',True)]"/>
+                                <field name="date_start"/>
+                                <field name="date_issue"/>
+                                <field name="date_finished"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Daftar Lokasi">
+                                <field name="line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="location_id" required="1" domain="[('type_id','=',parent.location_type_id)]"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="vat"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="project_total">
+                                <field name="project_value" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="project_ppn" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="project_nett" />
+                                    <!--<button name="button_dummy"-->
+                                        <!--states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>-->
+                                </div>
+                                <field name="project_nett" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your company settings."/>
+                            <div class="oe_clear"/>
+                            </page>
+                            <page string="Configuration" invisible="1">
+                                <group>
+                                    <group>
+                                        <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="currency_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_mill_project_tree" model="ir.ui.view">
+            <field name="name">view.mill.project.tree</field>
+            <field name="model">mill.project</field>
+            <field name="arch" type="xml">
+                <tree string="Project">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_mill_project_filter" model="ir.ui.view">
+            <field name="name">view.mill.project.filter</field>
+            <field name="model">mill.project</field>
+            <field name="arch" type="xml">
+                <search string="Project">
+                    <field name="name" string="Deskripsi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_mill_project" model="ir.actions.act_window">
+            <field name="name">Project</field>
+            <field name="res_model">mill.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_mill_project_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Master Project.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_master_mill_project" action="action_mill_project" parent="c10i_palm_oil_mill.master_mills_menu" sequence="20"/>
+        <!--End Of Master Mill Project-->
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="min_date" position="before">
+                    <field name='date_done' />
+                </field>
+                <xpath expr="//form/sheet/notebook/page[last()]" position="after">
+                    <page name="account_move_lines_grp" string="Journal Items" colspan="4">
+                        <field name="account_move_line_ids" readonly="1" nolabel="1"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_form" model="ir.ui.view">
+            <field name="name">stock.move.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <group name="moved_quants_grp" position="after">
+                    <group name="account_move_lines_grp" string="Journal Items" colspan="4">
+                        <field name="account_move_line_ids" readonly="1" nolabel="1"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+
+        <record id="view_move_picking_form" model="ir.ui.view">
+            <field name="name">stock.move.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form"/>
+            <field name="arch" type="xml">
+                <group name="moved_quants_grp" position="after">
+                    <group name="account_move_lines_grp" string="Journal Items" colspan="4">
+                        <field name="account_move_line_ids" readonly="1" nolabel="1"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

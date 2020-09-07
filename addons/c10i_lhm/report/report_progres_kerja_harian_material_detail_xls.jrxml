@@ -1,0 +1,2049 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Laporan Progress Kerja Harian" pageWidth="2500" pageHeight="2000" columnWidth="2500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="b0e95a63-3a3f-47ea-8291-f0ad58d698a3">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="cm"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="141"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="852"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="648"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="338"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ASL Lokal Server"/>
+	<style name="default" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" hTextAlign="Left" hImageAlign="Left" vTextAlign="Middle" vImageAlign="Middle" isBlankWhenNull="true" fontName="SansSerif" fontSize="8">
+		<box leftPadding="2" rightPadding="2"/>
+	</style>
+	<style name="num1" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0.00;-#,##0.00"/>
+	<style name="num2" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0;-#,##0"/>
+	<style name="date1" style="default" pattern="dd-MM-yy HH:mm"/>
+	<style name="date2" style="default" pattern="dd-MMM-yy"/>
+	<style name="date3" style="default" pattern="dd/MM/yy"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" style="default" hTextAlign="Center" hImageAlign="Center">
+		<box leftPadding="0" rightPadding="0"/>
+	</style>
+	<style name="angka_merah" style="num2" mode="Opaque" forecolor="#140404" backcolor="#F70702" fill="Solid" hTextAlign="Right" vTextAlign="Middle" markup="styled" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+		<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+			<topPen lineWidth="0.5"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+		<paragraph lineSpacing="Single"/>
+	</style>
+	<parameter name="company_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_start" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2018-12-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_end" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2018-12-31"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="listing" class="java.lang.String">
+		<defaultValueExpression><![CDATA["-"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="group_ids" class="java.lang.String">
+		<parameterDescription><![CDATA[group_ids]]></parameterDescription>
+		<defaultValueExpression><![CDATA["()"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="group_query" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{group_ids}.replace("[","(").replace("]",")").equals("()") ||$P{group_ids}.equals("") ? "TRUE" :
+" ll.group_progress_id in " + $P{group_ids}.replace("[","(").replace("]",")")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select lt.company_id
+, llt.code AS location_type_code
+, ll.code AS location_code
+, (CASE
+	WHEN llt.oil_palm = TRUE THEN pu_lpb."name"
+	WHEN llt.infrastruktur = TRUE THEN pu_li."name"
+	ELSE NULL END) AS uom_loc
+, (CASE
+	WHEN llt.oil_palm = TRUE THEN lpb.planted
+	WHEN llt.infrastruktur = TRUE THEN li."length"
+	ELSE NULL END) AS qty_loc
+, la.code AS activity_code
+, la."name" AS activity_name
+, pu_la.name AS uom_act
+, (SELECT SUM(lptl.nilai) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE =  $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS hi_nilai
+, (SELECT SUM(lptl.nilai) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE BETWEEN  $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS shi_nilai
+, la.is_variance -->>Jika True Maka shi_nilai - qty_loc<<
+, (SELECT SUM(lptl.work_day) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE = $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS hi_work_day
+, (SELECT SUM(lptl.work_day) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE BETWEEN $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS shi_work_day
+, (SELECT SUM(lptl.realization_date) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE = $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS hi_realization
+, (SELECT SUM(lptl.realization) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE BETWEEN $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS shi_realization
+, (SELECT SUM(lptl.premi) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE = $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS hi_premi
+, (SELECT SUM(lptl.premi) FROM lhm_transaction_process_line lptl 
+			WHERE lptl.date::DATE BETWEEN $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+			AND lptl.location_id = ll.id 
+			AND lptl.activity_id = la.id) AS shi_premi
+, pt_material.name AS material_name
+, pu_material.name AS uom_material_name
+, (SELECT SUM(ltmtl.realization) FROM lhm_transaction_material_line ltmtl 
+			WHERE ltmtl.date::DATE =  $P{date_end}::DATE -->>Change Here<<
+			AND ltmtl.product_id = pp_material.id
+			AND ltmtl.location_id = ll.id 
+			AND ltmtl.move_id = sm.id
+			AND ltmtl.activity_id = la.id) AS hi_material
+, (SELECT SUM(ltmtl.realization) FROM lhm_transaction_material_line ltmtl 
+			WHERE ltmtl.date::DATE BETWEEN $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+			AND ltmtl.product_id = pp_material.id
+			AND ltmtl.location_id = ll.id 
+			AND ltmtl.move_id = sm.id
+			AND ltmtl.activity_id = la.id) AS shi_material
+, rsc.name as company_name
+, sp.bpb_number as bpb_number
+, sp.date + interval '7 hours' as skb_date
+, sm.product_uom_qty as stock_qty
+FROM lhm_transaction_process_line lpt
+LEFT OUTER JOIN lhm_transaction_material_line ltmt ON ltmt.progress_id = lpt.id
+LEFT OUTER JOIN product_product pp_material ON pp_material.id = ltmt.product_id
+LEFT OUTER JOIN product_template pt_material ON pt_material.id = pp_material.product_tmpl_id
+LEFT OUTER JOIN product_uom pu_material ON pu_material.id = ltmt.product_uom_id
+INNER JOIN lhm_transaction lt ON lt.id = lpt.lhm_id
+INNER JOIN hr_foreman hf ON hf.id = lt.kemandoran_id
+INNER JOIN lhm_location ll ON ll.id = lpt.location_id
+INNER JOIN lhm_activity la ON la.id = lpt.activity_id
+INNER JOIN lhm_location_type llt ON llt.id = ll.type_id
+INNER JOIN res_company rsc ON rsc.id = lt.company_id
+LEFT OUTER JOIN lhm_plant_block lpb ON lpb.location_id = lpt.location_id
+LEFT OUTER JOIN product_uom pu_lpb ON pu_lpb.id = lpb.block_uom
+LEFT OUTER JOIN lhm_infrastruktur li ON li.location_id = lpt.location_id
+LEFT OUTER JOIN product_uom pu_li ON pu_li.id = li.satuan_id
+LEFT OUTER JOIN product_uom pu_la ON pu_la.id = la.uom_id
+LEFT OUTER JOIN stock_move sm ON sm.id = ltmt.move_id
+LEFT OUTER JOIN stock_picking sp ON sp.id = ltmt.picking_id
+WHERE lpt.date::DATE BETWEEN $P{date_start}::DATE AND $P{date_end}::DATE -->>Change Here<<
+AND lt.state in ('in_progress','done','close')
+AND $P!{group_query} -->>Change Here<<
+AND lt.company_id = $P{company_id}   -->>Change Here<<
+GROUP BY llt.code, ll.code, la.code, la.name, llt.oil_palm, llt.infrastruktur, pu_lpb.name, pu_li.name, pu_la.name, lpb.planted, li."length", ll.type_id, ll.id, la.id, lt.company_id,  pt_material.name, pu_material.name, pt_material.name, pp_material.id, rsc.name, sp.id, sm.id
+ORDER BY la.code, llt.code ASC, ll.code ASC,  pt_material.name ASC]]>
+	</queryString>
+	<field name="company_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="company_id"/>
+	</field>
+	<field name="location_type_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="location_type_code"/>
+	</field>
+	<field name="location_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="location_code"/>
+	</field>
+	<field name="uom_loc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uom_loc"/>
+	</field>
+	<field name="qty_loc" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="qty_loc"/>
+	</field>
+	<field name="activity_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="activity_code"/>
+	</field>
+	<field name="activity_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="activity_name"/>
+	</field>
+	<field name="uom_act" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uom_act"/>
+	</field>
+	<field name="hi_nilai" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="hi_nilai"/>
+	</field>
+	<field name="shi_nilai" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="shi_nilai"/>
+	</field>
+	<field name="is_variance" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="is_variance"/>
+	</field>
+	<field name="hi_work_day" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="hi_work_day"/>
+	</field>
+	<field name="shi_work_day" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="shi_work_day"/>
+	</field>
+	<field name="hi_realization" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="hi_realization"/>
+	</field>
+	<field name="shi_realization" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="shi_realization"/>
+	</field>
+	<field name="hi_premi" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="hi_premi"/>
+	</field>
+	<field name="shi_premi" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="shi_premi"/>
+	</field>
+	<field name="material_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="material_name"/>
+	</field>
+	<field name="uom_material_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uom_material_name"/>
+	</field>
+	<field name="hi_material" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="hi_material"/>
+	</field>
+	<field name="shi_material" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="shi_material"/>
+	</field>
+	<field name="company_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="company_name"/>
+	</field>
+	<field name="bpb_number" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bpb_number"/>
+	</field>
+	<field name="skb_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="skb_date"/>
+	</field>
+	<field name="stock_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="stock_qty"/>
+	</field>
+	<variable name="variance" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[($F{is_variance}==null?0.0:$F{is_variance}==true?($F{qty_loc}==null ||$F{qty_loc}.doubleValue() == 0.0 ? 0 :$F{qty_loc})-($F{shi_nilai}==null ||$F{shi_nilai}.doubleValue() == 0.0 ? 0 :$F{shi_nilai}) : 0.0)]]></variableExpression>
+	</variable>
+	<variable name="variance_skb" class="java.math.BigDecimal" resetType="Column">
+		<variableExpression><![CDATA[($F{stock_qty}==null ? BigDecimal.ZERO:$F{stock_qty}.subtract(($F{shi_material}==null ? BigDecimal.ZERO :$F{shi_material})))]]></variableExpression>
+	</variable>
+	<variable name="subtotal_shi_kerja" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ? $F{shi_nilai} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_hi_kerja" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ? $F{hi_nilai} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_variance" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$V{variance} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_hi_hk_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_work_day} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_hi_premi_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_premi} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_hi_realisasi_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_realization} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_shi_hk_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_work_day} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_shi_premi_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_premi} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="subtotal_shi_realisasi_biaya" class="java.lang.Double" resetType="Group" resetGroup="aktivitas" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_realization} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_hi_hk_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_work_day} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_hi_premi_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_premi} : 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_hi_realisasi_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{hi_realization}: 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_shi_hk_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_work_day}: 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_shi_premi_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_premi}: 0.0]]></variableExpression>
+	</variable>
+	<variable name="grandtotal_shi_realisasi_biaya" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{location_COUNT} == 1 ?$F{shi_realization}: 0.0]]></variableExpression>
+	</variable>
+	<group name="aktivitas">
+		<groupExpression><![CDATA[$F{activity_name}]]></groupExpression>
+		<groupFooter>
+			<band height="16">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="cf79222b-d444-4655-9f78-654ad81b1070"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Sub Total "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="310" y="0" width="100" height="16" backcolor="#F7F2F2" uuid="f53911b1-123f-402d-b7f6-e1c9bc51549d"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{activity_code}.contains("A")||$F{activity_code}.contains("a")||
+$F{activity_code}.contains("B")||$F{activity_code}.contains("b")||
+$F{activity_code}.contains("C")||$F{activity_code}.contains("c")||
+$F{activity_code}.contains("D")||$F{activity_code}.contains("d")||
+$F{activity_code}.contains("E")||$F{activity_code}.contains("e")||
+$F{activity_code}.contains("F")||$F{activity_code}.contains("f")||
+$F{activity_code}.contains("G")||$F{activity_code}.contains("g")||
+$F{activity_code}.contains("H")||$F{activity_code}.contains("h")||
+$F{activity_code}.contains("I")||$F{activity_code}.contains("i")||
+$F{activity_code}.contains("J")||$F{activity_code}.contains("j")||
+$F{activity_code}.contains("K")||$F{activity_code}.contains("k")||
+$F{activity_code}.contains("L")||$F{activity_code}.contains("l")||
+$F{activity_code}.contains("M")||$F{activity_code}.contains("m")||
+$F{activity_code}.contains("N")||$F{activity_code}.contains("n")||
+$F{activity_code}.contains("O")||$F{activity_code}.contains("o")||
+$F{activity_code}.contains("P")||$F{activity_code}.contains("p")||
+$F{activity_code}.contains("Q")||$F{activity_code}.contains("q")||
+$F{activity_code}.contains("R")||$F{activity_code}.contains("r")||
+$F{activity_code}.contains("S")||$F{activity_code}.contains("s")||
+$F{activity_code}.contains("T")||$F{activity_code}.contains("t")||
+$F{activity_code}.contains("U")||$F{activity_code}.contains("u")||
+$F{activity_code}.contains("V")||$F{activity_code}.contains("v")||
+$F{activity_code}.contains("W")||$F{activity_code}.contains("w")||
+$F{activity_code}.contains("X")||$F{activity_code}.contains("x")||
+$F{activity_code}.contains("Y")||$F{activity_code}.contains("y")||
+$F{activity_code}.contains("Y")||$F{activity_code}.contains("y")||
+$F{activity_code}.contains("Z")||$F{activity_code}.contains("z")?
+$F{activity_code}:Integer.parseInt($F{activity_code})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="410" y="0" width="510" height="16" backcolor="#F7F2F2" uuid="8aecf2ad-02d1-439a-9a46-5ef10805de72"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{activity_name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="980" y="0" width="65" height="16" backcolor="#F7F2F2" uuid="b07fafd1-5fd6-4b98-bfeb-34a42dc029cc"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_hi_kerja}==null ||$V{subtotal_hi_kerja}.doubleValue() == 0.0 ? 0 :$V{subtotal_hi_kerja}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1045" y="0" width="65" height="16" backcolor="#F7F2F2" uuid="5350fdc0-6079-42c3-9046-7066cce70fce"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_shi_kerja}==null ||$V{subtotal_shi_kerja}.doubleValue() == 0.0 ? 0 :$V{subtotal_shi_kerja}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1110" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="5f2ea194-a303-4f68-be98-c7941a0bf3d6"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_variance}==null ||$V{subtotal_variance}.doubleValue() == 0.0 ? 0 :$V{subtotal_variance}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1190" y="0" width="50" height="16" backcolor="#F7F2F2" uuid="230330ae-59a1-4c41-8dd7-29d9453a65e0"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_hi_hk_biaya}==null ||$V{subtotal_hi_hk_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_hi_hk_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1240" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="f9a05cb2-170f-487d-a65c-33a12dec63f2"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_hi_premi_biaya}==null ||$V{subtotal_hi_premi_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_hi_premi_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1330" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="aa2b519d-7dca-4e2e-afb8-f3029113d545"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_hi_realisasi_biaya}==null ||$V{subtotal_hi_realisasi_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_hi_realisasi_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1420" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="bd30b818-c47b-41f7-86f4-9cf9610b531c"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_shi_hk_biaya}==null ||$V{subtotal_shi_hk_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_shi_hk_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1480" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="6f730abe-73d1-413e-acee-f429dfac427f"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_shi_premi_biaya}==null ||$V{subtotal_shi_premi_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_shi_premi_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1570" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="7ff61ecc-0b32-42ee-ae46-22da85a3a122"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtotal_shi_realisasi_biaya}==null ||$V{subtotal_shi_realisasi_biaya}.doubleValue() == 0.0 ? 0 :$V{subtotal_shi_realisasi_biaya}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1900" y="0" width="300" height="16" backcolor="#F7F2F2" uuid="f68cdca5-3c16-43d7-ab7f-c21b5b541b1d"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2200" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="307e6673-d1da-481b-94fb-fe3b8e820595"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+					<reportElement style="default" stretchType="RelativeToBandHeight" mode="Opaque" x="2260" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="e7b08f82-903c-4de8-b527-3347d5e8c850"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2340" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="23cbc106-fb5b-4d27-88d5-c2b9bef00351"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="80" y="0" width="100" height="16" backcolor="#F7F2F2" uuid="b7205666-15b5-419e-9511-60db29ac1d97"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="180" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="78d31142-15be-48a8-b3c2-0d7c0c79d12a"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="240" y="0" width="70" height="16" backcolor="#F7F2F2" uuid="66a1df36-c880-4ca4-9968-541aeaa5611f"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="920" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="49c394c6-16a8-4877-ab7f-8f292828d71b"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2420" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="d49e63c0-967d-4e42-9989-8db848bf8b26"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1660" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="ec76d7f4-aad4-4fff-b8e4-a966c3704700"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1750" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="81ca0f6a-4b55-47ca-a921-c7cadca132e4"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1830" y="0" width="70" height="16" backcolor="#F7F2F2" uuid="e0abd6cf-2f04-4b8f-91dd-302d585694c7"/>
+					<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="location">
+		<groupExpression><![CDATA[$F{location_code}]]></groupExpression>
+	</group>
+	<group name="material">
+		<groupExpression><![CDATA[$F{material_name}]]></groupExpression>
+	</group>
+	<title>
+		<band height="151" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="0" width="2500" height="20" uuid="e884f857-2b3f-4d93-b4e2-e4346a74fc6d"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="20" width="1900" height="20" uuid="3f96c3b2-bde1-42ef-93de-3d9172136b2f"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LAPORAN PROGRES PEKERJAAN HARIAN - DETAIL MATERIAL"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="80" width="180" height="20" uuid="04ab31e2-b9ed-4062-a346-fb9bb1e11513"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TANGGAL"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-M-YYYY" isBlankWhenNull="false">
+				<reportElement style="default" stretchType="ContainerBottom" x="180" y="80" width="1720" height="20" uuid="bedcb3eb-8835-42d4-bafd-8ebb3e69ef94"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{date_end}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1900" y="20" width="300" height="60" uuid="3a87fdcb-4855-4380-90a4-7bdfd88f791a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Diperiksa Oleh,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2200" y="20" width="300" height="60" uuid="6f47f25f-dd0c-416e-ae10-e56dbf1c0e95"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Disetujui Oleh,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1900" y="80" width="300" height="20" uuid="2cf47385-c442-4c9f-bcf6-42d393bc1059"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ka. Afdeling/Kabag]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2200" y="80" width="300" height="20" uuid="4ec379a9-dd0a-42fc-ac86-5a584751fadd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asisten Kepala]]></text>
+			</staticText>
+			<textField pattern="dd/mm/yyyy">
+				<reportElement style="default" stretchType="ContainerHeight" x="0" y="40" width="180" height="20" uuid="2fb134ef-062a-423d-b17a-abdbbc59fe7a"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AFDELING/BAGIAN"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="100" width="2500" height="6" uuid="81d7f1b1-0571-4116-a594-d8a9186177e5"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-M-YYYY">
+				<reportElement style="default" stretchType="ContainerBottom" x="180" y="40" width="1720" height="20" uuid="ded684e6-cb0b-4711-ad96-6daa90beb9f2"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": " + $P{listing}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/mm/yyyy">
+				<reportElement style="default" stretchType="ContainerHeight" x="0" y="60" width="180" height="20" uuid="d4cd6fbf-b4e2-4da1-ae02-fd33b0dd8138"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TYPE PEKERJA"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-M-YYYY">
+				<reportElement style="default" stretchType="ContainerBottom" x="180" y="60" width="1720" height="20" uuid="600e1f9e-f5bc-4d09-b573-6a9db98d6cc7"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": HARIAN"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="106" width="80" height="45" uuid="5be2218e-e3e1-4e8b-b5a4-1d7358040863"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="106" width="230" height="30" uuid="f10c1503-90ce-4e91-b5a8-c0c5566ad377"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOKASI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="106" width="610" height="30" uuid="f0f2b13c-2057-4db5-a838-65430a5f4ef9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KEGIATAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="136" width="100" height="15" uuid="0e599378-3697-4bd1-ac59-4f48aaad41fb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="136" width="510" height="15" uuid="13d85ea2-3791-486a-9812-53f2716f164f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESKRIPSI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="920" y="106" width="60" height="45" uuid="cc24a828-4afa-4d6d-8530-80ff0cb092f3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1045" y="136" width="65" height="15" uuid="9dced8ff-6e3b-4705-9257-83c87fa9adaa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SHI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1190" y="106" width="470" height="15" uuid="c6e4e901-47b6-45a0-8e81-795d32a727b8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BIAYA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="136" width="65" height="15" uuid="31d3b3cd-ebeb-4da4-b820-35733c60f8eb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1190" y="121" width="230" height="15" uuid="e002ef76-9a0f-444e-9e7c-e7f73c9203b9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1240" y="136" width="90" height="15" uuid="c09f5d6d-4e5c-4cd9-bef6-3cc7e9385e17"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PREMI/LEMBUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1190" y="136" width="50" height="15" uuid="c6f67ddb-063a-460f-a44d-686eb062ae82"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="106" width="130" height="30" uuid="e4ca7d7a-c7e5-44bb-a4ad-9260fa9a6b12"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HASIL KERJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1570" y="136" width="90" height="15" uuid="56338938-f1ec-4c10-99cc-67dae0511dd2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1330" y="136" width="90" height="15" uuid="93557be5-68fa-4f13-b586-32de7bb986b7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1480" y="136" width="90" height="15" uuid="f25c413c-8f34-478e-9578-1fbc1f98d252"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PREMI/LEMBUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1420" y="136" width="60" height="15" uuid="ba45b6d6-5ab3-4304-8c1b-da759ec29224"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1420" y="121" width="240" height="15" uuid="56c363c2-ca9f-4650-a4c1-013c3f58d5f7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SHI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2260" y="121" width="160" height="15" uuid="e70b9bf2-9f90-4885-a0bc-1aba00788adb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1660" y="106" width="840" height="15" uuid="7c2b55f4-20a0-409d-ae65-8404c907a075"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PEMAKAIAN MATERIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2200" y="121" width="60" height="30" uuid="fd95b704-c9e7-4068-9b45-192e43660b2a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1900" y="121" width="300" height="30" uuid="02cd79c4-7386-4add-bb6d-378cdccb946d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NAMA MATERIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2260" y="136" width="80" height="15" uuid="d88ece64-e895-421d-8745-fd5b73d7b07d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="136" width="100" height="15" uuid="ff480b29-b2f3-451e-a26f-11afe90bcf22"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KODE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="136" width="60" height="15" uuid="2246cc78-8b51-4546-841f-512d08af0ef6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="136" width="70" height="15" uuid="a688aea6-3d98-4c20-b53e-0f10b7f052b1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1110" y="106" width="80" height="45" uuid="99fca8d9-c8de-4b29-897f-b01570dafab8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VARIANCE(+/-)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2340" y="136" width="80" height="15" uuid="d729627a-86e5-4a1d-9b32-203cfa087110"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SHI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2420" y="121" width="80" height="30" uuid="d5247470-87f7-480b-8692-0817ddf60db3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VARIANCE(+/-)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1830" y="136" width="70" height="15" uuid="78980070-84b0-41b1-9f13-f700087cd52c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1750" y="136" width="80" height="15" uuid="c7abd33d-f637-4bf0-a905-21c024004fab"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TANGGAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1660" y="136" width="90" height="15" uuid="2c5367e5-5c25-4e7c-bea5-fc3f44f25efb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO. BPB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1660" y="121" width="240" height="15" uuid="58528c79-6b05-4a1a-aee4-63b99953c212"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SKB]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="16">
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="2420" y="0" width="80" height="16" backcolor="#FFFFFF" uuid="345bfb9e-c224-4559-bebf-ade3716c4b2e"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$V{variance_skb}.equals(BigDecimal.ZERO) ? "-" :$V{variance_skb}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="80" height="16" uuid="97ea0e7c-b7c5-4dbb-bece-9c3fc1e994aa"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{location_type_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1830" y="0" width="70" height="16" uuid="64ef91b1-2588-4998-b3fd-1f85279b3b8d"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{stock_qty}==null || $F{stock_qty}.doubleValue() == 0.0 ? " - " :$F{stock_qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="YYYY-MM-DD HH:MM" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1750" y="0" width="80" height="16" uuid="00937102-eb92-4847-af90-7b691b91a156"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{skb_date} == null? "-" : $F{skb_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1660" y="0" width="90" height="16" uuid="24b85a80-6bee-4531-b650-3bc53c80cbc5"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{bpb_number} == null ? "-" : $F{bpb_number}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="80" y="0" width="100" height="16" uuid="bba8aa6a-cf55-4157-8ec5-e69a1e4c9bb9"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{location_code}.contains("A")||$F{location_code}.contains("a")||
+$F{location_code}.contains("B")||$F{location_code}.contains("b")||
+$F{location_code}.contains("C")||$F{location_code}.contains("c")||
+$F{location_code}.contains("D")||$F{location_code}.contains("d")||
+$F{location_code}.contains("E")||$F{location_code}.contains("e")||
+$F{location_code}.contains("F")||$F{location_code}.contains("f")||
+$F{location_code}.contains("G")||$F{location_code}.contains("g")||
+$F{location_code}.contains("H")||$F{location_code}.contains("h")||
+$F{location_code}.contains("I")||$F{location_code}.contains("i")||
+$F{location_code}.contains("J")||$F{location_code}.contains("j")||
+$F{location_code}.contains("K")||$F{location_code}.contains("k")||
+$F{location_code}.contains("L")||$F{location_code}.contains("l")||
+$F{location_code}.contains("M")||$F{location_code}.contains("m")||
+$F{location_code}.contains("N")||$F{location_code}.contains("n")||
+$F{location_code}.contains("O")||$F{location_code}.contains("o")||
+$F{location_code}.contains("P")||$F{location_code}.contains("p")||
+$F{location_code}.contains("Q")||$F{location_code}.contains("q")||
+$F{location_code}.contains("R")||$F{location_code}.contains("r")||
+$F{location_code}.contains("S")||$F{location_code}.contains("s")||
+$F{location_code}.contains("T")||$F{location_code}.contains("t")||
+$F{location_code}.contains("U")||$F{location_code}.contains("u")||
+$F{location_code}.contains("V")||$F{location_code}.contains("v")||
+$F{location_code}.contains("W")||$F{location_code}.contains("w")||
+$F{location_code}.contains("X")||$F{location_code}.contains("x")||
+$F{location_code}.contains("Y")||$F{location_code}.contains("y")||
+$F{location_code}.contains("Z")||$F{location_code}.contains("z")?
+$F{location_code}:Integer.parseInt($F{location_code})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="310" y="0" width="100" height="16" uuid="8fedc8ef-ad49-437f-837c-8c5c42fe5fa9"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{activity_code}.contains("A")||$F{activity_code}.contains("a")||
+$F{activity_code}.contains("B")||$F{activity_code}.contains("b")||
+$F{activity_code}.contains("C")||$F{activity_code}.contains("c")||
+$F{activity_code}.contains("D")||$F{activity_code}.contains("d")||
+$F{activity_code}.contains("E")||$F{activity_code}.contains("e")||
+$F{activity_code}.contains("F")||$F{activity_code}.contains("f")||
+$F{activity_code}.contains("G")||$F{activity_code}.contains("g")||
+$F{activity_code}.contains("H")||$F{activity_code}.contains("h")||
+$F{activity_code}.contains("I")||$F{activity_code}.contains("i")||
+$F{activity_code}.contains("J")||$F{activity_code}.contains("j")||
+$F{activity_code}.contains("K")||$F{activity_code}.contains("k")||
+$F{activity_code}.contains("L")||$F{activity_code}.contains("l")||
+$F{activity_code}.contains("M")||$F{activity_code}.contains("m")||
+$F{activity_code}.contains("N")||$F{activity_code}.contains("n")||
+$F{activity_code}.contains("O")||$F{activity_code}.contains("o")||
+$F{activity_code}.contains("P")||$F{activity_code}.contains("p")||
+$F{activity_code}.contains("Q")||$F{activity_code}.contains("q")||
+$F{activity_code}.contains("R")||$F{activity_code}.contains("r")||
+$F{activity_code}.contains("S")||$F{activity_code}.contains("s")||
+$F{activity_code}.contains("T")||$F{activity_code}.contains("t")||
+$F{activity_code}.contains("U")||$F{activity_code}.contains("u")||
+$F{activity_code}.contains("V")||$F{activity_code}.contains("v")||
+$F{activity_code}.contains("W")||$F{activity_code}.contains("w")||
+$F{activity_code}.contains("X")||$F{activity_code}.contains("x")||
+$F{activity_code}.contains("Y")||$F{activity_code}.contains("y")||
+$F{activity_code}.contains("Y")||$F{activity_code}.contains("y")||
+$F{activity_code}.contains("Z")||$F{activity_code}.contains("z")?
+$F{activity_code}:Integer.parseInt($F{activity_code})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="410" y="0" width="510" height="16" uuid="94a21bd6-83af-4555-8ac2-3f3c92bcfe37"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{activity_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="920" y="0" width="60" height="16" uuid="344f4c66-6bf2-4127-ae58-47de05f63152">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{uom_act} == null ? "-" : $F{uom_act}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1420" y="0" width="60" height="16" uuid="4e52d410-25b3-4106-bac3-1e153b5d70c4">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shi_work_day}==null ||$F{shi_work_day}.doubleValue() == 0.0 ? 0.0 :$F{shi_work_day}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1570" y="0" width="90" height="16" uuid="93007e55-5d91-4c86-89be-5134ea7914be">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shi_realization}==null ||$F{shi_realization}.doubleValue() == 0.0 ? 0.0 :$F{shi_realization}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1240" y="0" width="90" height="16" uuid="970adcdb-fee6-48ef-bb07-f8e92fdd6dd1">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hi_premi}==null || $F{hi_premi}.doubleValue() == 0.0 ? 0.0 :$F{hi_premi}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1190" y="0" width="50" height="16" uuid="802c9e40-2142-46fc-a5ff-dacf15e300d2">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hi_work_day}==null ||$F{hi_work_day}.doubleValue() == 0.0 ? 0.0 :$F{hi_work_day}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1480" y="0" width="90" height="16" uuid="5d75380c-f579-494f-b1d1-d4eccbc2a4de">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shi_premi}==null || $F{shi_premi}.doubleValue() == 0.0 ? 0.0 :$F{shi_premi}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1330" y="0" width="90" height="16" uuid="584a4f9d-1a8b-464f-8f62-92dfa7343299">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hi_realization}==null ||$F{hi_realization}.doubleValue() == 0.0 ? 0.0 :$F{hi_realization}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1900" y="0" width="300" height="16" uuid="4f6ef4a9-25e9-410a-aa53-b36dceb2c854"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{material_name} == null ? " - " : $F{material_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="2200" y="0" width="60" height="16" uuid="fc4ddee8-b87c-4274-87a4-660b18e07e37"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{uom_material_name} == null ? " - " : $F{uom_material_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="2260" y="0" width="80" height="16" uuid="ee415eb8-4a11-4c4b-8a9e-dbe4a853caa5"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hi_material}==null || $F{hi_material}.doubleValue() == 0.0 ? " - "  :$F{hi_material}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="2340" y="0" width="80" height="16" uuid="e86b4ddb-4efd-4c6c-b60d-658e47e03d22"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shi_material}==null || $F{shi_material}.doubleValue() == 0.0 ? " - " :$F{shi_material}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="980" y="0" width="65" height="16" backcolor="#E0231F" uuid="d164797d-b2a9-4c4b-86e6-f6f44c926294">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hi_nilai}==null ||$F{hi_nilai}.doubleValue() == 0.0 ? 0 :$F{hi_nilai}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1045" y="0" width="65" height="16" uuid="8878017d-0dde-428c-a1c0-c84ef3137e21">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shi_nilai}==null ||$F{shi_nilai}.doubleValue() == 0.0 ? 0 :$F{shi_nilai}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="180" y="0" width="60" height="16" uuid="bfec33d7-4aa0-4ab7-b823-d8b66465a99d"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{uom_loc}==null?"-":$F{uom_loc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="240" y="0" width="70" height="16" uuid="2f1d099c-5486-46a9-ba8a-1f22b9c59a1f"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$F{qty_loc}==null ||$F{qty_loc}.doubleValue() == 0.0 ? "-"  :$F{qty_loc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="1110" y="0" width="80" height="16" backcolor="#FFFFFF" uuid="87c97394-aba3-4bdc-ae5e-cf7686c95b24">
+					<printWhenExpression><![CDATA[$V{location_COUNT} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$V{variance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="920" y="0" width="60" height="16" backcolor="#F5F0F0" uuid="d79eecb1-476f-4773-8908-4d2bd50816fb">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="980" y="0" width="65" height="16" backcolor="#F5F0F0" uuid="3efebe37-5683-4988-a5fc-9c4dcf0cd50b">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1045" y="0" width="65" height="16" backcolor="#F5F0F0" uuid="4e91beba-5abb-4919-9ad1-3843eb328918">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1110" y="0" width="80" height="16" backcolor="#F5F0F0" uuid="0b9ab6e0-3829-4773-9c7c-623ef61958d5">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1190" y="0" width="50" height="16" backcolor="#F5F0F0" uuid="d85eb9b0-ebd7-40b5-9ce5-7dae41555e82">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1240" y="0" width="90" height="16" backcolor="#F5F0F0" uuid="edecd975-6ca6-40fe-aa43-6a8e3cf62f8c">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1330" y="0" width="90" height="16" backcolor="#F5F0F0" uuid="033bde0a-f1ef-4820-a24f-8d9d5ebebdbb">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1420" y="0" width="60" height="16" backcolor="#F5F0F0" uuid="1d6b07db-d15e-4022-a7ed-f7943a78f0d1">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1480" y="0" width="90" height="16" backcolor="#F5F0F0" uuid="c02bdea0-789c-4da3-b8c5-476f184798f1">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1570" y="0" width="90" height="16" backcolor="#F5F0F0" uuid="65d2a904-df7b-4113-a043-a6265518d85f">
+					<printWhenExpression><![CDATA[$V{location_COUNT} >= 2]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="16">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="37e852ca-0692-4cc3-b42b-792fd105ad9a"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Grand Total "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1190" y="0" width="50" height="16" backcolor="#F7F2F2" uuid="cefcbd26-ab98-4eac-b882-51cbedc76be8"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_hi_hk_biaya}==null ||$V{grandtotal_hi_hk_biaya}.doubleValue() == 0.0 ? 0 :$V{grandtotal_hi_hk_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1240" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="8574624e-6504-4fd5-9941-8d7a5a744576"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_hi_premi_biaya}==null ||$V{grandtotal_hi_premi_biaya}.doubleValue() == 0.0 ? 0 :$V{grandtotal_hi_premi_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1330" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="4bf71037-6392-44b4-adf6-943a77b062c3"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_hi_realisasi_biaya}==null ||$V{grandtotal_hi_realisasi_biaya}.doubleValue() == 0.0 ? 0 :$V{grandtotal_hi_realisasi_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1420" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="6d746f43-73d3-4439-b6e6-2f798bf57509"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_shi_hk_biaya}==null ||$V{grandtotal_shi_hk_biaya}.doubleValue() == 0.0 ? 0 :$V{grandtotal_shi_hk_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1480" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="0705cb31-ff59-4124-a0b9-b4dc0505deec"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_shi_premi_biaya}==null ||$V{grandtotal_shi_premi_biaya}.doubleValue() == 0.0 ? 0 :$V{grandtotal_shi_premi_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1570" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="effdac3d-2d20-4e47-b5a6-403c68795ee5"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grandtotal_shi_realisasi_biaya}==null ||$V{grandtotal_shi_realisasi_biaya}.doubleValue() == 0.0 ? 0:$V{grandtotal_shi_realisasi_biaya}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1900" y="0" width="300" height="16" backcolor="#F7F2F2" uuid="6a838b00-166c-46bd-b423-6f06b688cb2e"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2200" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="e86c9a2c-002f-4323-996b-f3133a814bae"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2260" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="b3e07ae8-d910-4f74-a235-f44494e431b8"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2340" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="3f9eb2f9-f7b9-49e5-9616-27beeb0b0f41"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="80" y="0" width="100" height="16" backcolor="#F7F2F2" uuid="8e6373f8-9981-43a0-905d-924876e437ef"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="180" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="36cb55df-b634-436d-8ce7-629dac48d6bb"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="240" y="0" width="70" height="16" backcolor="#F7F2F2" uuid="d50321c5-27f7-4818-b89e-166b90f168d0"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="310" y="0" width="100" height="16" backcolor="#F7F2F2" uuid="927e8eda-b475-4bff-9935-1e79797e30ba"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="410" y="0" width="510" height="16" backcolor="#F7F2F2" uuid="f4d644f7-20fa-4e1e-be47-758ded3f661b"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="920" y="0" width="60" height="16" backcolor="#F7F2F2" uuid="0ff96ef3-dfee-4efc-b586-5d025061bfa5"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="2420" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="e37dadca-789d-4c67-9403-f3c088a50da8"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1660" y="0" width="90" height="16" backcolor="#F7F2F2" uuid="421ef7c8-5d7d-46e1-a41b-2670ecff2ef0"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1750" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="cdd83e18-3884-4941-a324-72457348dad4"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1830" y="0" width="70" height="16" backcolor="#F7F2F2" uuid="de260474-9cbb-4e6c-b1e4-b1c4fa59b004"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="980" y="0" width="65" height="16" backcolor="#F7F2F2" uuid="c985a9d6-ce99-4f79-baa5-cbff3d4b5bad"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1045" y="0" width="65" height="16" backcolor="#F7F2F2" uuid="4d98165f-1061-414c-81c8-dad4c2fc1697"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1110" y="0" width="80" height="16" backcolor="#F7F2F2" uuid="be514652-f823-447f-b2c5-1f57d32330d6"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

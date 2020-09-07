@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_location_type_mill_form" model="ir.ui.view">
+            <field name="name">view.account.location.type.mill.form</field>
+            <field name="model">account.location.type</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="c10i_account_location.view_account_location_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='location_type']/group[1]" position="after">
+                    <group sting="Filtering">
+                        <field name="project"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="menu_mill_location_type_config"
+              name="Location Type"
+              parent="c10i_palm_oil_mill.config_mills_menu"
+              action="c10i_account_location.action_account_location_type"
+              groups="group_mill_manager"
+              sequence="10"/>
+
+        <menuitem id="menu_mill_location_config"
+              name="Locations"
+              groups="group_mill_manager"
+              parent="c10i_palm_oil_mill.config_mills_menu"
+              action="c10i_account_location.action_account_location"
+              sequence="11"/>
+
+        <menuitem id="menu_mill_cost_center_config"
+              name="Cost Centers"
+              groups="group_mill_manager"
+              parent="c10i_palm_oil_mill.master_mills_menu"
+              action="c10i_account_location.action_location_account_cost_center"
+              sequence="6"/>
+
+        <menuitem id="menu_mill_cost_center_foh_config"
+              name="Factory Overhead"
+              groups="group_mill_manager"
+              parent="c10i_palm_oil_mill.master_mills_menu"
+              action="c10i_account_location.action_location_account_cost_center_foh"
+              sequence="7"/>
+    </data>
+</odoo>

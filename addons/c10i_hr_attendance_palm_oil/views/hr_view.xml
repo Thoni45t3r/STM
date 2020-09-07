@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- HR Employee -->
+        <record id="view_hr_employee_attendance_palm_oil_form" model="ir.ui.view">
+            <field name="name">view.hr.employee.attendance.palm.oil.form</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">80</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='no_induk']" position="after">
+                    <field name="basic_salary_type" required="1" widget="radio" options="{'horizontal': true}"/>
+                </xpath>
+                <xpath expr="//field[@name='no_induk']" position="before">
+                    <field name="type_id" options='{"no_create_edit": True}' required="1"/>
+                </xpath>
+                <field name="bpjs_kesehatan" position="replace"/>
+                <field name="bpjs_ketenagakerjaan" position="replace"/>
+                <xpath expr="//group[@name='employee_authority']" position="replace"/>
+                <xpath expr="//page[@name='personal_information']" position="after">
+                    <page name="accounting" string="Accounting">
+                        <group>
+                            <group string="Default Tipe Lokasi &amp; Lokasi">
+                                <field name="default_location_type_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="default_location_id" domain="[('type_id','=',default_location_type_id)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="default_account_salary_id" string="Account Gaji" options='{"no_create_edit": True}' required="0"/>
+                            </group>
+                            <group string="Default Akun Tunjangan">
+                                <field name="default_account_overtime_id" options='{"no_create_edit": True}' required="0"/>
+                                <field name="default_account_holiday_allowance_id" options='{"no_create_edit": True}' required="0"/>
+                                <label for="default_account_incentive_id" string="Insentif"/>
+                                <div>
+                                    <field name="incentive" nolabel="1"/>
+                                    <field name="default_account_incentive_id" nolabel="1" style="width:90%;" placeholder="Beban Akun" attrs="{'required': [('incentive','=',True)],'readonly': [('incentive','=',False)],'invisible': [('incentive','=',False)]}" />
+                                </div>
+                                <label for="default_account_food_transport_allowance_id" string="Transport &amp; Makan"/>
+                                <div>
+                                    <field name="food_transport" nolabel="1"/>
+                                    <field name="default_account_food_transport_allowance_id" nolabel="1" style="width:90%;" placeholder="Beban Akun" attrs="{'required': [('food_transport','=',True)],'readonly': [('food_transport','=',False)],'invisible': [('food_transport','=',False)]}" />
+                                </div>
+                                <label for="default_account_medical_allowance_id" string="Pengobatan"/>
+                                <div>
+                                    <field name="medical" nolabel="1"/>
+                                    <field name="default_account_medical_allowance_id" nolabel="1" style="width:90%;" placeholder="Beban Akun" attrs="{'required': [('medical','=',True)],'readonly': [('medical','=',False)],'invisible': [('medical','=',False)]}" />
+                                </div>
+                                <label for="default_account_welfare_allowance_id" string="Kesejahteraan"/>
+                                <div>
+                                    <field name="welfare" nolabel="1"/>
+                                    <field name="default_account_welfare_allowance_id" nolabel="1" style="width:90%;" placeholder="Beban Akun" attrs="{'required': [('welfare','=',True)],'readonly': [('welfare','=',False)],'invisible': [('welfare','=',False)]}" />
+                                </div>
+                            </group>
+                            <group name="kesehatan" string="Asuransi Kesehatan">
+                                <label for="bpjs_kesehatan" string="Kesehatan"/>
+                                <div>
+                                    <field name="kesehatan" nolabel="1"/>
+                                    <field name="bpjs_kesehatan" nolabel="1" style="width:60%;" placeholder="Nomor Asuransi" attrs="{'required': [('kesehatan','=',True)],'readonly': [('kesehatan','=',False)],'invisible': [('kesehatan','=',False)]}" />
+                                    <field name="kesehatan_date_start" nolabel="1" style="width:25%;" placeholder="Tanggal Daftar" attrs="{'required': [('kesehatan','=',True)],'readonly': [('kesehatan','=',False)],'invisible': [('kesehatan','=',False)]}" />
+                                </div>
+                                <field name="default_account_bpjs_allowance_id" options='{"no_create_edit": True}' string="Pembebanan Akun" attrs="{'required': [('kesehatan','=',True)],'readonly': [('kesehatan','=',False)],'invisible': [('kesehatan','=',False)]}" />
+                                <field name="inter_account_bpjs_allowance_id" options='{"no_create_edit": True}' string="Inter Akun" attrs="{'required': [('kesehatan','=',True)],'readonly': [('kesehatan','=',False)],'invisible': [('kesehatan','=',False)]}" />
+                            </group>
+                            <group name="ketenagakerjaan" string="Asuransi Ketenagakerjaan">
+                                <label for="bpjs_ketenagakerjaan" string="Ketenagakerjaan"/>
+                                <div>
+                                    <field name="ketenagakerjaan" nolabel="1"/>
+                                    <field name="bpjs_ketenagakerjaan" nolabel="1" style="width:60%;" placeholder="Nomor Asuransi" attrs="{'required': [('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)],'invisible': [('ketenagakerjaan','=',False)]}" />
+                                    <field name="ketenagakerjaan_date_start" nolabel="1" style="width:25%;" placeholder="Tanggal Daftar" attrs="{'required': [('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)],'invisible': [('ketenagakerjaan','=',False)]}" />
+                                </div>
+                                <field name="default_account_ketenagakerjaan_allowance_id" options='{"no_create_edit": True}' string="Pembebanan Akun" attrs="{'required': [('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)],'invisible': [('ketenagakerjaan','=',False)]}" />
+                                <field name="inter_account_ketenagakerjaan_allowance_id" options='{"no_create_edit": True}' string="Inter Akun" attrs="{'required': [('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)],'invisible': [('ketenagakerjaan','=',False)]}" />
+                            </group>
+                            <group name="pensiun" string="Asuransi Pensiun">
+                                <label for="bpjs_pensiun" string="Pensiun"/>
+                                <div>
+                                    <field name="pensiun" nolabel="1"/>
+                                    <field name="bpjs_pensiun" nolabel="1" style="width:60%;" placeholder="Nomor Asuransi" attrs="{'required': [('pensiun','=',True)],'readonly': [('pensiun','=',False)],'invisible': [('pensiun','=',False)]}" />
+                                    <field name="pensiun_date_start" nolabel="1" style="width:25%;" placeholder="Tanggal Daftar" attrs="{'required': [('pensiun','=',True)],'readonly': [('pensiun','=',False)],'invisible': [('pensiun','=',False)]}" />
+                                </div>
+                                <field name="default_account_pensiun_allowance_id" options='{"no_create_edit": True}' string="Pembebanan Akun" attrs="{'required': [('pensiun','=',True)],'readonly': [('pensiun','=',False)],'invisible': [('pensiun','=',False)]}" />
+                                <field name="inter_account_pensiun_allowance_id" options='{"no_create_edit": True}' string="Inter Akun" attrs="{'required': [('pensiun','=',True)],'readonly': [('pensiun','=',False)],'invisible': [('pensiun','=',False)]}" />
+                            </group>
+                            <group name="keselamatan" string="JKK + JKM">
+                                <label for="bpjs_keselamatan" string="JKK + JKM"/>
+                                <div>
+                                    <field name="keselamatan" nolabel="1"/>
+                                    <field name="bpjs_keselamatan" nolabel="1" style="width:60%;" placeholder="Nomor Asuransi" attrs="{'required': [('keselamatan','=',True)],'readonly': [('keselamatan','=',False)],'invisible': [('keselamatan','=',False)]}" />
+                                    <field name="keselamatan_date_start" nolabel="1" style="width:25%;" placeholder="Tanggal Daftar" attrs="{'required': [('keselamatan','=',True)],'readonly': [('keselamatan','=',False)],'invisible': [('keselamatan','=',False)]}" />
+                                </div>
+                                <field name="default_account_keselamatan_allowance_id" options='{"no_create_edit": True}' string="Pembebanan Akun" attrs="{'required': [('keselamatan','=',True)],'readonly': [('keselamatan','=',False)],'invisible': [('keselamatan','=',False)]}" />
+                                <field name="inter_account_keselamatan_allowance_id" options='{"no_create_edit": True}' string="Inter Akun" attrs="{'required': [('keselamatan','=',True)],'readonly': [('keselamatan','=',False)],'invisible': [('keselamatan','=',False)]}" />
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//page[@name='public']/group[last()]" position="after">
+                    <group coslpan="8" attrs="{'invisible': [('basic_salary_type','!=','employee')]}" string="UMR">
+                        <field name="umr_ids" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="umr_month"/>
+                                <field name="year"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <!-- End Of HR Employee -->
+
+        <!-- HR Minimum Wage -->
+        <record id="view_hr_minimum_wage_attendance_form" model="ir.ui.view">
+            <field name="name">view.hr.minimum.wage.attendance.form</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="c10i_hr.view_minimum_wage_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_from']" position="before">
+                    <field name="basic_salary_type" required="1"/>
+                    <field name="work_day" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='date_to']" position="before">
+                    <field name="employee_type_id" attrs="{'invisible':[('basic_salary_type','!=','employee_type')], 'required':[('basic_salary_type','=','employee_type')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                    <field name="employee_id" attrs="{'invisible':[('basic_salary_type','!=','employee')], 'required':[('basic_salary_type','=','employee')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('basic_salary_type','=','employee')]"/>
+                    <field name="umr_day" required="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--HR Employee Type -->
+        <record id="view_employee_type_form" model="ir.ui.view">
+            <field name="name">view.employee.type.form</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <form string="Employee Type">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Monthly" required="1"/></h1>
+                        </div>
+                        <group name="employee_type">
+                            <group string="General Information">
+                                <field name="code" placeholder="Monthly" required="1"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="sequence_id" required="0"/>
+                            </group>
+                            <group string="Salary Calculation">
+                                <group>
+                                    <field name="overtime_calc"/>
+                                </group>
+                                <group>
+                                    <field name="monthly_employee"/>
+                                    <field name="bhl_employee"/>
+                                    <field name="contract_employee"/>
+                                    <field name="other_employee"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group string="History UMR" coslpan="8" attrs="{'invisible': [('monthly_employee','=',True)]}" groups="c10i_lhm.group_plantation_manager">
+                            <field name="umr_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="umr_month"/>
+                                    <field name="umr_day"/>
+                                    <field name="work_day"/>
+                                    <field name="year"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_type_tree" model="ir.ui.view">
+            <field name="name">view.employee.type.tree</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Type">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="overtime_calc"/>
+                    <field name="monthly_employee"/>
+                    <field name="bhl_employee"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_employee_type_filter" model="ir.ui.view">
+            <field name="name">view.employee.type.filter</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <search string="Employee Type" filter_domain="['|',('code','ilike',self),('name','ilike',self)]">
+                    <field name="name" string="Employee Type"/>
+                    <separator/>
+                    <filter name="overtime" string="Overtime" domain="[('overtime_calc','=',True)]"/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_employee_type" model="ir.actions.act_window">
+            <field name="name">Employee Type</field>
+            <field name="res_model">hr.employee.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_employee_type_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Employee Type.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_employee_type_config" name="Employee Type" action="action_employee_type" parent="hr.menu_human_resources_configuration" groups="hr.group_hr_manager" sequence="30"/>
+        <!--End Of HR Employee Type -->
+
+        <menuitem id="menu_hr_public_holidays_attendance" name="Public Holidays" parent="hr.menu_hr_root" sequence="92"/>
+        <menuitem action="hr_public_holidays.open_public_holidays_view" id="menu_public_holidays_attendance" parent="menu_hr_public_holidays_attendance" sequence="10"/>
+    </data>
+    <data noupdate="1">
+        <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root">
+            <field name="groups_id" eval="[(6,0,[ref('c10i_base.menu_make_invisible')])]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='wizard_create_contractor_book_view'>
+            <field name="name">wizard.create.contractor.book.view</field>
+            <field name="model">wizard.create.contractor.book</field>
+            <field name="arch" type="xml">
+                <form string="Create Contractor Book" version="7.0" create="false" edit="false">
+                    <header>
+                        <button name="generate_line" class="oe_highlight" string="Generate" type="object"/>
+                        <button name="create_contractor_book" class="oe_highlight" string="Create Buku Kontraktor" type="object"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="transaction" required="True"/>
+                            <field name="contractor_id" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="account_period_id" domain="[('special','=',False)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="payment_type"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="product_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                    </group>
+                    <separator string="Default Lines" colspan="4"/>
+                    <field name="default_lines" mode="tree" >
+                        <tree string="Default Lines" editable="bottom" create="false" context="{'contractor_id': parent.contractor_id, 'product_id': parent.product_id}">
+                            <field name="name"/>
+                            <field name="pks_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />
+                            <field name="location_type_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="['|',('oil_palm','=',True), ('general_charge','=',True)]"/>
+                            <field name="activity_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('type_id','=',location_type_id)]"/>
+                            <field name="pricelist_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('partner_id','=',parent.contractor_id),('plantation_pricelist_type','=','pricelist_transport'), ('pks_id','=',pks_id)]" attrs="{'required': [('price_unit','=',0)]}"/>
+                            <field name="price_unit" attrs="{'required': [('pricelist_id','=',False)]}" />
+                        </tree>
+                    </field>
+                    <separator string="Detail Buku Kontraktor" colspan="4"/>
+                    <field name="contractor_lines" mode="tree" >
+                        <tree editable="bottom" create="false" delete="false">
+                            <field name="date" readonly="1"/>
+                            <field name="vehicle_id" readonly="1"/>
+                            <field name="pks_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />
+                            <field name="location_type_id" readonly="1"/>
+                            <field name="location_id" readonly="1"/>
+                            <field name="activity_id" readonly="1"/>
+                            <field name="uom_id" readonly="1"/>
+                            <field name="qty" readonly="1"/>
+                            <field name="price_unit"/>
+                            <field name="amount" sum="amount"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_create_contractor_book'>
+            <field name="name">Input Buku Kontraktor atas NAB</field>
+            <field name="res_model">wizard.create.contractor.book</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_create_contractor_book_view"/>
+            <field name="target">current</field>
+            <!-- <field name="target">new</field> -->
+        </record>
+
+        <menuitem id="menu_create_contractor_book" 
+                  action="action_create_contractor_book" parent="menu_plantation_transaction" groups="group_plantation_operator" sequence="50"/>
+        
+    </data>
+</odoo>

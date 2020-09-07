@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Buku Workshop (WS)" pageWidth="1224" pageHeight="144" columnWidth="1224" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="b0e95a63-3a3f-47ea-8291-f0ad58d698a3">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="cm"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="141"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="852"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="648"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="338"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="asl_server"/>
+	<style name="default" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" hTextAlign="Left" hImageAlign="Left" vTextAlign="Top" vImageAlign="Top" isBlankWhenNull="true" fontName="SansSerif" fontSize="8">
+		<box leftPadding="2" rightPadding="2"/>
+	</style>
+	<style name="num1" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0.00;-#,##0.00"/>
+	<style name="num2" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0;-#,##0"/>
+	<style name="date1" style="default" pattern="dd-MM-yy HH:mm"/>
+	<style name="date2" style="default" pattern="dd-MMM-yy"/>
+	<style name="date3" style="default" pattern="dd/MM/yy"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" style="default" hTextAlign="Center" hImageAlign="Center">
+		<box leftPadding="0" rightPadding="0"/>
+	</style>
+	<parameter name="from_date" class="java.lang.String"/>
+	<parameter name="to_date" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+lwl.date AS "TANGGAL",	
+lu.code AS "KODE WORKSHOP",	
+lu.name AS "DESKRIPSI",	
+llt.code AS "TIPE LOKASI",	
+ll.code AS "KODE LOKASI",	
+ll.name AS "DESKRIPSI LOKASI",	
+la.code AS "KODE AKTIVITAS",	
+la.name AS "DESKRIPSI AKTIVITAS",	
+lwl.use_hours AS "JAM KERJA",	
+rc.name AS "COMPANY"
+
+FROM lhm_workshop lw
+LEFT JOIN lhm_workshop_line lwl ON lw.id=lwl.lhm_workshop_id
+LEFT JOIN lhm_utility lu ON lw.workshop_id = lu.id
+LEFT JOIN lhm_location_type llt ON lwl.location_type_id = llt.id
+LEFT JOIN lhm_location ll ON lwl.location_id = ll.id
+LEFT JOIN lhm_activity la ON lwl.activity_id = la.id
+LEFT JOIN res_company rc ON rc.id=lw.company_id
+where  lwl.date  between  $P{from_date}::date and  $P{to_date}::date]]>
+	</queryString>
+	<field name="TANGGAL" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="TANGGAL"/>
+	</field>
+	<field name="KODE WORKSHOP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="KODE WORKSHOP"/>
+	</field>
+	<field name="DESKRIPSI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DESKRIPSI"/>
+	</field>
+	<field name="TIPE LOKASI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TIPE LOKASI"/>
+	</field>
+	<field name="KODE LOKASI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="KODE LOKASI"/>
+	</field>
+	<field name="DESKRIPSI LOKASI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DESKRIPSI LOKASI"/>
+	</field>
+	<field name="KODE AKTIVITAS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="KODE AKTIVITAS"/>
+	</field>
+	<field name="DESKRIPSI AKTIVITAS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DESKRIPSI AKTIVITAS"/>
+	</field>
+	<field name="JAM KERJA" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="JAM KERJA"/>
+	</field>
+	<field name="COMPANY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="COMPANY"/>
+	</field>
+	<title>
+		<band height="71" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="8" width="1224" height="20" uuid="e884f857-2b3f-4d93-b4e2-e4346a74fc6d"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COMPANY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="28" width="1224" height="20" uuid="3f96c3b2-bde1-42ef-93de-3d9172136b2f"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LAPORAN WORKSHOP"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="48" width="1224" height="22" uuid="657ff9bf-a190-4548-a1ed-95a99ea8fd8f"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periode  dari tanggal  : " + new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date})) + " s/d " +new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="98" y="-1" width="69" height="30" uuid="00bf8ad4-519f-4060-8049-fc8d0d374405"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Workshop]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="-1" width="68" height="30" uuid="145995dc-70c3-4700-9ac9-0cfa926747f0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="-1" width="30" height="30" uuid="4a42a24d-36b7-414b-80a0-80f9a36d2192"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="-1" width="74" height="30" uuid="1c43f099-24bc-43ca-a68b-a3e856827d15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipe Lokasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="-1" width="76" height="30" uuid="c435aae7-5a58-4353-9d24-83546b1a3fa1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Lokasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="-1" width="269" height="30" uuid="af932272-9d41-4175-8abd-7b4d7fc05702"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Lokasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="793" y="-1" width="271" height="30" uuid="64e9a2c7-a076-4e5d-bd96-6b1f30f37242"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Aktivitas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="731" y="-1" width="62" height="30" uuid="e6dd3cb0-1b40-49cb-af60-f4d9ba0329ed"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Aktivitas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1064" y="-1" width="60" height="30" uuid="13c796ba-6cf2-445d-b54e-40fab8eeef28"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jam Kerja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1124" y="-1" width="100" height="30" uuid="0d8d352e-592a-4887-a838-1811725c9b78"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Perusahaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="-1" width="145" height="30" uuid="698e4f9c-cf79-4d23-9fc1-8b76187467dd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deskripsi]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="15">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="1124" y="-1" width="100" height="15" isPrintWhenDetailOverflows="true" uuid="d8a25cb9-e1b7-4461-8e74-e386ebe389a2"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COMPANY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="98" y="-1" width="69" height="15" isPrintWhenDetailOverflows="true" uuid="a5a20fc6-1411-47b7-8a47-37e4f8c3e489"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{KODE WORKSHOP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,###.00#;(#,###.00#)">
+				<reportElement stretchType="ElementGroupHeight" x="462" y="-1" width="269" height="15" isPrintWhenDetailOverflows="true" uuid="728ed09b-b5ce-4dd4-a0aa-b3f650da6639"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DESKRIPSI LOKASI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-YYYY">
+				<reportElement stretchType="ElementGroupHeight" x="30" y="-1" width="68" height="15" isPrintWhenDetailOverflows="true" uuid="48077b02-3609-49df-9321-ba05de57cda5"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TANGGAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="312" y="-1" width="74" height="15" isPrintWhenDetailOverflows="true" uuid="54ec2754-22d4-46d0-95b3-b698b2d089fd"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TIPE LOKASI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;(###0)">
+				<reportElement stretchType="ElementGroupHeight" x="731" y="-1" width="62" height="15" isPrintWhenDetailOverflows="true" uuid="d201acf2-d2f7-4149-9614-f6449d28d2a1"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{KODE AKTIVITAS}.contains("A")||$F{KODE AKTIVITAS}.contains("a")||
+$F{KODE AKTIVITAS}.contains("B")||$F{KODE AKTIVITAS}.contains("b")||
+$F{KODE AKTIVITAS}.contains("C")||$F{KODE AKTIVITAS}.contains("c")||
+$F{KODE AKTIVITAS}.contains("D")||$F{KODE AKTIVITAS}.contains("d")||
+$F{KODE AKTIVITAS}.contains("E")||$F{KODE AKTIVITAS}.contains("e")||
+$F{KODE AKTIVITAS}.contains("F")||$F{KODE AKTIVITAS}.contains("f")||
+$F{KODE AKTIVITAS}.contains("G")||$F{KODE AKTIVITAS}.contains("g")||
+$F{KODE AKTIVITAS}.contains("H")||$F{KODE AKTIVITAS}.contains("h")||
+$F{KODE AKTIVITAS}.contains("I")||$F{KODE AKTIVITAS}.contains("i")||
+$F{KODE AKTIVITAS}.contains("J")||$F{KODE AKTIVITAS}.contains("j")||
+$F{KODE AKTIVITAS}.contains("K")||$F{KODE AKTIVITAS}.contains("k")||
+$F{KODE AKTIVITAS}.contains("L")||$F{KODE AKTIVITAS}.contains("l")||
+$F{KODE AKTIVITAS}.contains("M")||$F{KODE AKTIVITAS}.contains("m")||
+$F{KODE AKTIVITAS}.contains("N")||$F{KODE AKTIVITAS}.contains("n")||
+$F{KODE AKTIVITAS}.contains("O")||$F{KODE AKTIVITAS}.contains("o")||
+$F{KODE AKTIVITAS}.contains("P")||$F{KODE AKTIVITAS}.contains("p")||
+$F{KODE AKTIVITAS}.contains("Q")||$F{KODE AKTIVITAS}.contains("q")||
+$F{KODE AKTIVITAS}.contains("R")||$F{KODE AKTIVITAS}.contains("r")||
+$F{KODE AKTIVITAS}.contains("S")||$F{KODE AKTIVITAS}.contains("s")||
+$F{KODE AKTIVITAS}.contains("T")||$F{KODE AKTIVITAS}.contains("t")||
+$F{KODE AKTIVITAS}.contains("U")||$F{KODE AKTIVITAS}.contains("u")||
+$F{KODE AKTIVITAS}.contains("V")||$F{KODE AKTIVITAS}.contains("v")||
+$F{KODE AKTIVITAS}.contains("W")||$F{KODE AKTIVITAS}.contains("w")||
+$F{KODE AKTIVITAS}.contains("X")||$F{KODE AKTIVITAS}.contains("x")||
+$F{KODE AKTIVITAS}.contains("Y")||$F{KODE AKTIVITAS}.contains("y")||
+$F{KODE AKTIVITAS}.contains("Y")||$F{KODE AKTIVITAS}.contains("y")||
+$F{KODE AKTIVITAS}.contains("Z")||$F{KODE AKTIVITAS}.contains("z")?
+$F{KODE AKTIVITAS}:Integer.parseInt($F{KODE AKTIVITAS})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00">
+				<reportElement stretchType="RelativeToTallestObject" x="793" y="-1" width="271" height="15" isPrintWhenDetailOverflows="true" uuid="dc94af74-4fa3-4a84-b391-0c9b162ebc60"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DESKRIPSI AKTIVITAS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00">
+				<reportElement stretchType="ElementGroupHeight" x="1064" y="-1" width="60" height="15" isPrintWhenDetailOverflows="true" uuid="67542920-9bc3-47b7-ba87-49a7e53254e2"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{JAM KERJA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="0" y="-1" width="30" height="15" isPrintWhenDetailOverflows="true" uuid="a8764019-55d3-442f-832a-2a13fe615cfc"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="386" y="-1" width="76" height="15" isPrintWhenDetailOverflows="true" uuid="b928c598-2853-4266-afc7-c1fa22b60a74"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{KODE LOKASI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ElementGroupHeight" x="167" y="-1" width="145" height="15" isPrintWhenDetailOverflows="true" uuid="d07235a4-4087-4956-92ed-38a25647d113"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DESKRIPSI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

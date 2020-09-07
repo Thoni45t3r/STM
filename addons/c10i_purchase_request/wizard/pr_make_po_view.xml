@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_pr_make_po" model="ir.ui.view">
+            <field name="name">PO Create</field>
+            <field name="model">pr.make.po</field>
+            <field name="arch" type="xml">
+                <form string="PO Create">
+                    <p class="oe_grey">
+                        each State must be Done, and supplier must be same
+                    </p>
+                    <group>
+                    	<field name="type_id"/>
+                    	<field name="partner_id"/>
+                    	<field name="pr_line_ids" attrs="{'invisible':[('type_id', '=','all')]}">
+                    		<tree editable="bottom">
+                    			<field name="pr_id"/>
+                    			<field name="product_id"/>
+								<field name="unit_price"/>
+								<field name="product_qty"/>
+                                <field name="product_uom"/>
+								<field name="total_price"/>
+                                <field name="pr_line_id" invisible="1"/>
+                    		</tree>
+                    	</field>
+                    </group>
+                    <footer>
+                        <button name="create_po" string="Create Purchase Order" type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_view_pr_make_po"
+		    name="Create PO"
+		    src_model="purchase.request"
+		    res_model="pr.make.po"
+		    view_type="form" view_mode="form"
+		    key2="client_action_multi" target="new"
+		   	/>
+
+
+        <act_window id="action_view_pr_make_request_for_quotation"
+            name="Create RFQ"
+            src_model="purchase.request"
+            res_model="pr.make.rfq"
+            view_type="form" view_mode="form"
+            key2="client_action_multi" target="new"
+            />
+
+
+</odoo>

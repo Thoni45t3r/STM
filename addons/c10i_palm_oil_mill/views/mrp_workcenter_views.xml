@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Account Location -->
+    <record id="view_mill_workcenter_form" model="ir.ui.view">
+        <field name="name">view.mill.workcenter.form</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="arch" type="xml">
+            <form string="Stations">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title">
+                        <label string="Name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Station 1" required="1"/></h1>
+                    </div>
+                    <group name="main_group">
+                        <group name="main_group1">
+                            <field name="code" string="Code" required="1"/>
+                            <field name="location_type_id" required="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                        <group name="main_group2">
+                            <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mill_workcenter_tree" model="ir.ui.view">
+        <field name="name">view.mill.workcenter.tree</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="arch" type="xml">
+            <tree string="Work Center">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_mill_workcenter_filter" model="ir.ui.view">
+        <field name="name">view.mill.workcenter.filter</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="arch" type="xml">
+            <search string="Stations">
+                <field name="name" string="Name/Code" filter_domain="['|', ('code','ilike', self), ('name','ilike',self)]"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mill_workcenter" model="ir.actions.act_window">
+        <field name="name">Stations</field>
+        <field name="res_model">mrp.workcenter</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_mill_workcenter_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Create to add a new Work Center
+          </p>
+        </field>
+    </record>
+
+    <record id="action_mill_workcenter_view1" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_mill_workcenter_tree"/>
+        <field name="act_window_id" ref="action_mill_workcenter"/>
+    </record>
+
+    <record id="action_mill_workcenter_view2" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mill_workcenter_form"/>
+        <field name="act_window_id" ref="action_mill_workcenter"/>
+    </record>
+    
+    <menuitem id="menu_mill_workcenter"
+              name="Stations"
+              parent="c10i_palm_oil_mill.master_mills_menu"
+              action="action_mill_workcenter"
+              groups="c10i_palm_oil_mill.group_mill_user"
+              sequence="10"/>
+    <!-- End Of Account Location -->
+
+</odoo>

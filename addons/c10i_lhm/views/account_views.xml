@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_move_form" model="ir.ui.view">
+            <field name="name">view.account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_form" model="ir.ui.view">
+            <field name="name">view.account.move.line.form</field>
+            <field name="model">account.move.line</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <field name="account_id" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="invoice_form_inherit_plantation" model="ir.ui.view">
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cost_center.invoice_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="cost_center_invoice_supplier_form_inherit_plantation" model="ir.ui.view">
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cost_center.invoice_supplier_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="invoice_supplier_form_inherit_plantation">
+            <field name="name">invoice.supplier.form.inherit.plantation</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_voucher_form_inherit_plantation" model="ir.ui.view">
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="c10i_account.view_voucher_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="move_form_cost_center_plantation" model="ir.ui.view">
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account_cost_center.move_form_cost_center"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//field[@name='line_ids']/tree/field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="move_line_form_cost_center_plantation" model="ir.ui.view">
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account_cost_center.move_line_form_cost_center"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="move_line_tree_cost_center_plantation " model="ir.ui.view">
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account_cost_center.move_line_tree_cost_center"/>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="settlement_advance_plantation_form">
+            <field name="name">account.settlement.advance.plantation</field>
+            <field name="model">account.settlement.advance</field>
+            <field name="inherit_id" ref="c10i_employee_advance.settlement_advance_form"/>
+            <field name="arch" type="xml">
+                <!-- <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/group/group[2]/field[@name='account_id']" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </xpath> -->
+                <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/group/group[2]/field[@name='account_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/group/group[2]/field[@name='amount']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[@name='settlemet_line']/field[@name='settlement_line_ids']/form/field[@name='split_line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)], 'required': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="plantation_validator" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

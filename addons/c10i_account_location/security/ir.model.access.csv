@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_account_location_type,access_account_location_type,model_account_location_type,group_account_location,1,1,1,0
+access_account_location,access_account_location,model_account_location,group_account_location,1,1,1,1
+access_account_location_cost_center,access_account_cost_center userlocation,model_account_location,group_account_location,1,1,1,1

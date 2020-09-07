@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+	    <record id="group_mill_user" model="res.groups">
+	        <field name="name">Mill User</field>
+	        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('product.group_uom')), (4, ref('stock.group_stock_multi_locations'))]"/>
+        	<field name="category_id" ref="base.module_category_manufacturing"/>
+	    </record>
+
+	    <record id="group_mill_manager" model="res.groups">
+	        <field name="name">Mill Manager</field>
+	        <field name="implied_ids" eval="[(4, ref('group_mill_user'))]"/>
+	        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        	<field name="category_id" ref="base.module_category_manufacturing"/>
+	    </record>
+
+	    <record id="group_mill_valuation" model="res.groups">
+	        <field name="name">Mill Valuation</field>
+	        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        	<field name="category_id" ref="base.module_category_hidden"/>
+	    </record>
+	</data>
+</openerp>

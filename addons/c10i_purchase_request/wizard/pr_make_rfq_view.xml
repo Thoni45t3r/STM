@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_pr_make_rfq" model="ir.ui.view">
+            <field name="name">RFQ Create</field>
+            <field name="model">pr.make.rfq</field>
+            <field name="arch" type="xml">
+                <form string="RFQ Create">
+                    <p class="oe_grey">
+                        each State must be Done, and supplier must be same
+                    </p>
+                    <group>
+                    	<field name="type_id"/>
+                    	<field name="partner_id" attrs="{'invisible':[('type_id', '=','all')]}"/>
+                    	<!-- <field name="pr_line_ids" attrs="{'invisible':[('type_id', '=','all')]}"> -->
+                        <field name="pr_line_ids">
+                    		<tree editable="bottom">
+                    			<field name="pr_id"/>
+                    			<field name="product_id"/>
+								<field name="unit_price"/>
+								<field name="product_qty"/>
+								<field name="product_uom"/>
+                                <field name="scheduled_date"/>
+								<field name="total_price"/>
+                                <field name="pr_line_id"/>
+                    		</tree>
+                    	</field>
+                    </group>
+                    <footer>
+                        <button name="create_request_for_quotation" string="Create RFQ" type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- <act_window id="action_view_pr_make_request_for_quotation"
+		    name="Create RFQ"
+		    src_model="purchase.request"
+		    res_model="pr.make.rfq"
+		    view_type="form" view_mode="form"
+		    key2="client_action_multi" target="new"
+		   	/> -->
+
+
+</odoo>

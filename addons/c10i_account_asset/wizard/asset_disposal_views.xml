@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record model="ir.ui.view" id="asset_disposal_form">
+        <field name="name">wizard.asset.disposal.form</field>
+        <field name="model">wizard.asset.disposal</field>
+        <field name="arch" type="xml">
+            <form string="Sell or Dispose">
+                <group col="4">
+                    <group colspan="2" col="2">
+                        <field name="dispose_method"/>
+                        <field name="name" />
+                        <field name="gross_value" />
+                        <field name="current_cumm_depr_amount" invisible="1"/>
+                        <field name="cumm_depr_amount" />
+                    </group>
+                    <group colspan="2" col="2">
+                        <!-- <field name="special_options" attrs="{'invisible':[('dispose_method','!=','asset_sale')], 'required':[('dispose_method','=','asset_sale')]}"/> -->
+                        <field name="partner_id" attrs="{'invisible':[('dispose_method','!=','asset_sale')], 'required':[('dispose_method','=','asset_sale')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="date_invoice" attrs="{'invisible':[('dispose_method','!=','asset_sale')], 'required':[('dispose_method','=','asset_sale')]}"/>
+                        <field name="sale_amount" attrs="{'invisible':[('dispose_method','!=','asset_sale')], 'required':[('dispose_method','=','asset_sale')]}"/>
+                        <field name="create_invoice" attrs="{'invisible':[('dispose_method','!=','asset_sale')]}"/>
+                        <field name="sale_account_asset_id" attrs="{'invisible':['|',('dispose_method','!=','asset_sale'), ('create_invoice','=',False)], 'required':[('dispose_method','=','asset_sale'), ('create_invoice','=',True)]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        <field name="with_depr" attrs="{'invisible':[('dispose_method','!=','asset_sale')]}"/>
+                        <field name="extra_depr_amount" attrs="{'invisible':[('dispose_method','!=','asset_sale')]}"/>
+                        <field name="write_off_amount" attrs="{'invisible':[('write_off_amount','=',0)]}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="dispose" string="Sell or Dispose" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_asset_disposal" model="ir.actions.act_window">
+         <field name="name">Sell or Dispose</field>
+         <field name="res_model">wizard.asset.disposal</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="view_id" ref="asset_disposal_form"/>
+         <field name="target">new</field>
+   </record>
+    
+</odoo>

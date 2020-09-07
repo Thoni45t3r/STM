@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Location Type Data-->
+        <record id="default_location_type_0" model="lhm.location.type">
+            <field name="name">General Charge</field>
+            <field name="code">GC</field>
+            <field name="general_charge">1</field>
+            <field name="workshop_line">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_1" model="lhm.location.type">
+            <field name="name">Indirect Cost</field>
+            <field name="code">IDC</field>
+            <field name="indirect">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_2" model="lhm.location.type">
+            <field name="name">Infrastruktur Bangunan Air</field>
+            <field name="code">IF-BA</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_3" model="lhm.location.type">
+            <field name="name">Infrastruktur Bangunan</field>
+            <field name="code">IF-BG</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_4" model="lhm.location.type">
+            <field name="name">Infrastructure Jembatan &amp; Gorong</field>
+            <field name="code">IF-JB</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_5" model="lhm.location.type">
+            <field name="name">Infrastructure Jalan</field>
+            <field name="code">IF-JL</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_6" model="lhm.location.type">
+            <field name="name">Infrastructure Parit</field>
+            <field name="code">IF-PR</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_7" model="lhm.location.type">
+            <field name="name">Infrastructure Utilitas</field>
+            <field name="code">IF-UT</field>
+            <field name="infrastruktur">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_8" model="lhm.location.type">
+            <field name="name">Machine</field>
+            <field name="code">MA</field>
+            <field name="machine">1</field>
+            <field name="workshop_line">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_9" model="lhm.location.type">
+            <field name="name">Nursery</field>
+            <field name="code">NS</field>
+            <field name="nursery">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_10" model="lhm.location.type">
+            <field name="name">Oil Palm</field>
+            <field name="code">OP</field>
+            <field name="oil_palm">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_11" model="lhm.location.type">
+            <field name="name">Project</field>
+            <field name="code">PJ</field>
+            <field name="project">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_12" model="lhm.location.type">
+            <field name="name">Vehicle</field>
+            <field name="code">VH</field>
+            <field name="vehicle">1</field>
+            <field name="workshop_line">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_13" model="lhm.location.type">
+            <field name="name">Workshop</field>
+            <field name="code">WS</field>
+            <field name="workshop">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_location_type_14" model="lhm.location.type">
+            <field name="name">-</field>
+            <field name="code">-</field>
+            <field name="no_line">1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+    </data>
+</odoo>

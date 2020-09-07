@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="wizard_invoice_advance_balance_form">
+        <field name="name">wizard.invoice.advance.balance.form</field>
+        <field name="model">wizard.invoice.advance.balance</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="as_of_date" />
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="advance_type" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_report" string="Excel" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_wizard_invoice_advance_balance" model="ir.actions.act_window">
+        <field name="name">Unadjusted Invoice Advances</field>
+        <field name="res_model">wizard.invoice.advance.balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="wizard_invoice_advance_balance_form"/>
+        <field name="target">new</field>
+   </record>
+
+   <menuitem id="menu_wizard_invoice_advance_balance" parent="account.menu_finance_reports" sequence="200" action="action_wizard_invoice_advance_balance" name="Unadjusted Invoice Advances"/>
+</odoo>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.actions.act_window" id="action_mill_order_moves">
+        <field name="name">Stock Moves</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|', ('unbuild_id', '=', active_id), ('consume_unbuild_id', '=', active_id)]</field>
+    </record>
+
+    <record id="mill_order_search_view" model="ir.ui.view">
+        <field name="name">mrp.unbuild.search</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <field name="product_id"/>
+                <field name="state"/>
+                <group expand="0" string="Filters">
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                </group>
+                <group expand='0' string='Group by...'>
+                    <filter string='Product' name="productgroup" context="{'group_by': 'product_id'}"/>
+                </group>
+           </search>
+        </field>
+    </record>
+
+   <record model="ir.actions.act_window" id="action_mill_order_moves">
+        <field name="name">Stock Moves</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|', ('unbuild_id', '=', active_id), ('consume_unbuild_id', '=', active_id)]</field>
+    </record>
+
+    <record id="mill_order_form_view" model="ir.ui.view">
+        <field name="name">mrp.unbuild.form</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="arch" type="xml">
+            <form string="Mill Orders">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': ['|',('editable_produce_line_ids','=',[]),('state','!=','draft')]}"/>
+                    <button name="action_set_draft" string="Set Draft" type="object" states="confirmed"/>
+                    <button name="generate_produce_lines" string="Generate Produce Lines" type="object" states="draft" class="oe_highlight"/>
+                    <button name="action_unbuild" string="Validate" type="object" states="confirmed" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="%(action_mill_order_moves)d"
+                                string="Moves" type="action" icon="fa-arrows-v" states="done"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Mill Order" nolabel="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" />
+                            <field name="product_id" domain="[('bom_ids', '!=', False)]"/>
+                            <field name="bom_id" domain="['|',
+                                        ('product_id','=',product_id),
+                                        '&amp;',
+                                            ('product_tmpl_id.product_variant_ids','=',product_id),
+                                            ('product_id','=',False),
+                                            ('type', '=', 'normal')]"/>
+                            <label for="product_qty"/>
+                            <div class="o_row">
+                                <field name="product_qty"/>
+                                <field name="product_uom_id" options="{'no_open':True,'no_create':True}" groups="product.group_uom"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                            <field name="location_dest_id" groups="stock.group_stock_multi_locations"/>
+                            <field name="has_tracking" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="need_recompute" invisible="1" />
+                    <notebook>
+                        <page name="produce_line" attrs="{'invisible': [('editable_produce_line_ids','=',[])]}" string="Produce Lines">
+                            <button name="recompute_product_lines" string="Recompute Produce Lines" type="object" attrs="{'invisible': [('need_recompute','=',False)]}" class="oe_stat_button oe_highlight oe_right"/>
+                            <newline/>
+                            <field name="editable_produce_line_ids" string="Produce Lines">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="product_id" options="{'no_open':True,'no_create':True}" readonly="1" />
+                                    <field name="product_uom" options="{'no_open':True,'no_create':True}" groups="product.group_uom" readonly="1" />
+                                    <field name="bom_line_qty" />
+                                    <field name="bom_line_qty_confirmed" />
+                                    <field name="product_uom_qty" />
+                                    <field name="bom_line_id" invisible="1"/>
+                                    <field name="need_recompute" invisible="1"/>
+                                    <field name="calc_line" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="mill_order_tree_view" model="ir.ui.view">
+        <field name="name">mrp.unbuild.tree</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="product_id"/>
+                <field name="bom_id"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id" grousp="product.group_uom"/>
+                <field name="state"/>
+                <field name="location_id" groups="stock.group_stock_multi_locations"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_mill_order">
+        <field name="name">Mill Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.unbuild</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('mill_order','=',True)]</field>
+        <field name="search_view_id" ref="mill_order_search_view"/>
+        <field name="context">{'mill_order': True}</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new Mill Order
+          </p><p>
+            Mill Order will do a breakdown product from a bill of materials of its raw material.
+          </p>
+        </field>
+    </record>
+
+    <record id="action_mill_order_view1" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mill_order_tree_view"/>
+        <field name="act_window_id" ref="action_mill_order"/>
+    </record>
+
+    <record id="action_mill_order_view2" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mill_order_form_view"/>
+        <field name="act_window_id" ref="action_mill_order"/>
+    </record>
+
+    <menuitem id="menu_mill_order"
+          name="Mill Orders"
+          parent="c10i_palm_oil_mill.transaction_mills_menu"
+          action="action_mill_order"
+          sequence="20"/>
+
+</odoo>

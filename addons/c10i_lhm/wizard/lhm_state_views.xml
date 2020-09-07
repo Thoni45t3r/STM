@@ -1,0 +1,48 @@
+<openerp>
+	<data>
+		<record id="lhm_transaction_progress_view" model="ir.ui.view">
+			<field name="name">lhm.transaction.progress.form</field>
+			<field name="model">lhm.transaction.progress</field>
+			<field name="arch" type="xml">
+				<form string="Proses Laporan Harian Mandor yg dipilih" version="7.0">
+					<p class="oe_grey">
+						Setelah LHM di Proses, progress pekerjaan Harian akan terakumulasi per Lokasi
+					</p>
+					<footer>
+						<button string="Proses" name="run_progress" type="object" default_focus="1" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="action_lhm_progress"
+			multi="True"
+			key2="client_action_multi" name="LHM Proses"
+			res_model="lhm.transaction.progress" src_model="lhm.transaction"
+			view_mode="form" target="new" view_type="form" />
+
+		<record id="lhm_transaction_set_draft_view" model="ir.ui.view">
+			<field name="name">lhm.transaction.set.draft.form</field>
+			<field name="model">lhm.transaction.set.draft</field>
+			<field name="arch" type="xml">
+				<form string="Set to Draft Laporan Harian Mandor yg dipilih" version="7.0">
+					<p class="oe_grey">
+					</p>
+					<footer>
+						<button string="Set to Draft" name="set_draft" type="object" default_focus="1" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="action_lhm_set_draft"
+			multi="True"
+			key2="client_action_multi" name="Set to Draft"
+			res_model="lhm.transaction.set.draft" src_model="lhm.transaction"
+			view_mode="form" target="new" view_type="form" />
+	</data>
+</openerp>

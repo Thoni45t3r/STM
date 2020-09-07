@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_report_asset' model="ir.ui.view">
+            <field name="name">Report Asset</field>
+            <field name="model">wizard.report.asset</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report Asset">
+                    <group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                            <field name="report_type"  />
+                        </group>
+                        <group>
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <!-- <notebook tabpos="up" colspan="4">
+                        <page string="Account" >
+                            <field name="account_ids" domain="[]" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook> -->
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_asset">
+            <field name="name">Report Asset</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.report.asset</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_asset"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Report Asset" parent="account.account_reports_management_menu" action="action_report_asset" id="menu_report_asset" icon="fa-print" sequence="9"/>
+        <!--====================Specifying the report========================-->
+        <report string="Report Asset"
+            model="wizard.report.asset"
+            auto="True"
+            name="report_asset"
+            rml="c10i_account_asset/report/report_asset.jrxml"
+            id="report_asset"
+            menu="False"
+            />
+
+		<report string="Report Asset Excel Edition"
+			model="wizard.report.asset"
+			auto="True"
+			name="report_asset_xls"
+			rml="c10i_account_asset/report/report_asset.jrxml"
+			id="report_asset_xls"
+			menu="False"
+			/>
+    </data>
+</odoo>

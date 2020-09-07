@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.sequence" id="seq_hr_attendance_import">
+            <field name="name">HR Attendance Sequence</field>
+            <field name="code">hr.attendance.import.sequence.number</field>
+            <field name="prefix">ATDC-IMP/%(year)s/%(month)s/</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</odoo>

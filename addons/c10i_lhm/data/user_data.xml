@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Plantation Operator -->
+        <record id="partner_plantation_operator" model="res.partner">
+            <field name="name">Template Plantation Operator</field>
+            <field name="email">operator@consult10indonesia.com</field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_user_plantation_operator" model="res.users">
+            <field name="partner_id" ref="partner_plantation_operator"/>
+            <field name="share">False</field>
+            <field name="login">plantation_operator</field>
+            <field name="password">plantation_operator</field>
+            <field name="signature" type="xml"><span>-- <br/>+User Template Plantation Operator</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_plantation_operator'),ref('operating_unit.group_multi_operating_unit')])]"/>
+            <field name="image" type="base64" file="c10i_lhm/static/description/farmer.png"/>
+        </record>
+
+        <!-- Plantation Supervisor -->
+        <record id="partner_plantation_supervisor" model="res.partner">
+            <field name="name">Template Plantation Supervisor</field>
+            <field name="email">supervisor@consult10indonesia.com</field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_user_plantation_supervisor" model="res.users">
+            <field name="partner_id" ref="partner_plantation_supervisor"/>
+            <field name="share">False</field>
+            <field name="login">plantation_supervisor</field>
+            <field name="password">plantation_supervisor</field>
+            <field name="signature" type="xml"><span>-- <br/>+User Template Plantation Supervisor</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_plantation_supervisor'),ref('operating_unit.group_multi_operating_unit')])]"/>
+            <field name="image" type="base64" file="c10i_lhm/static/description/farmer.png"/>
+        </record>
+
+        <!-- Plantation Manager -->
+        <record id="partner_plantation_manager" model="res.partner">
+            <field name="name">Template Plantation Manager</field>
+            <field name="email">manager@consult10indonesia.com</field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_user_plantation_manager" model="res.users">
+            <field name="partner_id" ref="partner_plantation_manager"/>
+            <field name="share">False</field>
+            <field name="login">plantation_manager</field>
+            <field name="password">plantation_manager</field>
+            <field name="signature" type="xml"><span>-- <br/>+User Template Plantation Manager</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_plantation_manager'),ref('operating_unit.group_multi_operating_unit')])]"/>
+            <field name="image" type="base64" file="c10i_lhm/static/description/farmer.png"/>
+        </record>
+
+        <!-- Plantation Super User -->
+        <record id="partner_plantation_super" model="res.partner">
+            <field name="name">Template Plantation Super</field>
+            <field name="email">superuser@consult10indonesia.com</field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_user_plantation_super" model="res.users">
+            <field name="partner_id" ref="partner_plantation_super"/>
+            <field name="share">False</field>
+            <field name="login">plantation_super</field>
+            <field name="password">plantation_super</field>
+            <field name="signature" type="xml"><span>-- <br/>+User Template Plantation Super User</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_plantation_super'),ref('operating_unit.group_multi_operating_unit')])]"/>
+            <field name="image" type="base64" file="c10i_lhm/static/description/farmer.png"/>
+        </record>
+    </data>
+</odoo>

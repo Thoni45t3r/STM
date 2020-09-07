@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="accounting_report_view" model="ir.ui.view">
+        <field name="name">Accounting Report</field>
+        <field name="model">accounting.report</field>
+        <field name="inherit_id" ref="account.accounting_report_view"/>
+        <field name="arch" type="xml">
+            <field name="target_move" position="after">
+                <field name="report_type" />
+            </field>
+        </field>
+    </record>
+    <report string="Financial Report"
+            model="accounting.report"
+            auto="True"
+            name="accounting_report_jasper"
+            rml="c10i_account/report/account_report_financial_jasper.jrxml"
+            id="accounting_report_jasper"
+            menu="False"
+            />
+    <report string="Financial Report"
+            model="accounting.report"
+            auto="True"
+            name="accounting_report_jasper_4c"
+            rml="c10i_account/report/account_report_financial_jasper_4c.jrxml"
+            id="accounting_report_jasper_4c"
+            menu="False"
+            />
+    <report string="Financial Report"
+            model="accounting.report"
+            auto="True"
+            name="accounting_report_jasper_comp"
+            rml="c10i_account/report/account_report_financial_jasper_comp.jrxml"
+            id="accounting_report_jasper_comp"
+            menu="False"
+            />
+
+    <record model="ir.ui.view" id="wizard_account_legal_report_form">
+        <field name="name">wizard.account.legal.report.form</field>
+        <field name="model">account.legal.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="target_move" />
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="date_start" />
+                        <field name="date_stop" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_report" string="Excel" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_account_legal_report_bs" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">account.legal.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'type': 'balance_sheet'}</field>
+        <field name="view_id" ref="wizard_account_legal_report_form"/>
+        <field name="target">new</field>
+   </record>
+
+   <record id="action_account_legal_report_pl" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">account.legal.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'type': 'profit_loss'}</field>
+        <field name="view_id" ref="wizard_account_legal_report_form"/>
+        <field name="target">new</field>
+   </record>
+
+   <!-- <menuitem id="menu_wizard_cash_bank_book" parent="account.menu_finance_legal_statement" sequence="5" action="action_wizard_cash_bank_book" name="Bank/Cash Book"/> -->
+    <menuitem id="account.menu_account_report_pl" name="Balance Sheet" action="action_account_legal_report_bs" parent="account.menu_finance_legal_statement"/>
+   <menuitem id="account.menu_account_report_bs" name="Profit and Loss" action="action_account_legal_report_pl" parent="account.menu_finance_legal_statement"/>
+
+   <report string   = "Balance Sheet"
+            model   = "account.legal.report"
+            auto    = "True"
+            name    = "account_report_balance_sheet"
+            rml     = "c10i_account/report/report_account_balance_sheet.jrxml"
+            id      = "account_report_balance_sheet"/>
+
+    <report string   = "Profit and Loss"
+            model   = "account.legal.report"
+            auto    = "True"
+            name    = "account_report_profit_loss"
+            rml     = "c10i_account/report/report_account_profit_and_loss.jrxml"
+            id      = "account_report_profit_loss"/>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_salary_target_confirmation" model="ir.ui.view">
+        <field name="name">plantation.salary.target.confirmation.form</field>
+        <field name="model">plantation.salary.target.confirmation</field>
+        <field name="arch" type="xml">
+            <form string="Backorder creation">
+                <h1>
+                    <field name="restan_found" invisible="1"/>
+                    <field name="tittle" nolabel="1" attrs="{'invisible': [('restan_found','=',False)]}" readonly="1"/>
+                </h1>
+                <group>
+                    <field name="message" nolabel="1" attrs="{'invisible': [('restan_found','=',False)]}" readonly="1"/>
+                    <!-- <p>
+                        You have processed less products than the initial demand.
+                    </p><p class="text-muted">
+                        Create a backorder, if you expect to process the remaining
+                        products later.  Do not create a backorder if you will not
+                        supply the remaining products.
+                    </p> -->
+                </group>
+                <footer>
+                    <button name="process" string="Continue" type="object" class="oe_highlight" attrs="{'invisible': [('restan_found','=',True)]}"/>
+                    <button name="su_process" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('restan_found','=',False)]}" groups="c10i_lhm.group_plantation_manager"/>
+                    <button name="process_cancel" string="Cancel" type="object" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_sales' model="ir.ui.view">
+            <field name="name">Report sales</field>
+            <field name="model">wizard.sales</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report sales">
+                    <group>
+                        <group>
+                            <field name="from_date" required='1'/>
+                            <field name="report_type"  />
+                        </group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_sales">
+            <field name="name">Report sales</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.sales</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_sales"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Report Sales" parent="account.menu_finance_legal_statement" action="action_report_sales" id="menu_sales" icon="fa-print" sequence="17"/>
+        <!--====================Specifying the report========================-->
+        <report string="Report sales"
+            model="report.sales"
+            auto="True"
+            name="report_sales"
+            rml="c10i_account/report/report_sales.jrxml"
+            id="report_sales"
+            menu="False"
+            />
+    </data>
+</odoo>

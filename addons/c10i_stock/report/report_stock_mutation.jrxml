@@ -1,0 +1,1160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report Stock Mutation" pageWidth="1084" pageHeight="612" columnWidth="1084" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="bd29eb8b-b16c-47df-90f0-740ac71bd8fe">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="ireport.zoom" value="0.9090909090909098"/>
+	<property name="ireport.x" value="225"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="683"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="303"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SITI SERVER QC"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="username" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ADMINISTRATOR_X"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date" class="java.lang.String">
+		<parameterDescription><![CDATA[from_date]]></parameterDescription>
+		<defaultValueExpression><![CDATA["2019-01-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date" class="java.lang.String">
+		<parameterDescription><![CDATA[to_date]]></parameterDescription>
+		<defaultValueExpression><![CDATA["2019-04-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="location_id" class="java.lang.Integer">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="company_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="show_value" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="product_id" class="java.lang.String">
+		<parameterDescription><![CDATA[product_id]]></parameterDescription>
+		<defaultValueExpression><![CDATA["(5725)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="product_query" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{product_id}.replace("[","(").replace("]",")").equals("()") || $P{product_id}.equals("")? "TRUE" :
+" smove.product_id in " + $P{product_id}.replace("[","(").replace("]",")")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT item.id
+, item.default_code
+, itemtmpl.name AS itemname
+, internalloc.complete_name AS internal_loc
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			< ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE(smove.product_qty, 0)
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS init_qty
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			< ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			WHEN smove.location_dest_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) AS init_qty_cost
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			< ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE(smove.product_uom_qty, 0)
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS init_trans_qty
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			<= (  $P{to_date} || ' 23:59:59')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE(smove.product_qty, 0)
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS ending_qty
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			<= ($P{to_date} || ' 23:59:59')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			WHEN smove.location_dest_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) AS ending_qty_cost
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			<= ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN -COALESCE(smove.product_uom_qty, 0)
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS ending_trans_qty
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS balancein
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) AS balancein_cost
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS balanceout
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) AS balanceout_cost
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS transbalancein
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage <> 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS transbalanceout
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS adjust_in
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) adjust_out
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) - SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) adjustment
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) - SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE((SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.ref = spick.name 
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0),
+				(SELECT SUM(aml.balance) / SUM(quantity) FROM account_move_line aml 
+				WHERE aml.name = smove.name
+				AND aml.product_id = smove.product_id
+				AND aml.quantity = smove.product_qty
+				AND balance > 0), smove.price_unit,
+				(SELECT AVG(squant.cost) FROM stock_move innersm 
+				INNER JOIN stock_quant_move_rel sqmr ON sqmr.move_id = innersm.id
+				INNER JOIN stock_quant squant ON squant.id = sqmr.quant_id 
+				WHERE innersm.id = smove.id))
+			ELSE 0 END
+		ELSE 0 END
+	) adjustment_cost
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) AS adjust_trans_in
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) adjust_trans_out
+, SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND src.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_dest_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) - SUM(
+	CASE WHEN (smove.date + interval '7 hours')::TIMESTAMP
+			BETWEEN ($P{from_date}  || ' 00:00:01')::TIMESTAMP -- << change here << --
+			AND ($P{to_date}  || ' 23:59:59')::TIMESTAMP -- << change here << --
+			AND dest.usage = 'inventory'
+		THEN
+			CASE internalloc.id
+			WHEN smove.location_id THEN COALESCE(smove.product_uom_qty, 0)
+			ELSE 0 END
+		ELSE 0 END
+	) adjustment_trans
+, uom.name uomname
+
+FROM stock_move smove
+INNER JOIN stock_location internalloc ON internalloc.id in (smove.location_id, smove.location_dest_id)
+	AND internalloc.id =   $P{location_id}   -- << change here << --
+	AND internalloc.usage = 'internal'
+INNER JOIN product_product item ON item.id = smove.product_id
+INNER JOIN product_template itemtmpl ON itemtmpl.id = item.product_tmpl_id
+INNER JOIN product_category categ ON categ.id = itemtmpl.categ_id
+INNER JOIN stock_location src ON src.id = smove.location_id
+INNER JOIN stock_location dest ON dest.id = smove.location_dest_id
+INNER JOIN product_uom uom ON uom.id = itemtmpl.uom_id
+/** look-up in standard operational */
+LEFT JOIN stock_picking spick ON spick.id = smove.picking_id
+/** lookup in Physical Inventory */
+LEFT JOIN stock_inventory inventory ON inventory.id = smove.inventory_id
+LEFT OUTER JOIN res_partner partner ON partner.id = spick.partner_id
+-- << this script are WHEN uom_conversion installed >> --
+--LEFT OUTER JOIN product_uom transuom ON transuom.id = smove.product_uom
+WHERE smove.state = 'done'
+AND $P!{product_query} --smove.product_id = 5725 -- << change here << --
+AND smove.company_id =   $P{company_id}   -- << change here << --
+AND (smove.date + INTERVAL '7 hours')::TIMESTAMP <= ($P{to_date} || ' 23:59:59')::TIMESTAMP -- << change here << --
+AND smove.location_id != smove.location_dest_id -- << eliminate wrong stock_move >> --
+GROUP BY item.id, itemtmpl.id, uom.id, internalloc.id]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+	</field>
+	<field name="default_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="default_code"/>
+	</field>
+	<field name="itemname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="itemname"/>
+	</field>
+	<field name="internal_loc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="internal_loc"/>
+	</field>
+	<field name="init_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="init_qty"/>
+	</field>
+	<field name="init_qty_cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="init_qty_cost"/>
+	</field>
+	<field name="init_trans_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="init_trans_qty"/>
+	</field>
+	<field name="ending_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ending_qty"/>
+	</field>
+	<field name="ending_qty_cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="ending_qty_cost"/>
+	</field>
+	<field name="ending_trans_qty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ending_trans_qty"/>
+	</field>
+	<field name="balancein" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balancein"/>
+	</field>
+	<field name="balancein_cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="balancein_cost"/>
+	</field>
+	<field name="balanceout" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="balanceout"/>
+	</field>
+	<field name="balanceout_cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="balanceout_cost"/>
+	</field>
+	<field name="transbalancein" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="transbalancein"/>
+	</field>
+	<field name="transbalanceout" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="transbalanceout"/>
+	</field>
+	<field name="adjust_in" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjust_in"/>
+	</field>
+	<field name="adjust_out" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjust_out"/>
+	</field>
+	<field name="adjustment" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjustment"/>
+	</field>
+	<field name="adjustment_cost" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="adjustment_cost"/>
+	</field>
+	<field name="adjust_trans_in" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjust_trans_in"/>
+	</field>
+	<field name="adjust_trans_out" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjust_trans_out"/>
+	</field>
+	<field name="adjustment_trans" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="adjustment_trans"/>
+	</field>
+	<field name="uomname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="uomname"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="78">
+			<textField>
+				<reportElement x="0" y="0" width="1084" height="52" uuid="80d6f437-23fa-48fc-8c7e-6bd59a53f46f"/>
+				<box>
+					<bottomPen lineWidth="0.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INVENTORY MUTATION \n" +
+new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date}))+
+" s/d " +
+new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="64" width="82" height="14" uuid="00eaf2bc-3aad-4fe8-ad81-9b79b162abc4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="52" width="292" height="12" uuid="e7ad9395-5e2c-45bc-9313-73f0d5e1e0ea"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="64" width="210" height="14" uuid="3a815c11-6c96-473c-8dac-1dde9bc725d7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="52" width="63" height="26" uuid="e49b7576-b0fe-4ddf-bd88-f8fbdeca8e57"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="52" width="146" height="13" uuid="bc6ca9e7-114a-4460-a7a9-c3e223e468da"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="65" width="65" height="13" uuid="3a012324-a3db-4fac-932e-aed007bc3974">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="65" width="81" height="13" uuid="1320ae84-2d98-4d35-b827-6debf64d469e">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rupiah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="501" y="65" width="65" height="13" uuid="309843a3-a99f-4daa-b464-6c63c70aae76">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="566" y="65" width="81" height="13" uuid="a0936367-dc93-45a0-a35d-935eb09e800a">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rupiah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="501" y="52" width="146" height="13" uuid="18248f26-4899-4e3f-bd27-1f855a1976c0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Penerimaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="52" width="146" height="13" uuid="71a35aa3-8953-4af9-b931-d8bd9a469b17"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pengeluaran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="65" width="65" height="13" uuid="45caad88-cb2d-49c5-9b8c-d4057a7216a6">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="712" y="65" width="81" height="13" uuid="6c528a43-0740-4c89-8f42-feef3dda0a20">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rupiah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="793" y="52" width="146" height="13" uuid="71978f1c-4f4a-4a71-8959-8b9ee4ee0f93"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adjustment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="793" y="65" width="65" height="13" uuid="67b4ffda-a192-4815-ae1e-de62360c9123">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="858" y="65" width="81" height="13" uuid="4542bca0-9822-4521-873a-6b5ceb8580b2">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rupiah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="939" y="65" width="65" height="13" uuid="fb9793fb-aa63-40b7-9087-b92a8336b311">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1004" y="65" width="80" height="13" uuid="25ef7827-d260-41be-ae0a-0ead9d045e2a">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rupiah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="939" y="52" width="145" height="13" uuid="177bf6f1-ed67-4444-a7ab-102fee936842"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Akhir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="501" y="65" width="146" height="13" uuid="a7839446-8cd1-4827-9453-5d063ef7e4ea">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="65" width="146" height="13" uuid="1538ebab-c02e-4af5-8a65-fe37034e3b3d">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="65" width="146" height="13" uuid="5c571c72-ccf5-4d75-be2a-a9da64727a3c">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="793" y="65" width="146" height="13" uuid="c09e2565-edec-4417-96a3-d84cbf7d2f1c">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="939" y="65" width="145" height="13" uuid="7ed745e7-ad21-49f0-8787-d3b9569caf45">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="13" splitType="Prevent">
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="82" height="13" uuid="90e24961-c871-4ade-ab95-f7dc73ade9c9"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{default_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="82" y="0" width="210" height="13" uuid="f9cb5f6d-c54a-4297-be68-96be24c3e6ec"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="292" y="0" width="63" height="13" uuid="c7c87ad4-2ba4-4ecd-95d3-cbb9eaef5e79"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uomname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="355" y="0" width="65" height="13" uuid="1bd14130-e2ba-4ca9-bd1c-c9b82848077b">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{init_qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="420" y="0" width="81" height="13" uuid="37aa23f8-fb63-4011-aad1-a937efd53033">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{init_qty_cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="501" y="0" width="65" height="13" uuid="bbe655db-0f2c-48a4-a738-bcc6c206d392">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balancein}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="566" y="0" width="81" height="13" uuid="51cf4a4d-1d96-444e-a1df-2692b2fef754">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balancein_cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="647" y="0" width="65" height="13" uuid="8a46def8-a718-4014-af3e-7456013501fa">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balanceout}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="793" y="0" width="65" height="13" uuid="1f11aa04-b258-42fd-8fa1-2b3f0287642c">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adjustment}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="858" y="0" width="81" height="13" uuid="41850b0d-0246-4844-95f8-1f8030c578c0">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adjustment_cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1004" y="0" width="80" height="13" uuid="b9a537d1-5f58-4f27-9add-d4365fa6abac">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ending_qty_cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="712" y="0" width="81" height="13" uuid="5dda8302-ba40-416e-baab-7c6ea6923ab8">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balanceout_cost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="939" y="0" width="65" height="13" uuid="879aafd9-6a22-4130-96ee-2e0e42204794">
+					<printWhenExpression><![CDATA[$P{show_value} == true]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ending_qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="501" y="0" width="146" height="13" uuid="c4044df9-f900-4b9c-8a9c-708397b8383c">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balancein}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="355" y="0" width="146" height="13" uuid="e0afede1-830c-433a-84fd-70b0da13217b">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{init_qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="647" y="0" width="146" height="13" uuid="f1d8ed5a-1290-48f7-8c90-0d0a70941c33">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balanceout}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="793" y="0" width="146" height="13" uuid="e3f76706-85d7-420b-8999-c1a542065875">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adjustment}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.000;(#,##0.000)" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="939" y="0" width="145" height="13" uuid="f708829c-8028-4871-8a80-d12f24c5ea41">
+					<printWhenExpression><![CDATA[$P{show_value} == false]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ending_qty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Cost Center views Override-->
+        <record id="account_cost_center.account_cost_center_form" model="ir.ui.view">
+            <field name="name">account.cost.center.plantation.override.form</field>
+            <field name="model">account.cost.center</field>
+            <field name="arch" type="xml">
+                <form string="Cost Centers">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Plasma" required="1"/></h1>
+                        </div>
+                        <group name="main_group">
+                            <group name="main_group1">
+                                <field name="code" string="Kode" required="1"/>
+                                <field name="location_type_id" required="1" domain="[('general_charge','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="group_progress_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <group name="main_group2">
+                                <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="plantation" readonly="1"/>
+                                <field name="owner_type" />
+                            </group>
+                        </group>
+                        <notebook name="notebook">
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_cost_center.account_cost_center_tree" model="ir.ui.view">
+            <field name="model">account.cost.center</field>
+            <field name="arch" type="xml">
+                <tree string="Cost Centers">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_cost_center.account_cost_center_filter" model="ir.ui.view">
+            <field name="model">account.cost.center</field>
+            <field name="arch" type="xml">
+                <search string="Cost Centers">
+                    <field name="name" string="Nama/Code" filter_domain="['|', ('code','ilike', self), ('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="account_cost_center_plantation_action" model="ir.actions.act_window">
+            <field name="name">Cost Centers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.cost.center</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="account_cost_center.account_cost_center_filter"/>
+            <field name="context">{"default_plantation":1}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik untuk menambahkan Cost Center.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_cost_center_lhm_config" name="Cost Center" action="account_cost_center_plantation_action" parent="menu_lhm_master" groups="group_plantation_supervisor" sequence="29"/>
+    </data>
+</odoo>

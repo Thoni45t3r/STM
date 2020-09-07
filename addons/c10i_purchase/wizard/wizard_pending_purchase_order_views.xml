@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id='wizard_report_pending_purchase_order' model="ir.ui.view">
+            <field name="name">wizard.pending.purchase.order.form</field>
+            <field name="model">wizard.pending.purchase.order</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Pending Purchase Order">
+                    <group>
+                        <group>
+                            <field name="to_date" required='1'/>
+                        </group>
+                        <group>
+                            <field name="report_type"  />
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_pending_purchase_order">
+            <field name="name">Pending Purchase Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.pending.purchase.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_pending_purchase_order"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Pending Purchase Order" parent="purchase.root_purchase_report" action="action_report_pending_purchase_order" id="menu_report_pending_purchase_order" icon="fa-print" sequence="1"/>
+    </data>
+</odoo>

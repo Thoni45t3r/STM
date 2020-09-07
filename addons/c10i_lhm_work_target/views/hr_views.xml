@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_insurance_form_target" model="ir.ui.view">
+            <field name="name">view.insurance.form.target</field>
+            <field name="model">hr.insurance</field>
+            <field name="inherit_id" ref="c10i_hr.view_insurance_form" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="before">
+                    <field name="employee_type_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="work_target_minimum_wage_form_target" model="ir.ui.view">
+            <field name="name">work.target.minimum.wage.form.target</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="inherit_id" ref="c10i_hr.view_minimum_wage_form" />
+            <field name="arch" type="xml">
+                <field name="date_from" position="before">
+                    <field name="activity_id" />
+                </field>
+                <field name="date_from" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                    <attribute name="required">1</attribute>
+                </field>
+                <xpath expr="//form/sheet/group" position="after">
+                    <notebook>
+                        <page name="rate_rawat" string="Rate Rawat">
+                            <field name="rate_rawat_ids">
+                                <tree string="Rate Rawat" editable="bottom" >
+                                    <field name="year" />
+                                    <field name="uom_id" />
+                                    <field name="rate" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="rate_panen" string="Rate Panen">
+                            <field name="rate_panen_ids">
+                                <tree string="Rate Panen" editable="bottom" >
+                                    <field name="year" />
+                                    <field name="uom_id" />
+                                    <field name="rate" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Employee Form -->
+        <record id="view_karyawan_form" model="ir.ui.view">
+            <field name="name">view.karyawan.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bpjs_ketenagakerjaan']" position="after">
+                    <field name="pensiun"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--HR Employee Type -->
+        <record id="view_employee_type_form" model="ir.ui.view">
+            <field name="name">view.employee.type.form</field>
+            <field name="model">hr.employee.type</field>
+            <field name="inherit_id" ref="c10i_lhm.view_employee_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='contract_employee']" position="after">
+                    <field name="pkwt_employee"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

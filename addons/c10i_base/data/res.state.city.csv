@@ -1,0 +1,515 @@
+id,state_id:id,country_id:id,name
+city_id_aceh_1,base.state_id_ac,base.id,Kabupaten Simeulue
+city_id_aceh_2,base.state_id_ac,base.id,Kabupaten Aceh Singkil
+city_id_aceh_3,base.state_id_ac,base.id,Kabupaten Aceh Selatan
+city_id_aceh_4,base.state_id_ac,base.id,Kabupaten Aceh Tenggara
+city_id_aceh_5,base.state_id_ac,base.id,Kabupaten Aceh Timur
+city_id_aceh_6,base.state_id_ac,base.id,Kabupaten Aceh Tengah
+city_id_aceh_7,base.state_id_ac,base.id,Kabupaten Aceh Barat
+city_id_aceh_8,base.state_id_ac,base.id,Kabupaten Aceh Besar
+city_id_aceh_9,base.state_id_ac,base.id,Kabupaten Pidie
+city_id_aceh_10,base.state_id_ac,base.id,Kabupaten Bireuen
+city_id_aceh_11,base.state_id_ac,base.id,Kabupaten Aceh Utara
+city_id_aceh_12,base.state_id_ac,base.id,Kabupaten Aceh Barat Daya
+city_id_aceh_13,base.state_id_ac,base.id,Kabupaten Gayo Lues
+city_id_aceh_14,base.state_id_ac,base.id,Kabupaten Aceh Tamiang
+city_id_aceh_15,base.state_id_ac,base.id,Kabupaten Nagan Raya
+city_id_aceh_16,base.state_id_ac,base.id,Kabupaten Aceh Jaya
+city_id_aceh_17,base.state_id_ac,base.id,Kabupaten Bener Meriah
+city_id_aceh_18,base.state_id_ac,base.id,Kabupaten Pidie Jaya
+city_id_aceh_19,base.state_id_ac,base.id,Kota Banda Aceh
+city_id_aceh_20,base.state_id_ac,base.id,Kota Sabang
+city_id_aceh_21,base.state_id_ac,base.id,Kota Langsa
+city_id_aceh_22,base.state_id_ac,base.id,Kota Lhokseumawe
+city_id_aceh_23,base.state_id_ac,base.id,Kota Subulussalam
+city_id_bali_1,base.state_id_ba,base.id,Kabupaten Jembrana
+city_id_bali_2,base.state_id_ba,base.id,Kabupaten Tabanan
+city_id_bali_3,base.state_id_ba,base.id,Kabupaten Badung
+city_id_bali_4,base.state_id_ba,base.id,Kabupaten Gianyar
+city_id_bali_5,base.state_id_ba,base.id,Kabupaten Klungkung
+city_id_bali_6,base.state_id_ba,base.id,Kabupaten Bangli
+city_id_bali_7,base.state_id_ba,base.id,Kabupaten Karang Asem
+city_id_bali_8,base.state_id_ba,base.id,Kabupaten Buleleng
+city_id_bali_9,base.state_id_ba,base.id,Kota Denpasar
+city_id_bangkabelitung_1,base.state_id_bb,base.id,Kabupaten Bangka
+city_id_bangkabelitung_2,base.state_id_bb,base.id,Kabupaten Belitung
+city_id_bangkabelitung_3,base.state_id_bb,base.id,Kabupaten Bangka Barat
+city_id_bangkabelitung_4,base.state_id_bb,base.id,Kabupaten Bangka Tengah
+city_id_bangkabelitung_5,base.state_id_bb,base.id,Kabupaten Bangka Selatan
+city_id_bangkabelitung_6,base.state_id_bb,base.id,Kabupaten Belitung Timur
+city_id_bangkabelitung_7,base.state_id_bb,base.id,Kota Pangkal Pinang
+city_id_banten_1,base.state_id_bt,base.id,Kabupaten Pandeglang
+city_id_banten_2,base.state_id_bt,base.id,Kabupaten Lebak
+city_id_banten_3,base.state_id_bt,base.id,Kabupaten Tangerang
+city_id_banten_4,base.state_id_bt,base.id,Kabupaten Serang
+city_id_banten_5,base.state_id_bt,base.id,Kota Tangerang
+city_id_banten_6,base.state_id_bt,base.id,Kota Cilegon
+city_id_banten_7,base.state_id_bt,base.id,Kota Serang
+city_id_banten_8,base.state_id_bt,base.id,Kota Tangerang Selatan
+city_id_bengkulu_1,base.state_id_be,base.id,Kabupaten Bengkulu Selatan
+city_id_bengkulu_2,base.state_id_be,base.id,Kabupaten Rejang Lebong
+city_id_bengkulu_3,base.state_id_be,base.id,Kabupaten Bengkulu Utara
+city_id_bengkulu_4,base.state_id_be,base.id,Kabupaten Kaur
+city_id_bengkulu_5,base.state_id_be,base.id,Kabupaten Seluma
+city_id_bengkulu_6,base.state_id_be,base.id,Kabupaten Mukomuko
+city_id_bengkulu_7,base.state_id_be,base.id,Kabupaten Lebong
+city_id_bengkulu_8,base.state_id_be,base.id,Kabupaten Kepahiang
+city_id_bengkulu_9,base.state_id_be,base.id,Kabupaten Bengkulu Tengah
+city_id_bengkulu_10,base.state_id_be,base.id,Kota Bengkulu
+city_id_gorontalo_1,base.state_id_go,base.id,Kabupaten Boalemo
+city_id_gorontalo_2,base.state_id_go,base.id,Kabupaten Gorontalo
+city_id_gorontalo_3,base.state_id_go,base.id,Kabupaten Pohuwato
+city_id_gorontalo_4,base.state_id_go,base.id,Kabupaten Bone Bolango
+city_id_gorontalo_5,base.state_id_go,base.id,Kabupaten Gorontalo Utara
+city_id_gorontalo_6,base.state_id_go,base.id,Kota Gorontalo
+city_id_jakarta_1,base.state_id_jk,base.id,Kota Jakarta Selatan
+city_id_jakarta_2,base.state_id_jk,base.id,Kota Jakarta Timur
+city_id_jakarta_3,base.state_id_jk,base.id,Kota Jakarta Pusat
+city_id_jakarta_4,base.state_id_jk,base.id,Kota Jakarta Barat
+city_id_jakarta_5,base.state_id_jk,base.id,Kabupaten Kepulauan Seribu
+city_id_jakarta_6,base.state_id_jk,base.id,Kota Jakarta Utara
+city_id_Jambi_1,base.state_id_ja,base.id,Kabupaten Kerinci
+city_id_Jambi_2,base.state_id_ja,base.id,Kabupaten Merangin
+city_id_Jambi_3,base.state_id_ja,base.id,Kabupaten Sarolangun
+city_id_Jambi_4,base.state_id_ja,base.id,Kabupaten Batang Hari
+city_id_Jambi_5,base.state_id_ja,base.id,Kabupaten Muaro Jambi
+city_id_Jambi_6,base.state_id_ja,base.id,Kabupaten Tanjung Jabung Timur
+city_id_Jambi_7,base.state_id_ja,base.id,Kabupaten Tanjung Jabung Barat
+city_id_Jambi_8,base.state_id_ja,base.id,Kabupaten Tebo
+city_id_Jambi_9,base.state_id_ja,base.id,Kabupaten Bungo
+city_id_Jambi_10,base.state_id_ja,base.id,Kota Jambi
+city_id_Jambi_11,base.state_id_ja,base.id,Kota Sungai Penuh
+city_id_jawabarat_1,base.state_id_jb,base.id,Kabupaten Bogor
+city_id_jawabarat_2,base.state_id_jb,base.id,Kabupaten Sukabumi
+city_id_jawabarat_3,base.state_id_jb,base.id,Kabupaten Cianjur
+city_id_jawabarat_4,base.state_id_jb,base.id,Kabupaten Bandung
+city_id_jawabarat_5,base.state_id_jb,base.id,Kabupaten Garut
+city_id_jawabarat_6,base.state_id_jb,base.id,Kabupaten Tasikmalaya
+city_id_jawabarat_7,base.state_id_jb,base.id,Kabupaten Ciamis
+city_id_jawabarat_8,base.state_id_jb,base.id,Kabupaten Kuningan
+city_id_jawabarat_9,base.state_id_jb,base.id,Kabupaten Cirebon
+city_id_jawabarat_10,base.state_id_jb,base.id,Kabupaten Majalengka
+city_id_jawabarat_11,base.state_id_jb,base.id,Kabupaten Sumedang
+city_id_jawabarat_12,base.state_id_jb,base.id,Kabupaten Indramayu
+city_id_jawabarat_13,base.state_id_jb,base.id,Kabupaten Subang
+city_id_jawabarat_14,base.state_id_jb,base.id,Kabupaten Purwakarta
+city_id_jawabarat_15,base.state_id_jb,base.id,Kabupaten Karawang
+city_id_jawabarat_16,base.state_id_jb,base.id,Kabupaten Bekasi
+city_id_jawabarat_17,base.state_id_jb,base.id,Kabupaten Bandung Barat
+city_id_jawabarat_18,base.state_id_jb,base.id,Kabupaten Pangandaran
+city_id_jawabarat_19,base.state_id_jb,base.id,Kota Bogor
+city_id_jawabarat_20,base.state_id_jb,base.id,Kota Sukabumi
+city_id_jawabarat_21,base.state_id_jb,base.id,Kota Bandung
+city_id_jawabarat_22,base.state_id_jb,base.id,Kota Cirebon
+city_id_jawabarat_23,base.state_id_jb,base.id,Kota Bekasi
+city_id_jawabarat_24,base.state_id_jb,base.id,Kota Depok
+city_id_jawabarat_25,base.state_id_jb,base.id,Kota Cimahi
+city_id_jawabarat_26,base.state_id_jb,base.id,Kota Tasikmalaya
+city_id_jawabarat_27,base.state_id_jb,base.id,Kota Banjar
+city_id_jawatengah_1,base.state_id_jt,base.id,Kabupaten Cilacap
+city_id_jawatengah_2,base.state_id_jt,base.id,Kabupaten Banyumas
+city_id_jawatengah_3,base.state_id_jt,base.id,Kabupaten Purbalingga
+city_id_jawatengah_4,base.state_id_jt,base.id,Kabupaten Banjarnegara
+city_id_jawatengah_5,base.state_id_jt,base.id,Kabupaten Kebumen
+city_id_jawatengah_6,base.state_id_jt,base.id,Kabupaten Purworejo
+city_id_jawatengah_7,base.state_id_jt,base.id,Kabupaten Wonosobo
+city_id_jawatengah_8,base.state_id_jt,base.id,Kabupaten Magelang
+city_id_jawatengah_9,base.state_id_jt,base.id,Kabupaten Boyolali
+city_id_jawatengah_10,base.state_id_jt,base.id,Kabupaten Klaten
+city_id_jawatengah_11,base.state_id_jt,base.id,Kabupaten Sukoharjo
+city_id_jawatengah_12,base.state_id_jt,base.id,Kabupaten Wonogiri
+city_id_jawatengah_13,base.state_id_jt,base.id,Kabupaten Karanganyar
+city_id_jawatengah_14,base.state_id_jt,base.id,Kabupaten Sragen
+city_id_jawatengah_15,base.state_id_jt,base.id,Kabupaten Grobogan
+city_id_jawatengah_16,base.state_id_jt,base.id,Kabupaten Blora
+city_id_jawatengah_17,base.state_id_jt,base.id,Kabupaten Rembang
+city_id_jawatengah_18,base.state_id_jt,base.id,Kabupaten Pati
+city_id_jawatengah_19,base.state_id_jt,base.id,Kabupaten Kudus
+city_id_jawatengah_20,base.state_id_jt,base.id,Kabupaten Jepara
+city_id_jawatengah_21,base.state_id_jt,base.id,Kabupaten Demak
+city_id_jawatengah_22,base.state_id_jt,base.id,Kabupaten Semarang
+city_id_jawatengah_23,base.state_id_jt,base.id,Kabupaten Temanggung
+city_id_jawatengah_24,base.state_id_jt,base.id,Kabupaten Kendal
+city_id_jawatengah_25,base.state_id_jt,base.id,Kabupaten Batang
+city_id_jawatengah_26,base.state_id_jt,base.id,Kabupaten Pekalongan
+city_id_jawatengah_27,base.state_id_jt,base.id,Kabupaten Pemalang
+city_id_jawatengah_28,base.state_id_jt,base.id,Kabupaten Tegal
+city_id_jawatengah_29,base.state_id_jt,base.id,Kabupaten Brebes
+city_id_jawatengah_30,base.state_id_jt,base.id,Kota Magelang
+city_id_jawatengah_31,base.state_id_jt,base.id,Kota Surakarta
+city_id_jawatengah_32,base.state_id_jt,base.id,Kota Salatiga
+city_id_jawatengah_33,base.state_id_jt,base.id,Kota Semarang
+city_id_jawatengah_34,base.state_id_jt,base.id,Kota Pekalongan
+city_id_jawatengah_35,base.state_id_jt,base.id,Kota Tegal
+city_id_jawatimur_1,base.state_id_ji,base.id,Kabupaten Pacitan
+city_id_jawatimur_2,base.state_id_ji,base.id,Kabupaten Ponorogo
+city_id_jawatimur_3,base.state_id_ji,base.id,Kabupaten Trenggalek
+city_id_jawatimur_4,base.state_id_ji,base.id,Kabupaten Tulungagung
+city_id_jawatimur_5,base.state_id_ji,base.id,Kabupaten Blitar
+city_id_jawatimur_6,base.state_id_ji,base.id,Kabupaten Kediri
+city_id_jawatimur_7,base.state_id_ji,base.id,Kabupaten Malang
+city_id_jawatimur_8,base.state_id_ji,base.id,Kabupaten Lumajang
+city_id_jawatimur_9,base.state_id_ji,base.id,Kabupaten Jember
+city_id_jawatimur_10,base.state_id_ji,base.id,Kabupaten Banyuwangi
+city_id_jawatimur_11,base.state_id_ji,base.id,Kabupaten Bondowoso
+city_id_jawatimur_12,base.state_id_ji,base.id,Kabupaten Situbondo
+city_id_jawatimur_13,base.state_id_ji,base.id,Kabupaten Probolinggo
+city_id_jawatimur_14,base.state_id_ji,base.id,Kabupaten Pasuruan
+city_id_jawatimur_15,base.state_id_ji,base.id,Kabupaten Sidoarjo
+city_id_jawatimur_16,base.state_id_ji,base.id,Kabupaten Mojokerto
+city_id_jawatimur_17,base.state_id_ji,base.id,Kabupaten Jombang
+city_id_jawatimur_18,base.state_id_ji,base.id,Kabupaten Nganjuk
+city_id_jawatimur_19,base.state_id_ji,base.id,Kabupaten Madiun
+city_id_jawatimur_20,base.state_id_ji,base.id,Kabupaten Magetan
+city_id_jawatimur_21,base.state_id_ji,base.id,Kabupaten Ngawi
+city_id_jawatimur_22,base.state_id_ji,base.id,Kabupaten Bojonegoro
+city_id_jawatimur_23,base.state_id_ji,base.id,Kabupaten Tuban
+city_id_jawatimur_24,base.state_id_ji,base.id,Kabupaten Lamongan
+city_id_jawatimur_25,base.state_id_ji,base.id,Kabupaten Gresik
+city_id_jawatimur_26,base.state_id_ji,base.id,Kabupaten Bangkalan
+city_id_jawatimur_27,base.state_id_ji,base.id,Kabupaten Sampang
+city_id_jawatimur_28,base.state_id_ji,base.id,Kabupaten Pamekasan
+city_id_jawatimur_29,base.state_id_ji,base.id,Kabupaten Sumenep
+city_id_jawatimur_30,base.state_id_ji,base.id,Kota Kediri
+city_id_jawatimur_31,base.state_id_ji,base.id,Kota Blitar
+city_id_jawatimur_32,base.state_id_ji,base.id,Kota Malang
+city_id_jawatimur_33,base.state_id_ji,base.id,Kota Probolinggo
+city_id_jawatimur_34,base.state_id_ji,base.id,Kota Pasuruan
+city_id_jawatimur_35,base.state_id_ji,base.id,Kota Mojokerto
+city_id_jawatimur_36,base.state_id_ji,base.id,Kota Madiun
+city_id_jawatimur_37,base.state_id_ji,base.id,Kota Surabaya
+city_id_jawatimur_38,base.state_id_ji,base.id,Kota Batu
+city_id_kalimantanbarat_1,base.state_id_kb,base.id,Kabupaten Sambas
+city_id_kalimantanbarat_2,base.state_id_kb,base.id,Kabupaten Bengkayang
+city_id_kalimantanbarat_3,base.state_id_kb,base.id,Kabupaten Landak
+city_id_kalimantanbarat_4,base.state_id_kb,base.id,Kabupaten Mempawah
+city_id_kalimantanbarat_5,base.state_id_kb,base.id,Kabupaten Sanggau
+city_id_kalimantanbarat_6,base.state_id_kb,base.id,Kabupaten Ketapang
+city_id_kalimantanbarat_7,base.state_id_kb,base.id,Kabupaten Sintang
+city_id_kalimantanbarat_8,base.state_id_kb,base.id,Kabupaten Kapuas Hulu
+city_id_kalimantanbarat_9,base.state_id_kb,base.id,Kabupaten Sekadau
+city_id_kalimantanbarat_10,base.state_id_kb,base.id,Kabupaten Melawi
+city_id_kalimantanbarat_11,base.state_id_kb,base.id,Kabupaten Kayong Utara
+city_id_kalimantanbarat_12,base.state_id_kb,base.id,Kabupaten Kubu Raya
+city_id_kalimantanbarat_13,base.state_id_kb,base.id,Kota Pontianak
+city_id_kalimantanbarat_14,base.state_id_kb,base.id,Kota Singkawang
+city_id_kalimantanselatan_1,base.state_id_ks,base.id,Kabupaten Tanah Laut
+city_id_kalimantanselatan_2,base.state_id_ks,base.id,Kabupaten Kota Baru
+city_id_kalimantanselatan_3,base.state_id_ks,base.id,Kabupaten Banjar
+city_id_kalimantanselatan_4,base.state_id_ks,base.id,Kabupaten Barito Kuala
+city_id_kalimantanselatan_5,base.state_id_ks,base.id,Kabupaten Tapin
+city_id_kalimantanselatan_6,base.state_id_ks,base.id,Kabupaten Hulu Sungai Selatan
+city_id_kalimantanselatan_7,base.state_id_ks,base.id,Kabupaten Hulu Sungai Tengah
+city_id_kalimantanselatan_8,base.state_id_ks,base.id,Kabupaten Hulu Sungai Utara
+city_id_kalimantanselatan_9,base.state_id_ks,base.id,Kabupaten Tabalong
+city_id_kalimantanselatan_10,base.state_id_ks,base.id,Kabupaten Tanah Bumbu
+city_id_kalimantanselatan_11,base.state_id_ks,base.id,Kabupaten Balangan
+city_id_kalimantanselatan_12,base.state_id_ks,base.id,Kota Banjarmasin
+city_id_kalimantanselatan_13,base.state_id_ks,base.id,Kota Banjar Baru
+city_id_kalimantantengah_1,base.state_id_kt,base.id,Kabupaten Kotawaringin Barat
+city_id_kalimantantengah_2,base.state_id_kt,base.id,Kabupaten Kotawaringin Timur
+city_id_kalimantantengah_3,base.state_id_kt,base.id,Kabupaten Kapuas
+city_id_kalimantantengah_4,base.state_id_kt,base.id,Kabupaten Barito Selatan
+city_id_kalimantantengah_5,base.state_id_kt,base.id,Kabupaten Barito Utara
+city_id_kalimantantengah_6,base.state_id_kt,base.id,Kabupaten Sukamara
+city_id_kalimantantengah_7,base.state_id_kt,base.id,Kabupaten Lamandau
+city_id_kalimantantengah_8,base.state_id_kt,base.id,Kabupaten Seruyan
+city_id_kalimantantengah_9,base.state_id_kt,base.id,Kabupaten Katingan
+city_id_kalimantantengah_10,base.state_id_kt,base.id,Kabupaten Pulang Pisau
+city_id_kalimantantengah_11,base.state_id_kt,base.id,Kabupaten Gunung Mas
+city_id_kalimantantengah_12,base.state_id_kt,base.id,Kabupaten Barito Timur
+city_id_kalimantantengah_13,base.state_id_kt,base.id,Kabupaten Murung Raya
+city_id_kalimantantengah_14,base.state_id_kt,base.id,Kota Palangka Raya
+city_id_kalimantantimur_1,base.state_id_ki,base.id,Kabupaten Paser
+city_id_kalimantantimur_2,base.state_id_ki,base.id,Kabupaten Kutai Barat
+city_id_kalimantantimur_3,base.state_id_ki,base.id,Kabupaten Kutai Kartanegara
+city_id_kalimantantimur_4,base.state_id_ki,base.id,Kabupaten Kutai Timur
+city_id_kalimantantimur_5,base.state_id_ki,base.id,Kabupaten Berau
+city_id_kalimantantimur_6,base.state_id_ki,base.id,Kabupaten Penajam Paser Utara
+city_id_kalimantantimur_7,base.state_id_ki,base.id,Kabupaten Mahakam Hulu
+city_id_kalimantantimur_8,base.state_id_ki,base.id,Kota Balikpapan
+city_id_kalimantantimur_9,base.state_id_ki,base.id,Kota Samarinda
+city_id_kalimantantimur_10,base.state_id_ki,base.id,Kota Bontang
+city_id_kalimantanutara_1,base.state_id_ku,base.id,Kabupaten Malinau
+city_id_kalimantanutara_2,base.state_id_ku,base.id,Kabupaten Bulungan
+city_id_kalimantanutara_3,base.state_id_ku,base.id,Kabupaten Tana Tidung
+city_id_kalimantanutara_4,base.state_id_ku,base.id,Kabupaten Nunukan
+city_id_kalimantanutara_5,base.state_id_ku,base.id,Kota Tarakan
+city_id_kepulauanriau_1,base.state_id_kr,base.id,Kabupaten Karimun
+city_id_kepulauanriau_2,base.state_id_kr,base.id,Kabupaten Bintan
+city_id_kepulauanriau_3,base.state_id_kr,base.id,Kabupaten Natuna
+city_id_kepulauanriau_4,base.state_id_kr,base.id,Kabupaten Lingga
+city_id_kepulauanriau_5,base.state_id_kr,base.id,Kabupaten Kepulauan Anambas
+city_id_kepulauanriau_6,base.state_id_kr,base.id,Kota Batam
+city_id_kepulauanriau_7,base.state_id_kr,base.id,Kota Tanjung Pinang
+city_id_lampung_1,base.state_id_la,base.id,Kabupaten Lampung Barat
+city_id_lampung_2,base.state_id_la,base.id,Kabupaten Tanggamus
+city_id_lampung_3,base.state_id_la,base.id,Kabupaten Lampung Selatan
+city_id_lampung_4,base.state_id_la,base.id,Kabupaten Lampung Timur
+city_id_lampung_5,base.state_id_la,base.id,Kabupaten Lampung Tengah
+city_id_lampung_6,base.state_id_la,base.id,Kabupaten Lampung Utara
+city_id_lampung_7,base.state_id_la,base.id,Kabupaten Way Kanan
+city_id_lampung_8,base.state_id_la,base.id,Kabupaten Tulangbawang
+city_id_lampung_9,base.state_id_la,base.id,Kabupaten Pesawaran
+city_id_lampung_10,base.state_id_la,base.id,Kabupaten Pringsewu
+city_id_lampung_11,base.state_id_la,base.id,Kabupaten Mesuji
+city_id_lampung_12,base.state_id_la,base.id,Kabupaten Tulang Bawang Barat
+city_id_lampung_13,base.state_id_la,base.id,Kabupaten Pesisir Barat
+city_id_lampung_14,base.state_id_la,base.id,Kota Bandar Lampung
+city_id_lampung_15,base.state_id_la,base.id,Kota Metro
+city_id_maluku_1,base.state_id_ma,base.id,Kabupaten Maluku Tenggara Barat
+city_id_maluku_2,base.state_id_ma,base.id,Kabupaten Maluku Tenggara
+city_id_maluku_3,base.state_id_ma,base.id,Kabupaten Maluku Tengah
+city_id_maluku_4,base.state_id_ma,base.id,Kabupaten Buru
+city_id_maluku_5,base.state_id_ma,base.id,Kabupaten Kepulauan Aru
+city_id_maluku_6,base.state_id_ma,base.id,Kabupaten Seram Bagian Barat
+city_id_maluku_7,base.state_id_ma,base.id,Kabupaten Seram Bagian Timur
+city_id_maluku_8,base.state_id_ma,base.id,Kabupaten Maluku Barat Daya
+city_id_maluku_9,base.state_id_ma,base.id,Kabupaten Buru Selatan
+city_id_maluku_10,base.state_id_ma,base.id,Kota Ambon
+city_id_maluku_11,base.state_id_ma,base.id,Kota Tual
+city_id_malukuutara_1,base.state_id_mu,base.id,Kabupaten Halmahera Barat
+city_id_malukuutara_2,base.state_id_mu,base.id,Kabupaten Halmahera Tengah
+city_id_malukuutara_3,base.state_id_mu,base.id,Kabupaten Kepulauan Sula
+city_id_malukuutara_4,base.state_id_mu,base.id,Kabupaten Halmahera Selatan
+city_id_malukuutara_5,base.state_id_mu,base.id,Kabupaten Halmahera Utara
+city_id_malukuutara_6,base.state_id_mu,base.id,Kabupaten Halmahera Timur
+city_id_malukuutara_7,base.state_id_mu,base.id,Kabupaten Pulau Morotai
+city_id_malukuutara_8,base.state_id_mu,base.id,Kabupaten Pulau Taliabu
+city_id_malukuutara_9,base.state_id_mu,base.id,Kota Ternate
+city_id_malukuutara_10,base.state_id_mu,base.id,Kota Tidore Kepulauan
+city_id_nusatenggarabarat_1,base.state_id_nb,base.id,Kabupaten Lombok Barat
+city_id_nusatenggarabarat_2,base.state_id_nb,base.id,Kabupaten Lombok Tengah
+city_id_nusatenggarabarat_3,base.state_id_nb,base.id,Kabupaten Lombok Timur
+city_id_nusatenggarabarat_4,base.state_id_nb,base.id,Kabupaten Sumbawa
+city_id_nusatenggarabarat_5,base.state_id_nb,base.id,Kabupaten Dompu
+city_id_nusatenggarabarat_6,base.state_id_nb,base.id,Kabupaten Bima
+city_id_nusatenggarabarat_7,base.state_id_nb,base.id,Kabupaten Sumbawa Barat
+city_id_nusatenggarabarat_8,base.state_id_nb,base.id,Kabupaten Lombok Utara
+city_id_nusatenggarabarat_9,base.state_id_nb,base.id,Kota Mataram
+city_id_nusatenggarabarat_10,base.state_id_nb,base.id,Kota Bima
+city_id_nusatenggaratimur_1,base.state_id_nt,base.id,Kabupaten Sumba Barat
+city_id_nusatenggaratimur_2,base.state_id_nt,base.id,Kabupaten Sumba Timur
+city_id_nusatenggaratimur_3,base.state_id_nt,base.id,Kabupaten Kupang
+city_id_nusatenggaratimur_4,base.state_id_nt,base.id,Kabupaten Timor Tengah Selatan
+city_id_nusatenggaratimur_5,base.state_id_nt,base.id,Kabupaten Timor Tengah Utara
+city_id_nusatenggaratimur_6,base.state_id_nt,base.id,Kabupaten Belu
+city_id_nusatenggaratimur_7,base.state_id_nt,base.id,Kabupaten Alor
+city_id_nusatenggaratimur_8,base.state_id_nt,base.id,Kabupaten Lembata
+city_id_nusatenggaratimur_9,base.state_id_nt,base.id,Kabupaten Flores Timur
+city_id_nusatenggaratimur_10,base.state_id_nt,base.id,Kabupaten Sikka
+city_id_nusatenggaratimur_11,base.state_id_nt,base.id,Kabupaten Ende
+city_id_nusatenggaratimur_12,base.state_id_nt,base.id,Kabupaten Ngada
+city_id_nusatenggaratimur_13,base.state_id_nt,base.id,Kabupaten Manggarai
+city_id_nusatenggaratimur_14,base.state_id_nt,base.id,Kabupaten Rote Ndao
+city_id_nusatenggaratimur_15,base.state_id_nt,base.id,Kabupaten Manggarai Barat
+city_id_nusatenggaratimur_16,base.state_id_nt,base.id,Kabupaten Sumba Tengah
+city_id_nusatenggaratimur_17,base.state_id_nt,base.id,Kabupaten Sumba Barat Daya
+city_id_nusatenggaratimur_18,base.state_id_nt,base.id,Kabupaten Nagekeo
+city_id_nusatenggaratimur_19,base.state_id_nt,base.id,Kabupaten Manggarai Timur
+city_id_nusatenggaratimur_20,base.state_id_nt,base.id,Kabupaten Sabu Raijua
+city_id_nusatenggaratimur_21,base.state_id_nt,base.id,Kabupaten Malaka
+city_id_nusatenggaratimur_22,base.state_id_nt,base.id,Kota Kupang
+city_id_papua_1,base.state_id_pa,base.id,Kabupaten Merauke
+city_id_papua_2,base.state_id_pa,base.id,Kabupaten Jayawijaya
+city_id_papua_3,base.state_id_pa,base.id,Kabupaten Jayapura
+city_id_papua_4,base.state_id_pa,base.id,Kabupaten Nabire
+city_id_papua_5,base.state_id_pa,base.id,Kabupaten Kepulauan Yapen
+city_id_papua_6,base.state_id_pa,base.id,Kabupaten Biak Numfor
+city_id_papua_7,base.state_id_pa,base.id,Kabupaten Paniai
+city_id_papua_8,base.state_id_pa,base.id,Kabupaten Puncak Jaya
+city_id_papua_9,base.state_id_pa,base.id,Kabupaten Mimika
+city_id_papua_10,base.state_id_pa,base.id,Kabupaten Boven Digoel
+city_id_papua_11,base.state_id_pa,base.id,Kabupaten Mappi
+city_id_papua_12,base.state_id_pa,base.id,Kabupaten Asmat
+city_id_papua_13,base.state_id_pa,base.id,Kabupaten Yahukimo
+city_id_papua_14,base.state_id_pa,base.id,Kabupaten Pegunungan Bintang
+city_id_papua_15,base.state_id_pa,base.id,Kabupaten Tolikara
+city_id_papua_16,base.state_id_pa,base.id,Kabupaten Sarmi
+city_id_papua_17,base.state_id_pa,base.id,Kabupaten Keerom
+city_id_papua_18,base.state_id_pa,base.id,Kabupaten Waropen
+city_id_papua_19,base.state_id_pa,base.id,Kabupaten Supiori
+city_id_papua_20,base.state_id_pa,base.id,Kabupaten Mamberamo Raya
+city_id_papua_21,base.state_id_pa,base.id,Kabupaten Nduga
+city_id_papua_22,base.state_id_pa,base.id,Kabupaten Lanny Jaya
+city_id_papua_23,base.state_id_pa,base.id,Kabupaten Mamberamo Tengah
+city_id_papua_24,base.state_id_pa,base.id,Kabupaten Yalimo
+city_id_papua_25,base.state_id_pa,base.id,Kabupaten Puncak
+city_id_papua_26,base.state_id_pa,base.id,Kabupaten Dogiyai
+city_id_papua_27,base.state_id_pa,base.id,Kabupaten Intan Jaya
+city_id_papua_28,base.state_id_pa,base.id,Kabupaten Deiyai
+city_id_papua_29,base.state_id_pa,base.id,Kota Jayapura
+city_id_papuabarat_1,base.state_id_pb,base.id,Kabupaten Fakfak
+city_id_papuabarat_2,base.state_id_pb,base.id,Kabupaten Kaimana
+city_id_papuabarat_3,base.state_id_pb,base.id,Kabupaten Teluk Wondama
+city_id_papuabarat_4,base.state_id_pb,base.id,Kabupaten Teluk Bintuni
+city_id_papuabarat_5,base.state_id_pb,base.id,Kabupaten Manokwari
+city_id_papuabarat_6,base.state_id_pb,base.id,Kabupaten Sorong Selatan
+city_id_papuabarat_7,base.state_id_pb,base.id,Kabupaten Sorong
+city_id_papuabarat_8,base.state_id_pb,base.id,Kabupaten Raja Ampat
+city_id_papuabarat_9,base.state_id_pb,base.id,Kabupaten Tambrauw
+city_id_papuabarat_10,base.state_id_pb,base.id,Kabupaten Maybrat
+city_id_papuabarat_11,base.state_id_pb,base.id,Kabupaten Manokwari Selatan
+city_id_papuabarat_12,base.state_id_pb,base.id,Kabupaten Pegunungan Arfak
+city_id_papuabarat_13,base.state_id_pb,base.id,Kota Sorong
+city_id_riau_1,base.state_id_ri,base.id,Kabupaten Kuantan Singingi
+city_id_riau_2,base.state_id_ri,base.id,Kabupaten Indragiri Hulu
+city_id_riau_3,base.state_id_ri,base.id,Kabupaten Indragiri Hilir
+city_id_riau_4,base.state_id_ri,base.id,Kabupaten Pelalawan
+city_id_riau_5,base.state_id_ri,base.id,Kabupaten Siak
+city_id_riau_6,base.state_id_ri,base.id,Kabupaten Kampar
+city_id_riau_7,base.state_id_ri,base.id,Kabupaten Rokan Hulu
+city_id_riau_8,base.state_id_ri,base.id,Kabupaten Bengkalis
+city_id_riau_9,base.state_id_ri,base.id,Kabupaten Rokan Hilir
+city_id_riau_10,base.state_id_ri,base.id,Kabupaten Kepulauan Meranti
+city_id_riau_11,base.state_id_ri,base.id,Kota Pekanbaru
+city_id_riau_12,base.state_id_ri,base.id,Kota Dumai
+city_id_sulawesibarat_1,base.state_id_sr,base.id,Kabupaten Majene
+city_id_sulawesibarat_2,base.state_id_sr,base.id,Kabupaten Polewali Mandar
+city_id_sulawesibarat_3,base.state_id_sr,base.id,Kabupaten Mamasa
+city_id_sulawesibarat_4,base.state_id_sr,base.id,Kabupaten Mamuju
+city_id_sulawesibarat_5,base.state_id_sr,base.id,Kabupaten Mamuju Utara
+city_id_sulawesibarat_6,base.state_id_sr,base.id,Kabupaten Mamuju Tengah
+city_id_sulawesiselatan_1,base.state_id_sn,base.id,Kabupaten Kepulauan Selayar
+city_id_sulawesiselatan_2,base.state_id_sn,base.id,Kabupaten Bulukumba
+city_id_sulawesiselatan_3,base.state_id_sn,base.id,Kabupaten Bantaeng
+city_id_sulawesiselatan_4,base.state_id_sn,base.id,Kabupaten Jeneponto
+city_id_sulawesiselatan_5,base.state_id_sn,base.id,Kabupaten Takalar
+city_id_sulawesiselatan_6,base.state_id_sn,base.id,Kabupaten Gowa
+city_id_sulawesiselatan_7,base.state_id_sn,base.id,Kabupaten Sinjai
+city_id_sulawesiselatan_8,base.state_id_sn,base.id,Kabupaten Maros
+city_id_sulawesiselatan_9,base.state_id_sn,base.id,Kabupaten Pangkajene Dan Kepulauan
+city_id_sulawesiselatan_10,base.state_id_sn,base.id,Kabupaten Barru
+city_id_sulawesiselatan_11,base.state_id_sn,base.id,Kabupaten Bone
+city_id_sulawesiselatan_12,base.state_id_sn,base.id,Kabupaten Soppeng
+city_id_sulawesiselatan_13,base.state_id_sn,base.id,Kabupaten Wajo
+city_id_sulawesiselatan_14,base.state_id_sn,base.id,Kabupaten Sidenreng Rappang
+city_id_sulawesiselatan_15,base.state_id_sn,base.id,Kabupaten Pinrang
+city_id_sulawesiselatan_16,base.state_id_sn,base.id,Kabupaten Enrekang
+city_id_sulawesiselatan_17,base.state_id_sn,base.id,Kabupaten Luwu
+city_id_sulawesiselatan_18,base.state_id_sn,base.id,Kabupaten Tana Toraja
+city_id_sulawesiselatan_19,base.state_id_sn,base.id,Kabupaten Luwu Utara
+city_id_sulawesiselatan_20,base.state_id_sn,base.id,Kabupaten Luwu Timur
+city_id_sulawesiselatan_21,base.state_id_sn,base.id,Kabupaten Toraja Utara
+city_id_sulawesiselatan_22,base.state_id_sn,base.id,Kota Makassar
+city_id_sulawesiselatan_23,base.state_id_sn,base.id,Kota Parepare
+city_id_sulawesiselatan_24,base.state_id_sn,base.id,Kota Palopo
+city_id_sulawesitengah_1,base.state_id_st,base.id,Kabupaten Banggai Kepulauan
+city_id_sulawesitengah_2,base.state_id_st,base.id,Kabupaten Banggai
+city_id_sulawesitengah_3,base.state_id_st,base.id,Kabupaten Morowali
+city_id_sulawesitengah_4,base.state_id_st,base.id,Kabupaten Poso
+city_id_sulawesitengah_5,base.state_id_st,base.id,Kabupaten Donggala
+city_id_sulawesitengah_6,base.state_id_st,base.id,Kabupaten Toli-Toli
+city_id_sulawesitengah_7,base.state_id_st,base.id,Kabupaten Buol
+city_id_sulawesitengah_8,base.state_id_st,base.id,Kabupaten Parigi Moutong
+city_id_sulawesitengah_9,base.state_id_st,base.id,Kabupaten Tojo Una-Una
+city_id_sulawesitengah_10,base.state_id_st,base.id,Kabupaten Sigi
+city_id_sulawesitengah_11,base.state_id_st,base.id,Kabupaten Banggai Laut
+city_id_sulawesitengah_12,base.state_id_st,base.id,Kabupaten Morowali Utara
+city_id_sulawesitengah_13,base.state_id_st,base.id,Kota Palu
+city_id_sulawesitenggara_1,base.state_id_sg,base.id,Kabupaten Buton
+city_id_sulawesitenggara_2,base.state_id_sg,base.id,Kabupaten Muna
+city_id_sulawesitenggara_3,base.state_id_sg,base.id,Kabupaten Konawe
+city_id_sulawesitenggara_4,base.state_id_sg,base.id,Kabupaten Kolaka
+city_id_sulawesitenggara_5,base.state_id_sg,base.id,Kabupaten Konawe Selatan
+city_id_sulawesitenggara_6,base.state_id_sg,base.id,Kabupaten Bombana
+city_id_sulawesitenggara_7,base.state_id_sg,base.id,Kabupaten Wakatobi
+city_id_sulawesitenggara_8,base.state_id_sg,base.id,Kabupaten Kolaka Utara
+city_id_sulawesitenggara_9,base.state_id_sg,base.id,Kabupaten Buton Utara
+city_id_sulawesitenggara_10,base.state_id_sg,base.id,Kabupaten Konawe Utara
+city_id_sulawesitenggara_11,base.state_id_sg,base.id,Kabupaten Kolaka Timur
+city_id_sulawesitenggara_12,base.state_id_sg,base.id,Kabupaten Konawe Kepulauan
+city_id_sulawesitenggara_13,base.state_id_sg,base.id,Kabupaten Muna Barat
+city_id_sulawesitenggara_14,base.state_id_sg,base.id,Kabupaten Buton Tengah
+city_id_sulawesitenggara_15,base.state_id_sg,base.id,Kabupaten Buton Selatan
+city_id_sulawesitenggara_16,base.state_id_sg,base.id,Kota Kendari
+city_id_sulawesitenggara_17,base.state_id_sg,base.id,Kota Baubau
+city_id_sulawesiutara_1,base.state_id_sa,base.id,Kabupaten Bolaang Mongondow
+city_id_sulawesiutara_2,base.state_id_sa,base.id,Kabupaten Minahasa
+city_id_sulawesiutara_3,base.state_id_sa,base.id,Kabupaten Kepulauan Sangihe
+city_id_sulawesiutara_4,base.state_id_sa,base.id,Kabupaten Kepulauan Talaud
+city_id_sulawesiutara_5,base.state_id_sa,base.id,Kabupaten Minahasa Selatan
+city_id_sulawesiutara_6,base.state_id_sa,base.id,Kabupaten Minahasa Utara
+city_id_sulawesiutara_7,base.state_id_sa,base.id,Kabupaten Bolaang Mongondow Utara
+city_id_sulawesiutara_8,base.state_id_sa,base.id,Kabupaten Siau Tagulandang Biaro
+city_id_sulawesiutara_9,base.state_id_sa,base.id,Kabupaten Minahasa Tenggara
+city_id_sulawesiutara_10,base.state_id_sa,base.id,Kabupaten Bolaang Mongondow Selatan
+city_id_sulawesiutara_11,base.state_id_sa,base.id,Kabupaten Bolaang Mongondow Timur
+city_id_sulawesiutara_12,base.state_id_sa,base.id,Kota Manado
+city_id_sulawesiutara_13,base.state_id_sa,base.id,Kota Bitung
+city_id_sulawesiutara_14,base.state_id_sa,base.id,Kota Tomohon
+city_id_sulawesiutara_15,base.state_id_sa,base.id,Kota Kotamobagu
+city_id_sumatrabarat_1,base.state_id_sb,base.id,Kabupaten Kepulauan Mentawai
+city_id_sumatrabarat_2,base.state_id_sb,base.id,Kabupaten Pesisir Selatan
+city_id_sumatrabarat_3,base.state_id_sb,base.id,Kabupaten Solok
+city_id_sumatrabarat_4,base.state_id_sb,base.id,Kabupaten Sijunjung
+city_id_sumatrabarat_5,base.state_id_sb,base.id,Kabupaten Tanah Datar
+city_id_sumatrabarat_6,base.state_id_sb,base.id,Kabupaten Padang Pariaman
+city_id_sumatrabarat_7,base.state_id_sb,base.id,Kabupaten Agam
+city_id_sumatrabarat_8,base.state_id_sb,base.id,Kabupaten Lima Puluh Kota
+city_id_sumatrabarat_9,base.state_id_sb,base.id,Kabupaten Pasaman
+city_id_sumatrabarat_10,base.state_id_sb,base.id,Kabupaten Solok Selatan
+city_id_sumatrabarat_11,base.state_id_sb,base.id,Kabupaten Dharmasraya
+city_id_sumatrabarat_12,base.state_id_sb,base.id,Kabupaten Pasaman Barat
+city_id_sumatrabarat_13,base.state_id_sb,base.id,Kota Padang
+city_id_sumatrabarat_14,base.state_id_sb,base.id,Kota Solok
+city_id_sumatrabarat_15,base.state_id_sb,base.id,Kota Sawah Lunto
+city_id_sumatrabarat_16,base.state_id_sb,base.id,Kota Padang Panjang
+city_id_sumatrabarat_17,base.state_id_sb,base.id,Kota Bukittinggi
+city_id_sumatrabarat_18,base.state_id_sb,base.id,Kota Payakumbuh
+city_id_sumatrabarat_19,base.state_id_sb,base.id,Kota Pariaman
+city_id_sumatraselatan_1,base.state_id_ss,base.id,Kabupaten Ogan Komering Ulu
+city_id_sumatraselatan_2,base.state_id_ss,base.id,Kabupaten Ogan Komering Ilir
+city_id_sumatraselatan_3,base.state_id_ss,base.id,Kabupaten Muara Enim
+city_id_sumatraselatan_4,base.state_id_ss,base.id,Kabupaten Lahat
+city_id_sumatraselatan_5,base.state_id_ss,base.id,Kabupaten Musi Rawas
+city_id_sumatraselatan_6,base.state_id_ss,base.id,Kabupaten Musi Banyuasin
+city_id_sumatraselatan_7,base.state_id_ss,base.id,Kabupaten Banyu Asin
+city_id_sumatraselatan_8,base.state_id_ss,base.id,Kabupaten Ogan Komering Ulu Selatan
+city_id_sumatraselatan_9,base.state_id_ss,base.id,Kabupaten Ogan Komering Ulu Timur
+city_id_sumatraselatan_10,base.state_id_ss,base.id,Kabupaten Ogan Ilir
+city_id_sumatraselatan_11,base.state_id_ss,base.id,Kabupaten Empat Lawang
+city_id_sumatraselatan_12,base.state_id_ss,base.id,Kabupaten Penukal Abab Lematang Ilir
+city_id_sumatraselatan_13,base.state_id_ss,base.id,Kabupaten Musi Rawas Utara
+city_id_sumatraselatan_14,base.state_id_ss,base.id,Kota Palembang
+city_id_sumatraselatan_15,base.state_id_ss,base.id,Kota Prabumulih
+city_id_sumatraselatan_16,base.state_id_ss,base.id,Kota Pagar Alam
+city_id_sumatraselatan_17,base.state_id_ss,base.id,Kota Lubuklinggau
+city_id_sumatrautara_1,base.state_id_su,base.id,Kabupaten Nias
+city_id_sumatrautara_2,base.state_id_su,base.id,Kabupaten Mandailing Natal
+city_id_sumatrautara_3,base.state_id_su,base.id,Kabupaten Tapanuli Selatan
+city_id_sumatrautara_4,base.state_id_su,base.id,Kabupaten Tapanuli Tengah
+city_id_sumatrautara_5,base.state_id_su,base.id,Kabupaten Tapanuli Utara
+city_id_sumatrautara_6,base.state_id_su,base.id,Kabupaten Toba Samosir
+city_id_sumatrautara_7,base.state_id_su,base.id,Kabupaten Labuhan Batu
+city_id_sumatrautara_8,base.state_id_su,base.id,Kabupaten Asahan
+city_id_sumatrautara_9,base.state_id_su,base.id,Kabupaten Simalungun
+city_id_sumatrautara_10,base.state_id_su,base.id,Kabupaten Dairi
+city_id_sumatrautara_11,base.state_id_su,base.id,Kabupaten Karo
+city_id_sumatrautara_12,base.state_id_su,base.id,Kabupaten Deli Serdang
+city_id_sumatrautara_13,base.state_id_su,base.id,Kabupaten Langkat
+city_id_sumatrautara_14,base.state_id_su,base.id,Kabupaten Nias Selatan
+city_id_sumatrautara_15,base.state_id_su,base.id,Kabupaten Humbang Hasundutan
+city_id_sumatrautara_16,base.state_id_su,base.id,Kabupaten Pakpak Bharat
+city_id_sumatrautara_17,base.state_id_su,base.id,Kabupaten Samosir
+city_id_sumatrautara_18,base.state_id_su,base.id,Kabupaten Serdang Bedagai
+city_id_sumatrautara_19,base.state_id_su,base.id,Kabupaten Batu Bara
+city_id_sumatrautara_20,base.state_id_su,base.id,Kabupaten Padang Lawas Utara
+city_id_sumatrautara_21,base.state_id_su,base.id,Kabupaten Padang Lawas
+city_id_sumatrautara_22,base.state_id_su,base.id,Kabupaten Labuhan Batu Selatan
+city_id_sumatrautara_23,base.state_id_su,base.id,Kabupaten Labuhan Batu Utara
+city_id_sumatrautara_24,base.state_id_su,base.id,Kabupaten Nias Utara
+city_id_sumatrautara_25,base.state_id_su,base.id,Kabupaten Nias Barat
+city_id_sumatrautara_26,base.state_id_su,base.id,Kota Sibolga
+city_id_sumatrautara_27,base.state_id_su,base.id,Kota Tanjung Balai
+city_id_sumatrautara_28,base.state_id_su,base.id,Kota Pematang Siantar
+city_id_sumatrautara_29,base.state_id_su,base.id,Kota Tebing Tinggi
+city_id_sumatrautara_30,base.state_id_su,base.id,Kota Medan
+city_id_sumatrautara_31,base.state_id_su,base.id,Kota Binjai
+city_id_sumatrautara_32,base.state_id_su,base.id,Kota Padangsidimpuan
+city_id_sumatrautara_33,base.state_id_su,base.id,Kota Gunungsitoli
+city_id_jogjakarta_1,base.state_id_yo,base.id,Kabupaten Kulon Progo
+city_id_jogjakarta_2,base.state_id_yo,base.id,Kabupaten Bantul
+city_id_jogjakarta_3,base.state_id_yo,base.id,Kabupaten Gunung Kidul
+city_id_jogjakarta_4,base.state_id_yo,base.id,Kabupaten Sleman
+city_id_jogjakarta_5,base.state_id_yo,base.id,Kota Yogyakarta

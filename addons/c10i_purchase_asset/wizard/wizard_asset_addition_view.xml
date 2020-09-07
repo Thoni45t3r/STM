@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="asset_addition_form">
+        <field name="name">wizard.asset.addition.form</field>
+        <field name="model">wizard.asset.addition</field>
+        <field name="arch" type="xml">
+            <form string="Asset Addition">
+                <group>
+                    <group colspan="2" col="2">
+                        <field name="company_id" invisible="1"/>
+                        <!-- <field name="picking_id" domain="[('picking_type_id.code','=','incoming'), ('company_id','=',company_id)]" options="{'no_create_edit':True, 'no_create':True}"/> -->
+                        <field name="picking_id" domain="[('location_id.usage','=','internal'), ('location_dest_id.usage','not in',['internal','customer','production']), ('company_id','=',company_id)]" options="{'no_create_edit':True, 'no_create':True}"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Asset Lines">
+                        <field name="line_ids">
+                            <tree string="Addition Lines" editable="bottom">
+                                <field name="move_id" invisible="1"/>
+                                <field name="asset_category_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                                <field name="name" />
+                                <field name="value" />
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>    
+                <footer>
+                    <button name="asset_create" string="Create" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_addition" model="ir.actions.act_window">
+         <field name="name">Asset Addition</field>
+         <field name="res_model">wizard.asset.addition</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="asset_addition_form"/>
+         <field name="target">current</field>
+   </record>
+
+   <menuitem parent="account.menu_finance_entries" id="menu_asset_addition" action="action_asset_addition" sequence="100" groups="account.group_account_user"/>
+</odoo>

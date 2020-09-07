@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_transport_cost_search_view" model="ir.ui.view">
+        <field name="name">stock.transport.cost.search</field>
+        <field name="model">stock.transport.cost</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <field name="transporter_id"/>
+                <field name="state"/>
+                <group expand="0" string="Filters">
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                </group>
+                <group expand='0' string='Group by...'>
+                    <filter string='Company' name="companygroup" context="{'group_by': 'company_id'}"/>
+                </group>
+           </search>
+        </field>
+    </record>
+
+    <record id="stock_transport_cost_form_view" model="ir.ui.view">
+        <field name="name">stock.transport.cost.form</field>
+        <field name="model">stock.transport.cost</field>
+        <field name="arch" type="xml">
+            <form string="Transport Costs">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" states="draft" class="oe_highlight"/>
+                    <button name="action_set_draft" string="Set Draft" type="object" states="confirmed" />
+                    <button name="generate_cost_lines" string="Generate Detail Cost" type="object" states="draft" class="oe_highlight"/>
+                    <button name="post" string="Validate" type="object" states="confirmed" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_stop"/>
+                        </group>
+                        <group>
+                            <field name="transporter_id" options="{'no_open':True,'no_create':True}" />
+                            <field name="picking_type_id" options="{'no_open':True,'no_create':True}" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_open':True,'no_create':True}"/>
+                            <field name="journal_id" options="{'no_open':True,'no_create':True}"/>
+                            <field name="currency_id" options="{'no_open':True,'no_create':True}"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="cost_lines" string="Transport Lines Summary">
+                            <field name="cost_line_ids" string="Transport Lines">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="transporter_id" options="{'no_open':True,'no_create':True}" />
+                                    <field name="incoterm_id" options="{'no_open':True,'no_create':True}" />
+                                    <field name="quantity" sum="quantity" />
+                                    <field name="price_unit" />
+                                    <field name="amount" sum="amount" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="picking_details" string="Pickings" attrs="{'invisible': [('picking_ids','=',[])]}">
+                            <field name="picking_ids" readonly="1" />
+                        </page>
+                        <!-- <page name="invoice_details" string="Invoices" >
+                            <field name="invoice_ids" readonly="1" /?>
+                        </page> -->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_transport_cost_tree_view" model="ir.ui.view">
+        <field name="name">stock.transport.cost.tree</field>
+        <field name="model">stock.transport.cost</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="transporter_id"/>
+                <field name="date_start"/>
+                <field name="date_stop"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_stock_transport_cost">
+        <field name="name">Transport Cost</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.transport.cost</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="stock_transport_cost_search_view"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new Transport Cost
+          </p><p>
+            Transport Cost will do a breakdown product from a bill of materials of its raw material.
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_stock_transport_cost"
+          name="Transport Costs"
+          parent="stock.menu_stock_warehouse_mgmt"
+          action="action_stock_transport_cost"
+          sequence="100"/>
+
+</odoo>

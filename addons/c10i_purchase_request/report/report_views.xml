@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+    	<!-- Pending Purchase Request -->
+    	<report string="Pending Purchase Request"
+            model="wizard.pending.purchase.request"
+            auto="True"
+            name="report_pending_purchase_request"
+            rml="c10i_purchase_request/report/report_pending_purchase_request.jrxml"
+            id="report_pending_purchase_request"
+            menu="False"
+            />
+
+		<report string="Pending Purchase Request Excel Edition"
+			model="wizard.pending.purchase.request"
+			auto="True"
+			name="report_pending_purchase_request_xls"
+            rml="c10i_purchase_request/report/report_pending_purchase_request.jrxml"
+			id="report_pending_purchase_request_xls"
+			menu="False"
+			/>
+	</data>
+</odoo>

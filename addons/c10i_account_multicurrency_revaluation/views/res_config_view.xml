@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record id="c10i_multi_view_account_config_settings" model="ir.ui.view">
+            <field name="name">c10i.multi.account.config.settings</field>
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings" />
+            <field name="arch" type="xml">
+    			<xpath expr="//form/group[@name='multi_currency']/div[@name='group_multi_currency']" position="after">
+    				<field name="revaluation_loss_account_id" attrs="{'invisible': [('group_multi_currency', '&lt;&gt;', True)]}"/>
+    				<field name="revaluation_gain_account_id" attrs="{'invisible': [('group_multi_currency', '&lt;&gt;', True)]}"/>
+                    <field name="default_currency_reval_journal_id" />
+    			</xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

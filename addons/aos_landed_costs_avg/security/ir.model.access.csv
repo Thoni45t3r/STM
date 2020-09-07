@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+"access_avg_landed_cost","avg.landed.cost","model_avg_landed_cost","aos_landed_costs_avg.group_purchase_inland_costs",1,1,1,1
+"access_avg_landed_cost_lines","avg.landed.cost.lines","model_avg_landed_cost_lines","aos_landed_costs_avg.group_purchase_inland_costs",1,1,1,1
+"access_avg_valuation_adjustment_lines","avg.valuation.adjustment.lines","model_avg_valuation_adjustment_lines","aos_landed_costs_avg.group_purchase_inland_costs",1,1,1,1

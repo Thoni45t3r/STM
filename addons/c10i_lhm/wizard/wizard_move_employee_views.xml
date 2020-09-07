@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_move_employee" model="ir.ui.view">
+            <field name="name">view.wizard.move.employee</field>
+            <field name="model">wizard.move.employee</field>
+            <field name="arch" type="xml">
+                <form string="Pindah Karyawan">
+                    <group>
+                        <group>
+                            <field name="dest_foreman_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1" domain="[('id','!=',src_foreman_id)]"/>
+                            <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form', 'tree_view_ref':'c10i_lhm.view_employee_tree'}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" readonly="1"/>
+                            <field name="src_foreman_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="company_id" readonly="1" options='{"no_open": True}'/>
+                            <field name="name" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Catatan..." colspan="8"/>
+                    <footer>
+                        <button string="Pindah" name="move_employee" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_move_employee" model="ir.actions.act_window">
+            <field name="name">Pindah Karyawan</field>
+            <field name="res_model">wizard.move.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_wizard_move_employee"/>
+            <field name="context">{'readonly_by_pass': True}</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_wizard_move_employee_all" model="ir.ui.view">
+            <field name="name">view.wizard.move.employee.all</field>
+            <field name="model">wizard.move.employee.all</field>
+            <field name="arch" type="xml">
+                <form string="Pindah Karyawan All">
+                    <field name="name" invisible="1"/>
+                    <group>
+                        <field name="line_ids" nolabel="1" readonly="0">
+                            <tree>
+                                <field name="date"/>
+                                <field name="employee_id"/>
+                                <field name="src_foreman_id"/>
+                                <field name="dest_foreman_id"/>
+                                <field name="moved_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button string="Pindah" name="move_employee" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_move_employee_all" model="ir.actions.act_window">
+            <field name="name">Pindah Karyawan</field>
+            <field name="res_model">wizard.move.employee.all</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_wizard_move_employee_all"/>
+            <field name="context">{'readonly_by_pass': True}</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

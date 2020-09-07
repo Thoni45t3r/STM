@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Res Doc Type Data-->
+        <record id="default_res_doc_type_0" model="res.doc.type">
+            <field name="name">Laporan Harian Mandor</field>
+            <field name="code">lhm</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_1" model="res.doc.type">
+            <field name="name">Progress Teknik</field>
+            <field name="code">pgt</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_2" model="res.doc.type">
+            <field name="name">Buku Kendaraan</field>
+            <field name="code">bk</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_3" model="res.doc.type">
+            <field name="name">Buku Kontraktor</field>
+            <field name="code">bkt</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_4" model="res.doc.type">
+            <field name="name">Buku Kontraktor Alat</field>
+            <field name="code">bkta</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_5" model="res.doc.type">
+            <field name="name">Buku Mesin</field>
+            <field name="code">bm</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_6" model="res.doc.type">
+            <field name="name">Buku Workshop</field>
+            <field name="code">bw</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+        <record id="default_res_doc_type_7" model="res.doc.type">
+            <field name="name">Dokumen Lain</field>
+            <field name="code">oth</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active">1</field>
+        </record>
+    </data>
+</odoo>

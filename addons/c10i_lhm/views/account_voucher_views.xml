@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Report Voucher"
+				model	= "account.voucher"
+				auto	= "True"
+				name	= "report_voucher_cash_bank"
+				rml		= "c10i_lhm/report/report_voucher.jrxml"
+				id		= "c10i_account.report_voucher_cash_bank"
+                menu    = "False"
+        />
+
+        <report string	= "Report Voucher"
+				model	= "account.voucher"
+				auto	= "True"
+				name	= "report_voucher_cash_bank_draft"
+				rml		= "c10i_lhm/report/report_voucher.jrxml"
+				id		= "c10i_account.report_voucher_cash_bank_draft"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- <record model="ir.sequence" id="seq_example_sequence">
+            <field name="name">Example Seq</field>
+            <field name="code">example.sequence.code</field>
+            <field name="prefix">SEQ/%(y)s%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False" />
+            <field name="implementation">no_gap</field>
+        </record> -->
+    </data>
+</odoo>

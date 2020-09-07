@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_rfq_to_purchase" model="ir.ui.view">
+            <field name="name">Purchase Request To Purchase Order</field>
+            <field name="model">wizard.rfq.to.purchase</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Create">
+                    <p class="oe_grey">
+                        Each State must be Approve, Vendor must be same, and picking type must be same.
+                    </p>
+                    <group>
+                        <field name="service_order" invisible="1"/>
+                    	<field name="partner_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" readonly="1"/>
+                    </group>
+                    <field name="line_ids" nolabel="1" colspan="8" readonly="0" attrs="{'invisible': [('service_order','=',True)]}">
+                        <tree editable="bottom" create="false">
+                            <field name="product_id" readonly="1"/>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="last_purchase_price" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="product_uom_id" readonly="1"/>
+                            <field name="scheduled_date" invisible="1"/>
+                            <field name="request_id" invisible="1"/>
+                            <field name="request_line_id" invisible="1"/>
+                            <field name="rfq_id" invisible="1"/>
+                            <field name="rfq_line_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="create_purchase" string="Create Purchase" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ========== Spesifikasi Action Wizard ========== -->
+        <record id="action_wizard_rfq_to_purchase" model="ir.actions.act_window">
+            <field name="name">RFQ To Purchase Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.rfq.to.purchase</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_rfq_to_purchase"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>
+        <record id="action_wizard_rfq_to_service_order" model="ir.actions.act_window">
+            <field name="name">RFQ To Service Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.rfq.to.purchase</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'service_order': True}</field>
+            <field name="view_id" ref="view_wizard_rfq_to_purchase"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>
+
+        <act_window id  = "act_wizard_rfq_to_purchase"
+            name        = "Make Purchase Order"
+            src_model   = "purchase.rfq"
+            res_model   = "wizard.rfq.to.purchase"
+            view_type   = "form"
+            view_mode   = "form"
+            key2        = "client_action_multi"
+            target      = "new"
+            />
+
+    </data>
+</odoo>

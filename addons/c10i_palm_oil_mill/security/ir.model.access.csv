@@ -1,0 +1,26 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mill_1,mill.unbuild.produce.line user,model_mill_unbuild_produce_line,group_mill_user,1,1,1,1
+access_mill_2,mrp.bom user,mrp.model_mrp_bom,group_mill_user,1,0,0,0
+access_mill_3,mrp.bom.line user,mrp.model_mrp_bom_line,group_mill_user,1,0,0,0
+access_mill_4,mrp.unbuild user,mrp.model_mrp_unbuild,group_mill_user,1,1,1,0
+access_mill_5,product.product user,product.model_product_product,group_mill_user,1,0,0,0
+access_mill_6,product.template user,product.model_product_template,group_mill_user,1,0,0,0
+access_mill_7,product.uom user,product.model_product_uom,group_mill_user,1,0,0,0
+access_mill_8,stock.move user,stock.model_stock_move,group_mill_user,1,1,1,0
+access_mill_9,stock.location user,stock.model_stock_location,group_mill_user,1,0,0,0
+access_mill_10,mill.unbuild.produce.line manager,model_mill_unbuild_produce_line,group_mill_manager,1,1,1,1
+access_mill_11,mrp.bom manager,mrp.model_mrp_bom,group_mill_manager,1,1,1,0
+access_mill_12,mrp.bom.line manager,mrp.model_mrp_bom_line,group_mill_manager,1,1,1,1
+access_mill_13,mrp.unbuild manager,mrp.model_mrp_unbuild,group_mill_manager,1,1,1,1
+access_mill_14,product.product manager,product.model_product_product,group_mill_manager,1,1,1,0
+access_mill_15,product.template manager,product.model_product_template,group_mill_manager,1,1,1,0
+access_mill_16,product.uom manager,product.model_product_uom,group_mill_manager,1,1,1,0
+access_mill_17,stock.move manager,stock.model_stock_move,group_mill_manager,1,1,1,0
+access_mill_18,stock.location manager,stock.model_stock_location,group_mill_manager,1,0,0,0
+access_mill_19,mill.valuation.consume.line manager,model_mill_valuation_consume_line,group_mill_valuation,1,1,1,1
+access_mill_20,mill.valuation.produce.line manager,model_mill_valuation_produce_line,group_mill_valuation,1,1,1,1
+access_mill_21,mill.valuation.category manager,model_mill_valuation_category,group_mill_valuation,1,1,1,0
+access_mill_22,mill.valuation manager,model_mill_valuation,group_mill_valuation,1,1,1,0
+access_mill_23,mill.project manager,model_mill_project,group_mill_manager,1,1,1,1
+access_mill_24,mill.project.line manager,model_mill_project_line,group_mill_manager,1,1,1,1
+access_mill_25,mill.project.type manager,model_mill_project_type,group_mill_manager,1,1,1,1

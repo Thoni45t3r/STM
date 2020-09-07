@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_report_stock_cukai_in_form" model="ir.ui.view">
+            <field name="name">view.wizard.report.stock.cukai.in.form</field>
+            <field name="model">wizard.report.stock.cukai</field>
+            <field name="arch" type="xml">
+                <form string="Report Stock Cukai Pemasukan" create="false">
+                    <header>
+                        <button name="action_generate_value" type="object" string="Generate" class="oe_highlight" />
+                        <button name="print_report" type="object" string="Print"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" invisible="1"/>
+                                <field name="from_date" string="Dari Tanggal" required="1"/>
+                                <field name="report_type" string="Tipe Report" required="1"/>
+                            </group>
+                            <group>
+                                <field name="to_date" string="Sampai Tanggal" required="1"/>
+                                <field name="company_id" string="Perusahaan" readonly="1"/>
+                                <field name="type" invisible="1"/>
+                            </group>
+                            <group string="Tipe Dokumen BC">
+                                <field name="type_doc_ids" domain="[]" colspan="4" nolabel="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Pemasukan Barang">
+                                <field name="line_ids" readonly="1" nolabel="1">
+                                    <tree>
+                                        <field name="bea_document_type_id" string="Jenis Dok"/>
+                                        <field name="bea_cukai_id" string="No. Dok"/>
+                                        <field name="bea_cukai_date" string="Tgl. Dok"/>
+                                        <field name="stock_picking_id" string="No. Penerimaan"/>
+                                        <field name="picking_date" string="Tgl. Penerimaan"/>
+                                        <field name="partner_id" string="Pemasok"/>
+                                        <field name="product_code" string="Kode"/>
+                                        <field name="product_id" string="Nama"/>
+                                        <field name="uom_id" string="Satuan"/>
+                                        <field name="qty" string="Jumlah"/>
+                                        <field name="currency_id" string=""/>
+                                        <field name="value" string="Nilai"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="bea_document_type_id" string="Jenis Dok"/>
+                                            <field name="bea_cukai_id" string="No. Dok"/>
+                                            <field name="bea_cukai_date" string="Tgl. Dok"/>
+                                        </group>
+                                        <group>
+                                            <field name="stock_picking_id" string="No. Penerimaan"/>
+                                            <field name="qty" string="Jumlah"/>
+                                            <field name="value" string="Nilai"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_report_stock_cukai_in" model="ir.actions.act_window">
+            <field name="name">Laporan Pemasukan Barang</field>
+            <field name="res_model">wizard.report.stock.cukai</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_report_stock_cukai_in_form"/>
+            <field name="target">current</field>
+            <field name="context">{'default_type': 'in'}</field>
+        </record>
+
+        <menuitem id="menu_wizard_report_stock_cukai_in" parent="menu_bea_cukai_report" action="action_wizard_report_stock_cukai_in" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+        <record id="view_wizard_report_stock_cukai_out_form" model="ir.ui.view">
+            <field name="name">view.wizard.report.stock.cukai.out.form</field>
+            <field name="model">wizard.report.stock.cukai</field>
+            <field name="arch" type="xml">
+                <form string="Report Stock Cukai Pengeluaran" create="false">
+                    <header>
+                        <button name="action_generate_value" type="object" string="Generate" class="oe_highlight" />
+                        <button name="print_report" type="object" string="Print"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" invisible="1"/>
+                                <field name="from_date" string="Dari Tanggal" required="1"/>
+                                <field name="report_type" string="Tipe Report" required="1"/>
+                            </group>
+                            <group>
+                                <field name="to_date" string="Sampai Tanggal" required="1"/>
+                                <field name="company_id" string="Perusahaan" readonly="1"/>
+                                <field name="type" invisible="1"/>
+                            </group>
+                            <group string="Tipe Dokumen BC">
+                                <field name="type_doc_ids" domain="[]" colspan="4" nolabel="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Pengeluaran Barang">
+                                <field name="line_ids" readonly="1" nolabel="1">
+                                    <tree>
+                                        <field name="bea_document_type_id" string="Jenis Dok"/>
+                                        <field name="bea_cukai_id" string="No. Dok"/>
+                                        <field name="bea_cukai_date" string="Tgl. Dok"/>
+                                        <field name="stock_picking_id" string="No. Pengeluaran"/>
+                                        <field name="picking_date" string="Tgl. Pengeluaran"/>
+                                        <field name="partner_id" string="Pembeli"/>
+                                        <field name="product_code" string="Kode"/>
+                                        <field name="product_id" string="Nama"/>
+                                        <field name="uom_id" string="Satuan"/>
+                                        <field name="qty" string="Jumlah"/>
+                                        <field name="currency_id" string=""/>
+                                        <field name="value" string="Nilai"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="bea_document_type_id" string="Jenis Dok"/>
+                                            <field name="bea_cukai_id" string="No. Dok"/>
+                                            <field name="bea_cukai_date" string="Tgl. Dok"/>
+                                        </group>
+                                        <group>
+                                            <field name="stock_picking_id" string="No. Penerimaan"/>
+                                            <field name="qty" string="Jumlah"/>
+                                            <field name="value" string="Nilai"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_report_stock_cukai_out" model="ir.actions.act_window">
+            <field name="name">Laporan Pengeluaran Barang</field>
+            <field name="res_model">wizard.report.stock.cukai</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_report_stock_cukai_out_form"/>
+            <field name="target">current</field>
+            <field name="context">{'default_type': 'out'}</field>
+        </record>
+
+        <menuitem id="menu_wizard_report_stock_cukai_out" parent="menu_bea_cukai_report" action="action_wizard_report_stock_cukai_out" sequence="15" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+        <report string  = "Laporan Stok"
+                model   = "wizard.report.stock.cukai"
+                auto    = "True"
+                name    = "report_stock_cukai"
+                rml     = "c10i_bea_cukai/report/report_stock_cukai.jrxml"
+                id      = "report_stock_cukai"
+                menu    = "False"
+        />
+
+        <report string  = "Laporan Stok"
+                model   = "wizard.report.stock.cukai"
+                auto    = "True"
+                name    = "report_stock_cukai_xls"
+                rml     = "c10i_bea_cukai/report/report_stock_cukai_xls.jrxml"
+                id      = "report_stock_cukai_xls"
+                menu    = "False"
+        />
+
+        <record id="view_wizard_report_stock_cukai_production_form" model="ir.ui.view">
+            <field name="name">view.wizard.report.stock.cukai.production.form</field>
+            <field name="model">wizard.report.stock.cukai.production</field>
+            <field name="arch" type="xml">
+                <form string="Report Produksi" create="false">
+                    <header>
+                        <button name="action_generate_value" type="object" string="Generate" class="oe_highlight" />
+                        <button name="print_report" type="object" string="Print" icon="fa-print"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" invisible="1"/>
+                                <field name="type" required="True" string="Tipe Transaksi"/>
+                                <field name="report_type" string="Tipe Report" required="1"/>
+                            </group>
+                            <group>
+                                <field name="product_type" options="{'no_create':True, 'no_edit':True, 'no_open':True}" string="Tipe Product" required="True"/>
+                                <field name="company_id" string="Perusahaan" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="from_date" string="Dari Tanggal" required="1"/>
+                            </group>
+                            <group>
+                                <field name="to_date" string="Sampai Tanggal" required="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Pengeluaran Barang">
+                                <field name="line_ids" readonly="1" nolabel="1">
+                                    <tree>
+                                        <field name="name" string="No. Transaksi"/>
+                                        <field name="picking_date" string="Tanggal"/>
+                                        <field name="product_code" string="Kode"/>
+                                        <field name="product_id" string="Nama"/>
+                                        <field name="uom_id" string="Satuan"/>
+                                        <field name="qty" string="Jumlah"/>
+                                        <field name="adjustment_qty"/>
+                                        <field name="difference_qty"/>
+                                        <field name="note"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="unbuild_id" string="No. Transaksi"/>
+                                            <field name="product_id" string="Nama"/>
+                                            <field name="qty" string="Jumlah"/>
+                                            <field name="uom_id" string="Satuan"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_report_stock_cukai_production" model="ir.actions.act_window">
+            <field name="name">Laporan Produksi</field>
+            <field name="res_model">wizard.report.stock.cukai.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_report_stock_cukai_production_form"/>
+            <field name="target">current</field>
+            <field name="context">{'default_type': 'out'}</field>
+        </record>
+
+        <menuitem id="menu_wizard_report_stock_cukai_production" parent="menu_bea_cukai_report" action="action_wizard_report_stock_cukai_production" sequence="16" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+        <report string  = "Laporan Produksi"
+		        model   = "wizard.report.stock.cukai.production"
+                auto    = "True"
+		        name    = "report_stock_cukai_production"
+		        rml     = "c10i_bea_cukai/report/report_stock_cukai_production.jrxml"
+		        id      = "report_stock_cukai_production"
+		        menu    = "False"
+		/>
+
+        <report string  = "Laporan Produksi"
+		        model   = "wizard.report.stock.cukai.production"
+                auto    = "True"
+		        name    = "report_stock_cukai_production_xls"
+		        rml     = "c10i_bea_cukai/report/report_stock_cukai_production_xls.jrxml"
+		        id      = "report_stock_cukai_production_xls"
+		        menu    = "False"
+		/>
+    </data>
+</odoo>

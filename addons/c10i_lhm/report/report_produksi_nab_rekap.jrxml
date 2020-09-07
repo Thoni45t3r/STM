@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Laporan NAB Rekap" pageWidth="1740" pageHeight="504" columnWidth="1740" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="b0e95a63-3a3f-47ea-8291-f0ad58d698a3">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="mm"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="141"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="852"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="648"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="338"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="asl_server"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="mm"/>
+	<style name="default" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" hTextAlign="Left" hImageAlign="Left" vTextAlign="Top" vImageAlign="Top" isBlankWhenNull="true" fontName="SansSerif" fontSize="8">
+		<box leftPadding="2" rightPadding="2"/>
+	</style>
+	<style name="num1" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0.00;-#,##0.00"/>
+	<style name="num2" style="default" hTextAlign="Right" hImageAlign="Right" pattern="#,##0;-#,##0"/>
+	<style name="date1" style="default" pattern="dd-MM-yy HH:mm"/>
+	<style name="date2" style="default" pattern="dd-MMM-yy"/>
+	<style name="date3" style="default" pattern="dd/MM/yy"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" style="default" hTextAlign="Center" hImageAlign="Center">
+		<box leftPadding="0" rightPadding="0"/>
+	</style>
+	<parameter name="id" class="java.lang.Integer"/>
+	<parameter name="date_doc" class="java.sql.Date" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select ln.name as noreg
+,a.tgl_nab
+,a.no_nab
+,ra.code as lokasi
+,kbn_qty_jjg
+,kbn_qty_kg
+,d.name as pks_name
+,pks_tgl
+,pks_bruto
+,pks_grading
+,pks_netto,
+b.date_start
+,b.date_end
+, case when ln.ownership='inventory' then 'Inventaris' else 'Rental' end as ownership
+, COALESCE (case WHEN ln.ownership='inventory' then '-' else rp.name end,'') as contractor_name
+,ln.driver
+,lu.code
+,ln.timbang_ksg_kbn
+,ln.timbang_isi_kbn
+,ln.timbang_isi_pks
+,ln.timbang_ksg_pks
+,rc.name as company_name
+from wizard_report_produksi_nab_rekap a
+left join wizard_report_produksi b on a.produksi_id=b.id
+left join res_partner d on a.pks_id=d.id
+left join res_afdeling ra on ra.id=a.afdeling_id
+left join lhm_nab ln on ln.id=a.nab_id 
+left join lhm_utility lu on lu.id=ln.vehicle_id and lu.type='vh'
+left join res_partner rp on rp.id=ln.contractor_id
+left join res_company rc on rc.id=b.company_id
+where produksi_id= $P{id}
+order by  a.tgl_nab,a.no_nab]]>
+	</queryString>
+	<field name="noreg" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="noreg"/>
+	</field>
+	<field name="tgl_nab" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="tgl_nab"/>
+	</field>
+	<field name="no_nab" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="no_nab"/>
+	</field>
+	<field name="lokasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="lokasi"/>
+	</field>
+	<field name="kbn_qty_jjg" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="kbn_qty_jjg"/>
+	</field>
+	<field name="kbn_qty_kg" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="kbn_qty_kg"/>
+	</field>
+	<field name="pks_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="pks_name"/>
+	</field>
+	<field name="pks_tgl" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="pks_tgl"/>
+	</field>
+	<field name="pks_bruto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pks_bruto"/>
+	</field>
+	<field name="pks_grading" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pks_grading"/>
+	</field>
+	<field name="pks_netto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pks_netto"/>
+	</field>
+	<field name="date_start" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="date_start"/>
+	</field>
+	<field name="date_end" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="date_end"/>
+	</field>
+	<field name="ownership" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ownership"/>
+	</field>
+	<field name="contractor_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="contractor_name"/>
+	</field>
+	<field name="driver" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="driver"/>
+	</field>
+	<field name="code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="code"/>
+	</field>
+	<field name="timbang_ksg_kbn" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="timbang_ksg_kbn"/>
+	</field>
+	<field name="timbang_isi_kbn" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="timbang_isi_kbn"/>
+	</field>
+	<field name="timbang_isi_pks" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="timbang_isi_pks"/>
+	</field>
+	<field name="timbang_ksg_pks" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="timbang_ksg_pks"/>
+	</field>
+	<field name="company_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="company_name"/>
+	</field>
+	<title>
+		<band height="62" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="0" width="1740" height="20" uuid="e884f857-2b3f-4d93-b4e2-e4346a74fc6d"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="20" width="1740" height="20" uuid="3f96c3b2-bde1-42ef-93de-3d9172136b2f"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LAPORAN REKAP HARIAN NOTA ANGKUT BUAH"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement style="default" stretchType="ContainerBottom" x="0" y="40" width="1740" height="22" uuid="708ec91c-7912-401d-9c44-30c81d829eb6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periode  dari tanggal  : " + new SimpleDateFormat("dd/MM/yyyy").format($F{date_start})  + " s/d "+new SimpleDateFormat("dd/MM/yyyy").format($F{date_end})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="30" y="15" width="70" height="15" uuid="00bf8ad4-519f-4060-8049-fc8d0d374405"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TANGGAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="15" width="120" height="15" uuid="145995dc-70c3-4700-9ac9-0cfa926747f0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO. NAB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="30" height="30" uuid="4a42a24d-36b7-414b-80a0-80f9a36d2192"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="15" width="60" height="15" uuid="eac7a936-d56e-49c9-9820-d75677108b38"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AFDELING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="15" width="151" height="15" uuid="a207132f-29c2-4274-825d-4cf6911968aa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KENDARAAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="810" y="15" width="66" height="15" uuid="08752974-85e9-44d0-82bb-0cf03077283b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Janjang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="15" width="80" height="15" uuid="33c84caf-b6cd-436a-8448-effc8199a940"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tgl Timbang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="0" width="372" height="15" uuid="3da5b06c-3614-481c-a322-d37de80ca34f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIMBANGAN KEBUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1022" y="15" width="80" height="15" uuid="80a6acb7-cdd7-44f9-bdbf-fea5038f05f2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarra (Kg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1102" y="15" width="171" height="15" uuid="bf2785d4-508f-4192-b464-7bdadfd8da34"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1499" y="15" width="80" height="15" uuid="8c0d911b-c465-401f-9675-baf0764f3699"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bruto (Kg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1102" y="0" width="638" height="15" uuid="d93e1255-fa14-4e0f-b2b2-a75368c5bb8a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIMBANGAN PABRIK KELAPA SAWIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1273" y="15" width="80" height="15" uuid="18420e95-06a5-4c13-86f2-2cb7a485a808"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tgl Timbang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1659" y="15" width="81" height="15" uuid="067ad47c-4455-4a2e-8031-f20c95973fc9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Netto (Kg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1579" y="15" width="80" height="15" uuid="c03c7f56-a0bd-4943-8f90-e8844d29854f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grading (Kg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="535" y="15" width="75" height="15" uuid="5b8f9845-2582-4e54-a0bb-def69f3309cb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KEPEMILIKAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="15" width="104" height="15" uuid="f12be2ce-b81a-4ab7-8648-59e4206f426d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DRIVER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="0" width="700" height="15" uuid="54a0ad5e-9145-4138-9580-46160fb5f998"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTA ANGKUT BUAH - NAB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="876" y="15" width="80" height="15" uuid="42edbd11-db9f-4aca-bc45-a00c76ac3e08"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kosong]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="956" y="15" width="66" height="15" uuid="ebf09ffc-99bc-40f9-8d6a-27ddb4684506"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Isi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1419" y="15" width="80" height="15" uuid="6d3bc0b5-45cd-45a2-b401-957106604962"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kosong]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1353" y="15" width="66" height="15" uuid="a8f9b7c2-57eb-4875-ab8a-ccffb57263f5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Isi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="610" y="15" width="120" height="15" uuid="0c8f3ec8-e172-4a94-8834-eebd4017208d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KONTRAKTOR]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="18">
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="30" y="0" width="70" height="18" uuid="97ea0e7c-b7c5-4dbb-bece-9c3fc1e994aa"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tgl_nab}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="100" y="0" width="120" height="18" uuid="bba8aa6a-cf55-4157-8ec5-e69a1e4c9bb9"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{no_nab}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="30" height="18" uuid="f58c728f-2277-4d4a-88be-e3c9f240baae"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="60" height="18" uuid="8fedc8ef-ad49-437f-837c-8c5c42fe5fa9"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{lokasi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="151" height="18" uuid="c822e37d-4b66-4390-b873-35aa16946c5c"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0">
+				<reportElement x="810" y="0" width="66" height="18" uuid="18908f86-d144-4b1e-9a68-9b216031238d"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{kbn_qty_jjg}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="730" y="0" width="80" height="18" uuid="952cdad8-840b-40ea-9494-8a690c600bbb"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tgl_nab}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1022" y="0" width="80" height="18" uuid="94a21bd6-83af-4555-8ac2-3f3c92bcfe37"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{kbn_qty_kg}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1499" y="0" width="80" height="18" uuid="d34540de-54fb-40c4-86e6-19272be0880e"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{pks_bruto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="1273" y="0" width="80" height="18" uuid="de89a428-5837-41d9-a5bf-7635eca0197c"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{pks_tgl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1102" y="0" width="171" height="18" uuid="e3b26ece-e6a3-4f89-8169-1db882ab95f0"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{pks_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1659" y="0" width="81" height="18" uuid="6ff56ef4-d81a-4d18-9bb9-fe1ced469f8b"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{pks_netto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1579" y="0" width="80" height="18" uuid="0d13e63c-60eb-45ea-ab93-a6c05fb58a04"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{pks_grading}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="431" y="0" width="104" height="18" uuid="fbb04307-3fc3-4601-a88e-695348dc8b80"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{driver}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="535" y="0" width="75" height="18" uuid="07f6a855-0437-42b6-ae51-7a3c4fd525ac"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{ownership}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="956" y="0" width="66" height="18" uuid="030c6841-1854-4a75-803e-2aa6b388fe56"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{timbang_isi_kbn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="876" y="0" width="80" height="18" uuid="0a49c65a-7a5f-4b4a-b850-578dbabe0ad7"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{timbang_ksg_kbn}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1419" y="0" width="80" height="18" uuid="ec03b9a3-64ae-4dbe-9b46-141c4f3f414a"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{timbang_ksg_pks}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement x="1353" y="0" width="66" height="18" uuid="b9711e34-fe09-44e6-833a-92d84930b6ba"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{timbang_isi_pks}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="610" y="0" width="120" height="18" uuid="fdb0902c-b469-4d1a-b640-a6be097e7fdf"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{contractor_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

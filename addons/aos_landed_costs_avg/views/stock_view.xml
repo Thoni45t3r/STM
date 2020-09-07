@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	
+   	 	<menuitem action="action_avg_landed_cost" name="Landed Costs" parent="stock.menu_stock_warehouse_mgmt" id="menu_avg_landed_cost_stock" sequence="10"/>
+
+        <record id="az_view_picking_form" model="ir.ui.view">
+            <field name="name">az.stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+            	<div name="button_box" position="inside">
+	                <button class="oe_stat_button" name="open_entries" groups="account.group_account_manager,account.group_account_invoice" type="object" icon="fa-pencil">
+	                    <field string="Items" name="entry_count" widget="statinfo" />
+	                </button>
+	            </div>
+	            <field name="min_date" position="before">
+	                <field name="force_date" groups="purchase.group_purchase_manager"/>
+	            </field>            	
+	            <field name="result_package_id" position="after">
+	                <field name="tot_weight" sum="Total Weight"/>
+	                <!-- <field name="shipping_weight" sum="Ship Weight"/> -->
+	                <button name="put_in_pack" string="Put in Pack" type="object" icon="fa-refresh" groups="stock.group_tracking_lot" attrs="{'invisible': [('result_package_id','!=', False)]}"/>
+	            </field>            	
+	            <xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='qty_done']" position="after">
+	            	<field name="tracking" invisible="1"/>
+	                <field name="use_lots" attrs="{'readonly': [('lots_visible','=',False),('tracking','=','none')]}"/>
+	            </xpath>
+	            <xpath expr="//field[@name='priority']" position="after">
+                    <field name="landed_ids" widget="many2many_tags"/>
+	            </xpath>
+            </field>
+        </record>
+        
+        
+        <record id="view_pack_operation_details_form_jvp" model="ir.ui.view">
+	        <field name="name">stock.pack.operation.details.form</field>
+	        <field name="model">stock.pack.operation</field>
+            <field name="inherit_id" ref="stock.view_pack_operation_details_form"/>
+            <field name="arch" type="xml">        	
+            	<group name="qty_to" position="after">
+    				<button class="oe_link oe_left" name="put_in_pack" type="object" string="&#8627;Put in New Pack" groups="stock.group_tracking_lot" attrs="{'invisible': [('result_package_id','!=', False)]}"/>
+	            </group>
+            </field>
+        </record>
+        
+        <!-- <record id="stock_move_view_form_inherit_jvp" model="ir.ui.view">
+            <field name="name">stock.move.view.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom']" position="after">
+                    <field name="shipping_weight" />
+                </xpath>
+            </field>
+        </record> -->
+        
+    </data>
+</odoo>

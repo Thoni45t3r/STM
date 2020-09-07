@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_category_manual_valuation_form" model="ir.ui.view">
+        <field name="name">product.category.manual.valuation.form.inherit</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="stock_account.view_category_property_form"/>
+        <field name="arch" type="xml">
+            <field name="property_stock_valuation_account_id" position="after">
+                <field name="purchase_account_categ_id" domain="[('deprecated', '=', False)]" attrs="{'invisible': [('property_valuation','=','real_time')]}"/>
+                <field name="stock_counterpart_valuation_account_categ_id" domain="[('deprecated', '=', False)]" attrs="{'invisible': [('property_valuation','=','real_time')]}"/>
+                <field name="cost_account_categ_ids" domain="[('deprecated', '=', False), ('id','!=',purchase_account_categ_id), ('product_cost_value_categ_ids','=',False), ('product_tmpl_cost_value_ids','=',False)]" attrs="{'invisible': ['|',('property_valuation','=','real_time'),('purchase_account_categ_id','=',False)]}"/>
+                <!-- <field name="cost_location_categ_ids" domain="[('product_cost_value_categ_ids','=',False), ('product_tmpl_cost_value_ids','=',False)]" attrs="{'invisible': [('property_valuation','=','real_time')]}"/> -->
+            </field>
+        </field>
+    </record>
+
+    <record id="view_template_manual_valuation_form" model="ir.ui.view">
+        <field name="name">product.template.manual.valuation.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock_account.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <field name="property_stock_account_output" position="after">
+                <field name="purchase_account_id" domain="[('deprecated', '=', False)]" attrs="{'invisible': [('valuation','=','real_time')]}"/>
+                <field name="cost_account_ids" domain="[('deprecated', '=', False), ('id','!=',purchase_account_id), ('product_cost_value_categ_ids','=',False), ('product_tmpl_cost_value_ids','=',False)]" attrs="{'invisible': ['|',('valuation','=','real_time'),('purchase_account_id','=',False)]}"/>
+                <!-- <field name="cost_location_ids" domain="[('product_cost_value_categ_ids','=',False), ('product_tmpl_cost_value_ids','=',False)]" attrs="{'invisible': [('valuation','=','real_time')]}"/> -->
+            </field>
+        </field>
+    </record>
+
+</odoo>

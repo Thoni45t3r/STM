@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="location_plantation" model="stock.location">
+            <field name="name">Plantation</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+            <field name="company_id"></field>
+        </record>
+        <record id="sequence_stock_plantation" model="ir.sequence">
+            <field name="name">Virtual Stock Plantation</field>
+            <field name="code">stock.plantation</field>
+            <field name="prefix">SIV/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        <record id="sequence_stock_plantation_return" model="ir.sequence">
+            <field name="name">Virtual Stock Plantation Return</field>
+            <field name="code">stock.plantation.return</field>
+            <field name="prefix">RE-SIV/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        <record id="stock_picking_type_skb_return" model="stock.picking.type">
+            <field name="name">Slip Keluar Barang Return</field>
+            <field name="code">plantation</field>
+            <field name="sequence_id" ref="sequence_stock_plantation_return"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="skb">True</field>
+            <field name="use_create_lots">False</field>
+            <field name="use_existing_lots">False</field>
+            <field name="default_location_src_id" ref="location_plantation"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_stock"/>
+        </record>
+        <record id="stock_picking_type_skb" model="stock.picking.type">
+            <field name="name">Slip Keluar Barang</field>
+            <field name="code">plantation</field>
+            <field name="sequence_id" ref="sequence_stock_plantation"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="skb">True</field>
+            <field name="use_create_lots">False</field>
+            <field name="use_existing_lots">False</field>
+            <field name="return_picking_type_id" ref="stock_picking_type_skb_return"/>
+            <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+            <field name="default_location_dest_id" ref="location_plantation"/>
+        </record>
+    </data>
+</odoo>

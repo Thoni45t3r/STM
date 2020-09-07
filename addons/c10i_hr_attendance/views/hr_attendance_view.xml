@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="hr_attendance.menu_hr_attendance_my_attendances" name="My Attendances" parent="hr_attendance.menu_hr_attendance_manage_attendances" sequence="30" groups="hr.group_hr_attendance" action="hr_attendance.hr_attendance_action_my_attendances"/>
+
+        <menuitem id="menu_hr_attendance_manage_import" name="Import Attendances" parent="hr_attendance.menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_user"/>
+        <menuitem id="menu_hr_attendance_configuration" name="Configuration" parent="hr_attendance.menu_hr_attendance_root" groups="hr_attendance.group_hr_attendance_manager" sequence="1000"/>
+        <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Settings" parent="menu_hr_attendance_configuration" sequence="100" action="hr_attendance.action_hr_attendance_settings" groups="hr_attendance.group_hr_attendance_manager"/>
+    </data>
+</odoo>

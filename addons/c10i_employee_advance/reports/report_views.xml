@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		<report string	= "Voucher Payment"
+			model	= "account.employee.advance"
+			auto	= "True"
+			name	= "voucher_payment_employee_advance"
+			rml		= "c10i_employee_advance/reports/voucher_payment_employee_advance.jrxml"
+			id		= "voucher_payment_employee_advance"/>
+
+        <report string	= "Unsettled Employee Advance"
+			model	= "wizard.employee.advance.balance"
+			auto	= "True"
+			name	= "employee_advance_balance"
+			rml		= "c10i_employee_advance/reports/employee_advance_balance.jrxml"
+			id		= "employee_advance_balance"/>
+    </data>
+</odoo>

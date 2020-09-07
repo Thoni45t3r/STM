@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+    	<!-- PENDING PURCHASE ORDER -->
+    	<report string="Pending Purchase Order"
+            model="wizard.pending.purchase.order"
+            auto="True"
+            name="report_pending_purchase_order"
+            rml="c10i_purchase/report/report_pending_purchase_order.jrxml"
+            id="report_pending_purchase_order"
+            menu="False"
+            />
+
+		<report string="Pending Purchase Order Excel Edition"
+			model="wizard.pending.purchase.order"
+			auto="True"
+			name="report_pending_purchase_order_xls"
+            rml="c10i_purchase/report/report_pending_purchase_order.jrxml"
+			id="report_pending_purchase_order_xls"
+			menu="False"
+			/>
+
+    	<!-- PURCHASE RECEIVED REGISTER -->
+		<report string="Purchase Received Register"
+            model="wizard.purchase.received.register"
+            auto="True"
+            name="report_purchase_received_register"
+            rml="c10i_purchase/report/report_purchase_received_register.jrxml"
+            id="report_purchase_received_register"
+            menu="False"
+            />
+
+		<report string="Purchase Received Register Excel Edition"
+			model="wizard.purchase.received.register"
+			auto="True"
+			name="report_purchase_received_register_xls"
+            rml="c10i_purchase/report/report_purchase_received_register.jrxml"
+			id="report_purchase_received_register_xls"
+			menu="False"
+			/>
+	</data>
+</odoo>

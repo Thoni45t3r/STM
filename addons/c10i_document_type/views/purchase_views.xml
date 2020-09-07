@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="purchase_order_form_inherit">
+            <field name="name">purchase.order.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <button name="button_confirm" position="before">
+                    <field name="auto_downpayment" invisible="1"/>
+                    <button name="create_downpayment" string="Create DP" class="btn-primary o_sale_confirm" type="object" attrs="{'invisible':['|',('auto_downpayment', '!=', True),('advance_invoice_id', '!=', False)]}"/>
+                </button>
+                <field name="partner_id" position="after">
+                    <field name="doc_type_id" required="1" domain="[('sales','=',False)]" options='{"always_reload": True, "no_create": True, "no_open": True}'/>
+                </field>
+                <field name="payment_term_id" position="after">
+                    <label for="downpayment" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    <div class="o_row">
+                        <field name="downpayment" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}"/>
+                        <label string="%" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    </div>
+                    <field name="downpayment_date" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    <field name="advance_invoice_id" context="{'form_view_ref':'c10i_account_invoice_advance.invoice_advance_supplier_form'}" readonly="1" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                </field>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}">
+                        <label for="downpayment_value"/>
+                    </div>
+                    <field name="downpayment_value" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                    <field name="user_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_document_type_filter" model="ir.ui.view">
+            <field name="name">view.purchase.order.document.type.filter</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@expand='0']" position="after">
+                    <filter name="document_type_group" string="Document Type" context="{'group_by':'doc_type_id'}"/>
+                </xpath>
+                <field name="partner_id" position="after">
+                   <field name="doc_type_id" string="Document Type"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'readonly_by_pass': True, 'search_default_document_type_group':1, 'search_default_todo':1, 'show_purchase': True}</field>
+            <field name="domain">[]</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order.
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+        <!-- Menu Configuration -->
+        <menuitem id="menu_document_type_purchase_config" parent="purchase.menu_purchase_config" action="c10i_document_type.action_res_document_type" sequence="10" groups="purchase.group_purchase_manager"/>
+    </data>
+</odoo>

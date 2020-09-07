@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Bea Cukai User -->
+        <record id="partner_bea_cukai_user" model="res.partner">
+            <field name="name">Bea Cukai User Template</field>
+            <field name="email"></field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_bea_cukai_user" model="res.users">
+            <field name="partner_id" ref="partner_bea_cukai_user"/>
+            <field name="share">False</field>
+            <field name="login">bea_cukai_user</field>
+            <field name="password">bea_cukai_user</field>
+            <field name="signature" type="xml"><span>-- <br/>++</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_bea_cukai_user')])]"/>
+            <field name="image" type="base64" file="c10i_bea_cukai/static/description/bea_cukai_user.png"/>
+        </record>
+
+        <!-- Bea Cukai Officer -->
+        <record id="partner_bea_cukai_office" model="res.partner">
+            <field name="name">Bea Cukai Officer Template</field>
+            <field name="email"></field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_bea_cukai_office" model="res.users">
+            <field name="partner_id" ref="partner_bea_cukai_office"/>
+            <field name="share">False</field>
+            <field name="login">bea_cukai_office</field>
+            <field name="password">bea_cukai_office</field>
+            <field name="signature" type="xml"><span>-- <br/>++</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_bea_cukai_office')])]"/>
+            <field name="image" type="base64" file="c10i_bea_cukai/static/description/bea_cukai_user.png"/>
+        </record>
+
+        <!-- Bea Cukai Manager -->
+        <record id="partner_bea_cukai_manager" model="res.partner">
+            <field name="name">Bea Cukai Manager Template</field>
+            <field name="email"></field>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="False"/>
+            <field name="notify_email">none</field>
+            <field name="city"></field>
+            <field name="zip"></field>
+            <field name="country_id" ref="base.id"/>
+            <field name="street"></field>
+        </record>
+
+        <record id="template_bea_cukai_manager" model="res.users">
+            <field name="partner_id" ref="partner_bea_cukai_manager"/>
+            <field name="share">False</field>
+            <field name="login">bea_cukai_manager</field>
+            <field name="password">bea_cukai_manager</field>
+            <field name="signature" type="xml"><span>-- <br/>++</span></field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('group_bea_cukai_manager')])]"/>
+            <field name="image" type="base64" file="c10i_bea_cukai/static/description/bea_cukai_user.png"/>
+        </record>
+    </data>
+</odoo>

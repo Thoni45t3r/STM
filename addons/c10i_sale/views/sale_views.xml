@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_sale_stock_form_view" model="ir.ui.view">
+            <field name="name">c10i.sale.stock.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="priority">16</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <field name="incoterm" position="replace"/>
+            </field>
+        </record>
+
+        <record id="c10i_sale_order_form_view" model="ir.ui.view">
+            <field name="name">c10i.sale.order.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="priority">17</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="client_order_ref" position="replace"/>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="incoterm"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="before">
+                    <field name="client_order_ref"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

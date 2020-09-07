@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Plantation Salary_ -->
+        <record id="view_plantation_salary_form_target" model="ir.ui.view">
+            <field name="name">view.plantation.salary.form.target</field>
+            <field name="model">plantation.salary</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Daftar Upah">
+                    <header>
+                        <button name="button_draft" states="cancel,confirmed" string="Set Draft" type="object" class="btn-default"/>
+                        <button icon="fa-get-pocket" name="generate_data_upah_target" string="Regenerate Data" type="object" states="confirmed"/>
+                        <button name="%(action_lhm_target_salary_bill)d" states="confirmed" string="Create Payroll Entry" type="action" class="btn-default btn-primary" />
+                        <button name="button_confirm" states="draft" string="Confirm" type="object" class="btn-default btn-primary"/>
+                        <button name="button_cancel" states="confirmed" string="Cancel" type="object" class="btn-default"/>
+                        <button icon="fa-print" name="%(c10i_lhm.wizard_report_du_all_select_action)d" string="Print" type="action" target="new"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,cancel,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group name="plantation_salary">
+                            <group>
+                                <field name="period_id"/>
+                                <label string="Periode Laporan"/>
+                                <div>
+                                    <field name="from_date" class="oe_inline" nolabel="1" required="1"/> -
+                                    <field name="to_date" nolabel="1" class="oe_inline" required="1"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tunjangan dan Potongan" group="base.group_no_one">
+                                <field name="allowance_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="no_induk"/>
+                                        <field name="employee_id"/>
+                                        <field name="tunjangan_cuti" sum="tunjangan_cuti"/>
+                                        <field name="kompensasi_cuti" sum="kompensasi_cuti"/>
+                                        <field name="potongan_lain" sum="potongan_lain"/>
+                                        <field name="subsidi_kendaraan" sum="subsidi_kendaraan"/>
+                                        <field name="rapel" sum="rapel"/>
+                                        <!--<field name="thr" sum="thr"/>-->
+                                        <field name="pph21" sum="pph21"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Natura" group="base.group_no_one">
+                                <field name="natura_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="no_induk"/>
+                                        <field name="employee_id"/>
+                                        <field name="employee_type_id"/>
+                                        <field name="ptkp_id"/>
+                                        <field name="natura_rp" sum="natura_rp"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="BPJS" group="base.group_no_one">
+                                <field name="bpjs_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="no_induk"/>
+                                        <field name="employee_id"/>
+                                        <field name="employee_type_id"/>
+                                        <field name="bpjs_tk_id"/>
+                                        <field name="bpjs_tk_tunj" sum="bpjs_tk_tunj"/>
+                                        <field name="bpjs_tk_pot" sum="bpjs_tk_pot"/>
+                                        <field name="bpjs_tk_setor" sum="bpjs_tk_setor"/>
+                                        <field name="bpjs_pensiun_id"/>
+                                        <field name="bpjs_pensiun_tunj" sum="bpjs_pensiun_tunj"/>
+                                        <field name="bpjs_pensiun_pot" sum="bpjs_pensiun_pot"/>
+                                        <field name="bpjs_pensiun_setor" sum="bpjs_pensiun_setor"/>
+                                        <field name="bpjs_kesehatan_id"/>
+                                        <field name="bpjs_kesehatan_tunj" sum="bpjs_kesehatan_tunj"/>
+                                        <field name="bpjs_kesehatan_pot" sum="bpjs_kesehatan_pot"/>
+                                        <field name="bpjs_kesehatan_setor" sum="bpjs_kesehatan_setor"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Daftar Upah">
+                                <field name="upah_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="kemandoran_id"/>
+                                        <field name="no_induk"/>
+                                        <field name="employee_id"/>
+                                        <field name="ptkp_id" invisible="1"/>
+                                        <field name="employee_type_id"/>
+                                        <field name="division_id" invisible="1"/>
+                                        <field name="hke" sum="hke" invisible="1"/>
+                                        <field name="hkne" sum="hkne" invisible="1"/>
+                                        <field name="total_hk" sum="total_hk" invisible="1"/>
+                                        <field name="hke_rp" sum="hke_rp" invisible="1"/>
+                                        <field name="hkne_rp" sum="hkne_rp" invisible="1"/>
+                                        <field name="total_hk_rp" sum="total_hk_rp" invisible="1"/>
+                                        <field name="basic_salary" sum="basic_salary" invisible="1"/>
+                                        <field name="tunjangan_lain" sum="tunjangan_lain" invisible="1"/>
+                                        <field name="premi_lembur" sum="premi_lembur" invisible="1"/>
+                                        <field name="natura" sum="natura" invisible="1"/>
+                                        <field name="rapel" sum="rapel" invisible="1"/>
+                                        <field name="tunj_bpjs_pensiun" sum="tunj_bpjs_pensiun" invisible="1"/>
+                                        <field name="tunj_bpjs_kesehatan" sum="tunj_bpjs_kesehatan" invisible="1"/>
+                                        <field name="tunj_bpjs_tk" sum="tunj_bpjs_tk" invisible="1"/>
+                                        <field name="tunj_lebih_hari" sum="tunj_lebih_hari" invisible="1"/>
+                                        <field name="gaji_bruto" sum="gaji_bruto" invisible="1"/>
+                                        <field name="pot_bpjs_pensiun" sum="pot_bpjs_pensiun" invisible="1"/>
+                                        <field name="pot_bpjs_kesehatan" sum="pot_bpjs_kesehatan" invisible="1"/>
+                                        <field name="pot_bpjs_tk" sum="pot_bpjs_tk" invisible="1"/>
+                                        <field name="pot_lain" sum="pot_lain" invisible="1"/>
+                                        <field name="pot_kurang_hari" sum="pot_kurang_hari" invisible="1"/>
+                                        <field name="pph_21" sum="pph_21" invisible="1"/>
+                                        <field name="total_potongan" sum="total_potongan" invisible="1"/>
+                                        <field name="upah_diterima" sum="upah_diterima"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payrol Invoice" attrs="{'invisible': [('invoice_ids','=',[])]}">
+                                <field name='invoice_ids' context="{'tree_view_ref': 'account.action_invoice_tree2'}" readonly="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_plantation_salary_target" model="ir.actions.act_window">
+            <field name="name">Daftar Upah Pekerja Target</field>
+            <field name="res_model">plantation.salary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="c10i_lhm.view_plantation_salary_filter"/>
+            <field name="domain">[('lhm_input_type','=','work_target')]</field>
+            <field name="context">{'readonly_by_pass': ['period_id'], 'lhm_input_type': 
+                'work_target'}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Laporan Daftar Upah.
+              </p>
+            </field>
+        </record>
+        <record id="action_plantation_salary_target_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="c10i_lhm.view_plantation_salary_tree"/>
+            <field name="act_window_id" ref="action_plantation_salary_target"/>
+        </record>
+        <record id="action_plantation_salary_target_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_plantation_salary_form_target"/>
+            <field name="act_window_id" ref="action_plantation_salary_target"/>
+        </record>
+
+        <record id="c10i_lhm.view_plantation_salary_action" model="ir.actions.act_window">
+            <field name="name">Daftar Upah Biasa</field>
+            <field name="res_model">plantation.salary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="c10i_lhm.view_plantation_salary_filter"/>
+            <field name="domain">[('lhm_input_type','=','reguler')]</field>
+            <field name="context">{'readonly_by_pass': ['period_id'], 'lhm_input_type': 
+                'reguler'}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Laporan Daftar Upah.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="submenu_daftar_upah_target" name="Daftar Upah Pekerja Target" action="action_plantation_salary_target" parent="c10i_lhm.menu_plantation_report" groups="c10i_lhm.group_plantation_manager" sequence="61"/>
+        <!-- End of Report DU -->
+    </data>
+</odoo>

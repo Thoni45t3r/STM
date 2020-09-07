@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="header_logo" pageWidth="250" pageHeight="50" columnWidth="250" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="90851fd9-e691-4de6-b755-58f40ce8ff72">
+	<property name="ireport.zoom" value="1.6105100000000012"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Company_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT rp."name"
+, rp.street
+, rc.rml_header1
+, rp.city
+FROM res_company rc
+INNER JOIN res_partner rp ON rp."id" = rc.partner_id
+WHERE rc."id" = $P{Company_ID}]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="street" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="street"/>
+	</field>
+	<field name="rml_header1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="rml_header1"/>
+	</field>
+	<field name="city" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="city"/>
+	</field>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="0" width="200" height="28" forecolor="#000099" uuid="fe5d8371-c943-4297-878a-52872359c399"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape">
+				<reportElement x="1" y="0" width="50" height="50" uuid="5598533a-a9ff-44fe-b83a-82fd2c4e3d95"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<imageExpression><![CDATA["../../jasper_reports/custom_reports/logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="base.IDR" model="res.currency">
+            <field name="name">IDR</field>
+            <field name="symbol">Rp</field>
+            <field name="rounding">0.01</field>
+            <field name="position">before</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="base.main_company" model="res.company">
+            <field name="name">Consult10 Indonesia</field>
+            <field name="rml_header1">Konsaltén Indonesia</field>
+            <field name="website">http://www.consult10indonesia.com</field>
+            <field name="email">info@consult10indonesia.com</field>
+            <field name="currency_id" ref="base.IDR"/>
+            <field name="country_id" ref="base.id"/>
+            <field name="logo" type="base64" file="c10i_base/static/description/icon.png"/>
+        </record>
+    </data>
+</odoo>

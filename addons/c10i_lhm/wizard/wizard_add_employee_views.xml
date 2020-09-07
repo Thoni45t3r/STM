@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_add_employee" model="ir.ui.view">
+            <field name="name">view.wizard.add.employee</field>
+            <field name="model">wizard.add.employee</field>
+            <field name="arch" type="xml">
+                <form string="Tambah Karyawan">
+                    <group>
+                        <group>
+                            <field name="attendance_id" domain="[('special','=',True)]" widget="selection" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1"/>
+                            <field name="kemandoran_from_id" attrs="{'readonly': [('attendance_type','in',['out'])],'required': [('attendance_type','in',['in'])],'invisible': [('attendance_type','in',['na','kj'])]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="kemandoran_to_id" attrs="{'readonly': [('attendance_type','in',['in'])],'required': [('attendance_type','in',['out'])],'invisible': [('attendance_type','in',['na','kj'])]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form', 'tree_view_ref':'c10i_lhm.view_employee_tree'}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1"/>
+                            <field name="residual_hk" readonly="1" attrs="{'invisible': [('attendance_type','not in',['kj'])]}"/>
+                        </group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="attendance_type" readonly="1"/>
+                            <field name="next_number" readonly="1" invisible="1"/>
+                            <field name="date" readonly="1"/>
+                            <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Tambah" name="add_employee" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_add_employee" model="ir.actions.act_window">
+            <field name="name">Tambah Karyawan</field>
+            <field name="res_model">wizard.add.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_wizard_add_employee"/>
+            <field name="context">{'readonly_by_pass': ['residual_hk']}</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

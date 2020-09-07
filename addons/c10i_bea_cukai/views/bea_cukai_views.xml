@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu Bea Cukai -->
+        <menuitem id="main_menu_bea_cukai" name="Bea Cukai" web_icon="c10i_bea_cukai,static/description/bea_cukai.png" sequence="100" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+        <!--SubMenu Bea Cukai -->
+        <menuitem id="menu_bea_cukai_transaction" name="Transaksi" parent="main_menu_bea_cukai" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <menuitem id="submenu_bea_cukai" name="Bea Cukai" parent="menu_bea_cukai_transaction" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <menuitem id="menu_bea_cukai_configuration" name="Konfigurasi" parent="main_menu_bea_cukai" sequence="20" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <menuitem id="submenu_configuration_bea_cukai" name="Bea Cukai" parent="menu_bea_cukai_configuration" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <menuitem id="menu_bea_cukai_report" parent="main_menu_bea_cukai" name="Reporting" sequence="11" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+
+        <!--Bea Cukai Document Type -->
+        <record id="view_bea_cukai_document_type_form" model="ir.ui.view">
+            <field name="name">view.bea.cukai.document.type.form</field>
+            <field name="model">bea.cukai.document.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipe Dokumen Bea Cukai">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Bea Cukai 1" required="1"/></h1>
+                        </div>
+                        <group name="bea_cukai_document_type" string="Informasi">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_bea_cukai_document_type_tree" model="ir.ui.view">
+            <field name="name">view.bea.cukai.document.type.tree</field>
+            <field name="model">bea.cukai.document.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipe Dokumen Bea Cukai">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_bea_cukai_document_type_filter" model="ir.ui.view">
+            <field name="name">view.bea.cukai.document.type.filter</field>
+            <field name="model">bea.cukai.document.type</field>
+            <field name="arch" type="xml">
+                <search string="Tipe Dokumen Bea Cukai">
+                    <field name="name" string="Tipe Lokasi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_bea_cukai_document_type" model="ir.actions.act_window">
+            <field name="name">Tipe Dokumen Bea Cukai</field>
+            <field name="res_model">bea.cukai.document.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bea_cukai_document_type_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Tipe Dokumen Bea Cukai.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_bea_cukai_document_type_config" name="Tipe Dokumen Bea Cukai" action="action_bea_cukai_document_type" parent="submenu_configuration_bea_cukai" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <!-- End Of Bea Cukai Document Type -->
+
+        <!--Bea Cukai-->
+        <record id="view_bea_cukai_form" model="ir.ui.view">
+            <field name="name">view.bea.cukai.form</field>
+            <field name="model">bea.cukai</field>
+            <field name="arch" type="xml">
+                <form string="Bea Cukai">
+                    <header>
+                        <button name="action_lock" string="Lock" type="object" states="draft" class="oe_highlight"/>
+                        <button name="action_unlock" string="Unlock" type="object" states="done" groups="c10i_bea_cukai.group_bea_cukai_manager"/>
+                        <button name="compute_source_bc" string="Check Source BC" type="object" states="draft" class="oe_highlight" groups="c10i_bea_cukai.group_check_source_bc"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Bea Cukai 1" readonly="1"/></h1>
+                        </div>
+                        <group name="bea_cukai">
+                            <group>
+                                <field name="type" required="1" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                <field name="submission_number" placeholder="0030140-20191001-0001"/>
+                                <field name="submission_date"/>
+                            </group>
+                            <group>
+                                <field name="registration_number" />
+                                <field name="date"/>
+                                <field name="sale_id" attrs="{'invisible': [('purchase_id','!=',False)], 'required': [('sale_id','=',False),('purchase_id','=',False)]}" options="{'no_create': True, 'no_edit': True}" domain="[('state','=','sale')]"/>
+                                <field name="purchase_id" attrs="{'invisible': [('sale_id','!=',False)], 'required': [('sale_id','=',False),('purchase_id','=',False)]}" options="{'no_create': True, 'no_edit': True}" domain="[('state','=','purchase')]"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <field name="bea_cukai_product_lines" nolabel="1">
+                            <tree editable="bottom" create="false" delete="false">
+                                <field name="product_id" readonly="True"/>
+                                <field name="product_uom" readonly="True"/>
+                                <field name="price_unit" readonly="True"/>
+                                <field name="currency_id" readonly="True"/>
+                                <field name="doc_rate" />
+                            </tree>
+                        </field>
+                        <notebook>
+                            <page string="Related Pickings" name="pickings">
+                                <field name="stock_picking_ids" domain="[('state','=','done')]" nolabel="1">
+                                    <tree>
+                                        <field name="date_done" />
+                                        <field name="name" />
+                                        <field name="partner_id" />
+                                        <field name="transporter_id" />
+                                        <field name="driver_name" />
+                                        <field name="vehicle_number" />
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Faktur Pajak" name="fakturs">
+                                <field name="faktur_pajak_ids" nolabel="1">
+                                    <tree>
+                                        <field name="faktur_pajak" />
+                                        <field name="faktur_pajak_date" />
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Source BC Document" name="src_bc" attrs="{'invisible': [('source_bc_ids','=',[])]}" groups="c10i_bea_cukai.group_check_source_bc" >
+                                <field name="source_bc_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="src_bea_cukai_id" />
+                                        <field name="product_id" />
+                                        <field name="product_qty" sum="product_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <!-- <field name="note" placeholder="Tulis Catatan Disini..." nolabel="1" colspan="8"/> -->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_bea_cukai_tree" model="ir.ui.view">
+            <field name="name">view.bea.cukai.tree</field>
+            <field name="model">bea.cukai</field>
+            <field name="arch" type="xml">
+                <tree string="Bea Cukai">
+                    <field name="type"/>
+                    <field name="name"/>
+                    <field name="submission_number"/>
+                    <field name="submission_date"/>
+                    <field name="registration_number"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_bea_cukai_filter" model="ir.ui.view">
+            <field name="name">view.bea.cukai.filter</field>
+            <field name="model">bea.cukai</field>
+            <field name="arch" type="xml">
+                <search string="Bea Cukai">
+                    <field name="name"/>
+                    <field name="submission_number"/>
+                    <field name="submission_date"/>
+                    <field name="registration_number"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="State" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_bea_cukai" model="ir.actions.act_window">
+            <field name="name">Bea Cukai</field>
+            <field name="res_model">bea.cukai</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bea_cukai_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Bea Cukai.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_bea_cukai_form" name="Bea Cukai" action="action_bea_cukai" parent="submenu_bea_cukai" sequence="10" groups="c10i_bea_cukai.group_bea_cukai_office"/>
+        <!-- End Of Bea Cukai-->
+    </data>
+</odoo>

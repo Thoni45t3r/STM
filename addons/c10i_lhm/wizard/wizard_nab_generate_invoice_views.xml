@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='lhm_gen_nab_wizard_view'>
+            <field name="name">lhm.gen.nab.wizard.view</field>
+            <field name="model">lhm.gen.nab.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generate NAB Wizard" version="7.0"
+                      create="false"
+                      edit="false">
+
+                    <header>
+                        <button name="generate_nab" class="oe_highlight" string="Generate" type="object"/>
+                        <button name="process_nab" class="oe_highlight" string="Process" type="object"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="date_invoice"/>
+                            <field name="period_id" domain="[('special','=',False)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="pks_id" domain="[('is_pks','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="product_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                    </group>
+
+                    <separator string="Header Nota Angkut Buah" colspan="4"/>
+                    <field name="header_nab_ids" mode="tree" >
+                        <tree string="Header NAB" editable="bottom" create="false">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="qty" sum="qty"/>
+                            <field name="uom_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="price"/>
+                            <field name="total" sum="total"/>
+                        </tree>
+                    </field>
+
+                    <separator string="Detail Nota Angkut Buah" colspan="4"/>
+                    <field name="line_nab_ids" mode="tree" >
+                        <tree string="Detail NAB" editable="bottom" create="false">
+                            <field name="name"/>
+                            <field name="date_nab"/>
+                            <field name="no_nab"/>
+                            <field name="afdeling_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="reg_number"/>
+                            <field name="timbang_ksg_kbn" sum="timbang_ksg_kbn"/>
+                            <field name="timbang_isi_kbn" sum="timbang_isi_kbn"/>
+                            <field name="timbang_tara_kbn" sum="timbang_tara_kbn"/>
+                            <field name="janjang_jml" sum="janjang_jml"/>
+                            <field name="pks_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="date_pks"/>
+                            <field name="timbang_isi_pks" sum="timbang_isi_pks"/>
+                            <field name="timbang_ksg_pks" sum="timbang_ksg_pks"/>
+                            <field name="timbang_tara_pks" sum="timbang_tara_pks"/>
+                            <field name="grading" sum="grading"/>
+                            <field name="netto" sum="netto"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='menu_lhm_gen_nab_action'>
+            <field name="name">Generate NAB Wizard</field>
+            <field name="res_model">lhm.gen.nab.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lhm_gen_nab_wizard_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="submenu_lhm_nab_gen" name="Generate Customer Invoice - NAB "
+                  action="menu_lhm_gen_nab_action" parent="submenu_lhm_nab" groups="group_plantation_operator" sequence="30"/>
+        
+    </data>
+</odoo>

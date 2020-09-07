@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="account_employee_payment" name="Employee" parent="account.menu_finance" sequence="3"/>
+        <record id="employee_advance_tree" model="ir.ui.view">
+            <field name="name">account.employee.advance.tree</field>
+            <field name="model">account.employee.advance</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Advance">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id"/>
+                    <field name="employee_id"/>
+                    <field name="amount_total"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="employee_advance_form" model="ir.ui.view">
+            <field name="name">account.employee.advance.form</field>
+            <field name="model">account.employee.advance</field>
+            <field name="arch" type="xml">
+                <form string="Employee Advance">
+                    <header>
+                        <button name="post" string="Validate" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,posted"/>
+                        <button name="action_draft" string="Set to Draft" type="object" states="cancel"/>
+                        <button name="print_voucher" string="Print" icon="fa-print" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <!-- <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                    options='{"terminology": "archive"}'/>
+                            </button>
+                        </div> -->
+                        <div class="oe_title">
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group name="payment_info">
+                            <group>
+                                <field name="partner_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="journal_id" />
+                                <field name="amount_total" />
+                            </group>
+                            <group>
+                                <field name="date" />
+                                <field name="memo" />
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <!-- <field name="country_group_ids"/> -->
+                        </group>
+                        <group name="employee_info">
+                            <group>
+                                <field name="employee_id" options="{'no_create':True}"/>
+                                <field name="employee_partner_id" />
+                            </group>
+                            <group>
+                                <field name="rounding_account_id" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="advance_line" string="Detail Advance">
+                                <field name="line_ids" nolabel="1" context="{'employee_id': employee_id}">
+                                    <tree string="Detail Advance" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="employee_id" />
+                                        <field name="employee_partner_id" />
+                                        <field name="amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="move" string="Journal Items" attrs="{'invisible': [('move_id','=',False)]}">
+                                <field name='move_id' />
+                                <field name='move_line_ids' nolabel="True"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_employee_advance">
+            <field name="name">Advance Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.employee.advance</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik Create untuk membuat Penghitungan Harga Plasma terbaru
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_employee_advance" action="action_employee_advance" parent="account_employee_payment" sequence="1"/>
+    </data>
+</odoo>

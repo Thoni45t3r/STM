@@ -1,0 +1,21 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_hr_overtime_group_user","hr_overtime group_user","model_hr_overtime","hr.group_hr_user",1,0,0,0
+"access_hr_overtime_group_manager","hr_overtime group_manager","model_hr_overtime","hr.group_hr_manager",1,1,1,1
+"access_hr_nature_group_user","hr_nature group_user","model_hr_nature","hr.group_hr_user",1,0,0,0
+"access_hr_nature_group_manager","hr_nature group_manager","model_hr_nature","hr.group_hr_manager",1,1,1,1
+"access_hr_minimum_wage_group_user","hr_minimum_wage group_user","model_hr_minimum_wage","hr.group_hr_user",1,0,0,0
+"access_hr_minimum_wage_group_manager","hr_minimum_wage group_manager","model_hr_minimum_wage","hr.group_hr_manager",1,1,1,1
+"access_hr_insurance_group_user","hr_insurance group_user","model_hr_insurance","hr.group_hr_user",1,0,0,0
+"access_hr_insurance_group_manager","hr_insurance group_manager","model_hr_insurance","hr.group_hr_manager",1,1,1,1
+"access_hr_ptkp_group_user","hr_ptkp group_user","model_hr_ptkp","hr.group_hr_user",1,0,0,0
+"access_hr_ptkp_group_manager","hr_ptkp group_manager","model_hr_ptkp","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_religion_group_user","hr_employee_religion group_user","model_hr_employee_religion","hr.group_hr_user",1,0,0,0
+"access_hr_employee_religion_group_manager","hr_employee_religion group_manager","model_hr_employee_religion","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_education_line_group_user","hr_employee_education_line group_user","model_hr_employee_education_line","hr.group_hr_user",1,0,0,0
+"access_hr_employee_education_line_group_manager","hr_employee_education_line group_manager","model_hr_employee_education_line","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_driving_license_line_group_user","hr_employee_driving_license_line group_user","model_hr_employee_driving_license_line","hr.group_hr_user",1,0,0,0
+"access_hr_employee_driving_license_line_group_manager","hr_employee_driving_license_line group_manager","model_hr_employee_driving_license_line","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_experience_line_group_user","hr_employee_experience_line group_user","model_hr_employee_experience_line","hr.group_hr_user",1,0,0,0
+"access_hr_employee_experience_line_group_manager","hr_employee_experience_line group_manager","model_hr_employee_experience_line","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_ptkp_history_group_user","hr_ptkp_history group_user","model_hr_ptkp_history","hr.group_hr_user",1,0,0,0
+"access_hr_employee_ptkp_history_group_manager","hr_ptkp_history group_manager","model_hr_ptkp_history","hr.group_hr_manager",1,1,1,1

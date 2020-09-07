@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportTrialBalance10c" pageWidth="1548" pageHeight="612" orientation="Landscape" columnWidth="1492" leftMargin="28" rightMargin="28" topMargin="28" bottomMargin="28" isTitleNewPage="true" isIgnorePagination="true" uuid="c0af60e3-296d-4eac-b1bc-5f922d81ded8">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="0.8264462809917362"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Wed Jan 16 14:19:31 ICT 2013"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="live_siti"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="194"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="798"/>
+	<property name="com.jaspersoft.studio.unit." value="inch"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="company_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="from_date" class="java.lang.String">
+		<parameterDescription><![CDATA[from_date]]></parameterDescription>
+	</parameter>
+	<parameter name="to_date" class="java.lang.String">
+		<parameterDescription><![CDATA[to_date]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="start_year" class="java.lang.String">
+		<parameterDescription><![CDATA[from_date]]></parameterDescription>
+	</parameter>
+	<parameter name="target_move" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{target_move}=="all" ? " am1.state in ('posted','draft')" : "am1.state='posted'"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	aa.code, aa.name
+	, (case when aat.include_initial_balance=True then 'bs' when aat.type='view' then 'view' else 'pl' end) as bs_pl
+	, tb_value.sa_dr_cr
+	, tb_value.tr_dr
+	, tb_value.tr_cr
+	, (tb_value.tb_dr-tb_value.aje_dr) as tb_dr
+	, (tb_value.tb_cr-tb_value.aje_cr) as tb_cr
+	, tb_value.aje_dr
+	, tb_value.aje_cr 
+	, tb_value.tb_dr as tb_aje_dr
+	, tb_value.tb_cr as tb_aje_cr
+	, (case when aat.include_initial_balance=False then tb_dr else 0 end) as pl_dr
+	, (case when aat.include_initial_balance=False then tb_cr else 0 end) as pl_cr
+	, (case when aat.include_initial_balance=True then tb_dr else 0 end) as bs_dr
+	, (case when aat.include_initial_balance=True then tb_cr else 0 end) as bs_cr
+FROM
+	account_account aa
+	INNER JOIN account_account_type aat ON aat.id=aa.user_type_id
+	LEFT JOIN (
+		Select 
+			account_id, 
+			sum(init_bal) as sa_dr_cr,
+			sum(debit_amt) as tr_dr,
+			sum(credit_amt) as tr_cr,
+			sum(closing_debit) as tb_dr,
+			sum(closing_credit) as tb_cr,
+			sum(0.0) as aje_dr,
+			sum(0.0) as aje_cr
+		From (
+			-- init balance sheet account
+			select
+				aml1.account_id,
+				sum(aml1.debit-aml1.credit) as init_bal,
+				sum(0.0) as debit_amt, 
+				sum(0.0) as credit_amt, 
+				sum(0.0) as closing_debit, 
+				sum(0.0) as closing_credit,
+				sum(0.0) as adj_dedit,
+				sum(0.0) as adj_credit
+			from 
+				account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+				inner join account_account aa1 on aa1.id=aml1.account_id
+				inner join account_account_type aat1 on aat1.id=aa1.user_type_id
+			where aat1.include_initial_balance=True
+				and aml1.date<$P{from_date}::date
+				and $P!{target_move}
+			group by aml1.account_id
+			Union All
+			-- init profit loss account, only from start of the year
+			select
+				aml1.account_id,
+				sum(aml1.debit-aml1.credit) as init_bal,
+				sum(0.0) as debit_amt, 
+				sum(0.0) as credit_amt, 
+				sum(0.0) as closing_debit, 
+				sum(0.0) as closing_credit,
+				sum(0.0) as adj_dedit,
+				sum(0.0) as adj_credit
+			from
+				account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+				inner join account_account aa1 on aa1.id=aml1.account_id
+				inner join account_account_type aat1 on aat1.id=aa1.user_type_id
+			where
+				aat1.include_initial_balance=False
+				and aml1.date>=$P{start_year}::date 
+				and aml1.date<$P{from_date}::date
+				and $P!{target_move}
+			group by aml1.account_id
+			Union All
+			-- all transaction on those period
+			select
+				aml1.account_id,
+				sum(0.0) as init_bal,
+				sum(aml1.debit) as debit_amt, 
+				sum(aml1.credit) as credit_amt, 
+				sum(0.0) as closing_debit, 
+				sum(0.0) as closing_credit,
+				sum(0.0) as adj_dedit,
+				sum(0.0) as adj_credit
+			from
+				account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+			where
+				aml1.date between $P{from_date}::date and $P{to_date}::date
+				and $P!{target_move}
+			group by aml1.account_id
+			Union All
+			-- closing balance sheet account
+			select
+				aml1.account_id,
+				sum(0.0) as init_bal,
+				sum(0.0) as debit_amt, 
+				sum(0.0) as credit_amt, 
+				(case when sum(aml1.debit-aml1.credit)>0.0 then sum(aml1.debit-aml1.credit) else 0.0 end) as closing_debit, 
+				(case when sum(aml1.debit-aml1.credit)<0.0 then -1*sum(aml1.debit-aml1.credit) else 0.0 end) as closing_credit,
+				sum(0.0) as adj_dedit,
+				sum(0.0) as adj_credit
+			from 
+				account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+				inner join account_account aa1 on aa1.id=aml1.account_id
+				inner join account_account_type aat1 on aat1.id=aa1.user_type_id
+			where aat1.include_initial_balance=True
+				and aml1.date<=$P{to_date}::date
+				and $P!{target_move}
+			group by aml1.account_id
+			Union All
+			-- closing profit loss account
+			select
+				aml1.account_id,
+				sum(0.0) as init_bal,
+				sum(0.0) as debit_amt, 
+				sum(0.0) as credit_amt, 
+				(case when sum(aml1.debit-aml1.credit)>0.0 then sum(aml1.debit-aml1.credit) else 0.0 end) as closing_debit, 
+				(case when sum(aml1.debit-aml1.credit)<0.0 then -1*sum(aml1.debit-aml1.credit) else 0.0 end) as closing_credit,
+				sum(0.0) as adj_dedit,
+				sum(0.0) as adj_credit
+			from
+				account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+				inner join account_account aa1 on aa1.id=aml1.account_id
+				inner join account_account_type aat1 on aat1.id=aa1.user_type_id
+			where
+				aat1.include_initial_balance=False
+				and aml1.date between $P{start_year}::date and $P{to_date}::date
+				and $P!{target_move}
+			group by aml1.account_id
+			Union All
+			select aml1.account_id
+				,sum(0.0) as sa_dr_cr
+				,sum(0.0) as tr_dr
+				,sum(0.0) as tr_cr
+				,sum(0.0) as tb_dr
+				,sum(0.0) as tb_dr
+				,sum(aml1.debit) as aje_dr
+				,sum(aml1.credit) as aje_cr
+			from account_move_line aml1
+				inner join account_move am1 on am1.id = aml1.move_id
+			where aml1.date between $P{from_date}::date and $P{to_date}::date 
+				and am1.journal_id in (select id from account_journal where code ='AJE')
+				and $P!{target_move}
+			group by account_id
+			) sub
+		Group By account_id
+		) tb_value ON tb_value.account_id=aa.id
+ORDER BY aa.code]]>
+	</queryString>
+	<field name="code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="code"/>
+	</field>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="bs_pl" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bs_pl"/>
+	</field>
+	<field name="sa_dr_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="sa_dr_cr"/>
+	</field>
+	<field name="tr_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tr_dr"/>
+	</field>
+	<field name="tr_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tr_cr"/>
+	</field>
+	<field name="tb_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tb_dr"/>
+	</field>
+	<field name="tb_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tb_cr"/>
+	</field>
+	<field name="aje_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="aje_dr"/>
+	</field>
+	<field name="aje_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="aje_cr"/>
+	</field>
+	<field name="tb_aje_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tb_aje_dr"/>
+	</field>
+	<field name="tb_aje_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="tb_aje_cr"/>
+	</field>
+	<field name="pl_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pl_dr"/>
+	</field>
+	<field name="pl_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="pl_cr"/>
+	</field>
+	<field name="bs_dr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="bs_dr"/>
+	</field>
+	<field name="bs_cr" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="bs_cr"/>
+	</field>
+	<variable name="vtb_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tb_dr}]]></variableExpression>
+	</variable>
+	<variable name="vtb_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tb_cr}]]></variableExpression>
+	</variable>
+	<variable name="vaje_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{aje_dr}]]></variableExpression>
+	</variable>
+	<variable name="vaje_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{aje_cr}]]></variableExpression>
+	</variable>
+	<variable name="vtb_aje_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tb_aje_dr}]]></variableExpression>
+	</variable>
+	<variable name="vtb_aje_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tb_aje_cr}]]></variableExpression>
+	</variable>
+	<variable name="vpl_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{pl_dr}]]></variableExpression>
+	</variable>
+	<variable name="vpl_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{pl_cr}]]></variableExpression>
+	</variable>
+	<variable name="vbs_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{bs_dr}]]></variableExpression>
+	</variable>
+	<variable name="vbs_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{bs_cr}]]></variableExpression>
+	</variable>
+	<variable name="vpl" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{pl_dr}.subtract($F{pl_cr})]]></variableExpression>
+	</variable>
+	<variable name="vsa_dr_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sa_dr_cr}]]></variableExpression>
+	</variable>
+	<variable name="vtr_dr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tr_dr}]]></variableExpression>
+	</variable>
+	<variable name="vtr_cr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{tr_cr}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="105" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" x="0" y="26" width="1498" height="26" uuid="0e5f7302-06b4-472a-b1f4-6c71577a7f3b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACCOUNTING WORKSHEET]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="52" width="1498" height="18" uuid="4a5b50ba-75eb-4f54-bd47-a5ca4d9e957d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Per: " +
+new SimpleDateFormat("dd-MM-yyyy", new Locale("ID")).format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1142" y="88" width="89" height="17" uuid="0e5648d0-0a07-49ea-90a9-be0ad703094e"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1409" y="88" width="89" height="17" uuid="a671ecfd-4a4e-49e7-bf9b-420b62ed8e81"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1320" y="88" width="89" height="17" uuid="b7891a4f-3823-4371-964b-31eb9a83c4a1"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="71" width="232" height="34" uuid="36d11e8b-7c20-488f-b2bc-8b8a3cf80ef6"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Account Name"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="875" y="88" width="89" height="17" uuid="10745c74-76c5-4e98-bb06-aa6261844aae"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="964" y="88" width="89" height="17" uuid="46e10006-01d1-4e86-bc66-ae7f3441d65f"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1231" y="88" width="89" height="17" uuid="d9f016f4-1128-4209-9875-d4b0959dc865"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="88" height="34" uuid="56b73167-09cd-4822-8706-2296e72fff54"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Account Code"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="697" y="88" width="89" height="17" uuid="35801008-e406-498b-8836-69c0df642c6f"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="608" y="88" width="89" height="17" uuid="51cb957d-6bc8-4bca-bf63-47adcb22213e"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="786" y="88" width="89" height="17" uuid="a6d77f2b-5515-4de9-adb2-31855445b778"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1053" y="88" width="89" height="17" uuid="2af5557b-2871-435a-9897-1e2197b4d11d"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="608" y="71" width="178" height="17" uuid="02a082e6-b4a1-4d89-986d-f1a727cb6b75"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Unadjusted Trial Balance"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="786" y="71" width="178" height="17" uuid="1c9544fa-ff13-4b14-ae7b-19733cdcfcf4"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Adjustments"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="964" y="71" width="178" height="17" uuid="e9311d3a-f049-49b0-a1f5-7583da6cc075"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Adjusted Trial Balance"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1142" y="71" width="178" height="17" uuid="12c60865-2202-43b6-ad02-1f56eaf07487"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Income Statement"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1320" y="71" width="178" height="17" uuid="ab104931-587e-4a4b-a5db-80c665e693c3"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Balance Sheet"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="88" width="89" height="17" uuid="df15e9c8-cfcb-44c4-b311-ab18d75a36df"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="71" width="178" height="17" uuid="1f20f040-641a-42ec-8df5-00a2a8199f95"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Transaction"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="519" y="88" width="89" height="17" uuid="f6e5e7cf-bf0b-4e21-b94a-9cae1b165a35"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="71" width="110" height="17" uuid="e9da8824-8291-4212-8824-bde2b5260ead"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Begining Balance"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="88" width="110" height="17" uuid="ad25e146-4099-4cf0-b1d1-d6297ad6cca8"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (Credit)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="1498" height="26" uuid="52736548-6c52-49fc-8052-42a15ca97c73">
+					<printWhenExpression><![CDATA[$F{bs_pl}.length()==0]]></printWhenExpression>
+				</reportElement>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{company_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="88" height="17" uuid="86024fcc-ea44-4a4b-9d0a-7276ae8bffba">
+					<printWhenExpression><![CDATA[$F{bs_pl}.length()>0]]></printWhenExpression>
+				</reportElement>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="0" width="232" height="17" uuid="0d9ed435-c071-4700-93e4-28f280c6c784">
+					<printWhenExpression><![CDATA[$F{bs_pl}.length()>0]]></printWhenExpression>
+				</reportElement>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="608" y="0" width="89" height="17" uuid="8a9590f4-b753-4aae-b4a7-f13a25913686"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_dr}==null?0:$F{tb_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="697" y="0" width="89" height="17" uuid="64ad4eae-03a2-48bd-a366-579ac7deb60a"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_cr}==null?0:$F{tb_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="786" y="0" width="89" height="17" uuid="c8485fe1-e198-4a5e-a196-8b889a1794f6"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aje_dr}==null?0:$F{aje_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="875" y="0" width="89" height="17" uuid="93d52f0f-0ea6-4b47-b3c6-455f53e351f4"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aje_cr}==null?0:$F{aje_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="964" y="0" width="89" height="17" uuid="dcbc5f51-148e-4ee5-9aae-fa1d8b05a9dc"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_aje_dr}==null?0:$F{tb_aje_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1053" y="0" width="89" height="17" uuid="552abc15-352e-4021-aaa3-b41ddd0c0026"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_aje_cr}==null?0:$F{tb_aje_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1142" y="0" width="89" height="17" uuid="db775e1c-250d-4dfb-b763-700d2aa28a3b"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pl_dr}==null?0:$F{pl_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1231" y="0" width="89" height="17" uuid="f5261f55-c3da-44e1-8c9b-895c9e67533d"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pl_cr}==null?0:$F{pl_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1320" y="0" width="89" height="17" uuid="95a140c7-acf8-45a4-a08a-387e56e7b623"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bs_dr}==null?0:$F{bs_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1409" y="0" width="89" height="17" uuid="0807aea8-4f45-4a9a-99bd-3ef97dbbc40b"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bs_cr}==null?0:$F{bs_cr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="0" width="232" height="17" uuid="b423a3a6-0049-4aed-847e-8d46023f4933">
+					<printWhenExpression><![CDATA[$F{bs_pl}.length()==0]]></printWhenExpression>
+				</reportElement>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="88" height="17" uuid="792a599a-61d0-4ba3-bc7c-1e4b6fe8698e">
+					<printWhenExpression><![CDATA[$F{bs_pl}.length()==0]]></printWhenExpression>
+				</reportElement>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="519" y="0" width="89" height="17" uuid="4ff0ebbb-0a0c-4274-9487-97f090319469"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tr_cr}==null?0:$F{tr_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="430" y="0" width="89" height="17" uuid="ca7b7d56-086a-4518-9aaf-1cf6f2bc3a91"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tr_dr}==null?0:$F{tr_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="320" y="0" width="110" height="17" uuid="55b262bc-78a7-4e07-b5a6-5bfa526b6985"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sa_dr_cr}==null?0:$F{sa_dr_cr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="51" splitType="Stretch">
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="608" y="0" width="89" height="17" uuid="326ebaae-0669-4e6e-b354-e721db44463f"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtb_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1409" y="0" width="89" height="17" uuid="f9f70259-13ce-42ef-8dac-c142910c0896"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vbs_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1231" y="0" width="89" height="17" uuid="3d3adfd5-5cec-4fa5-8549-788c80f04bd3"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="786" y="0" width="89" height="17" uuid="1b11c0c3-e41f-4cf4-b544-7ab625740458"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vaje_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1142" y="0" width="89" height="17" uuid="b03f989a-6e81-4908-afc6-15dd99fa70da"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1320" y="0" width="89" height="17" uuid="6bfb4f97-ac99-4518-919a-1e5a6278fa91"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vbs_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="875" y="0" width="89" height="17" uuid="8aebbc18-498a-42e7-9d5b-43bea8d5d478"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vaje_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="964" y="0" width="89" height="17" uuid="8ca91ab9-bfa7-4736-a2af-3a39a3b83b1b"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtb_aje_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="697" y="0" width="89" height="17" uuid="a3f2e21e-3f85-41e3-a5df-65ec06446e60"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtb_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1053" y="0" width="89" height="17" uuid="9c19d76f-7f08-4a5a-8d32-c9d376d797b2"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtb_aje_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1231" y="17" width="89" height="17" uuid="d4ce4efc-22ec-4254-a3d0-91350b24ec18"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()<0?0:$V{vpl}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1409" y="17" width="89" height="17" uuid="30018736-a3fa-498a-8c70-4b2376ed7615"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()>0?0:$V{vpl}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1142" y="17" width="89" height="17" uuid="9a7642c3-4598-460d-a18c-7c165b1040d9"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()>0?0:$V{vpl}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1320" y="17" width="89" height="17" uuid="3033e638-2162-4fe5-88c4-27117cae2cfa"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()<0?0:$V{vpl}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#)">
+				<reportElement x="1053" y="17" width="89" height="17" uuid="b3cb1d29-6373-4790-8986-aa7ae54d3f2f"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Net Income"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1409" y="34" width="89" height="17" uuid="d96c158f-0e3e-4b99-a449-4d5ac511a455"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()>0?$V{vbs_cr}:$V{vbs_cr}.add($V{vpl})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1142" y="34" width="89" height="17" uuid="364f9787-5a04-4dbd-b872-c02bc9262459"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()>0?$V{vpl_dr}:$V{vpl_dr}.add($V{vpl})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1231" y="34" width="89" height="17" uuid="965f2db3-42ea-45fb-89f1-577b840ea1b5"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()<0?$V{vpl_cr}:$V{vpl_cr}.add($V{vpl})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1320" y="34" width="89" height="17" uuid="36134f9f-9983-416f-bd62-552355383fc0"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vpl}.intValue()<0?$V{vbs_dr}:$V{vbs_dr}.add($V{vpl})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#)">
+				<reportElement x="1053" y="34" width="89" height="17" uuid="a8d5bc59-6702-49be-af20-3f892e0fa2b9"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="430" y="0" width="89" height="17" uuid="13641cac-5104-4e09-807e-3422464ee2ce"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtr_dr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="519" y="0" width="89" height="17" uuid="05fd1736-e553-45b1-ab0b-7fdd630d0a4b"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vtr_cr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="320" y="0" width="110" height="17" uuid="bd50436f-c54a-4c57-9dc3-ae0b5f1155fe"/>
+				<box padding="2">
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vsa_dr_cr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="stock.menu_warehouse_report" name="Reports" sequence="99" parent="stock.menu_stock_root" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+        <record id="view_view_picking_type_skb_form" model="ir.ui.view">
+            <field name="name">view.stock.picking.type.skb.form</field>
+            <field name="model">stock.picking.type</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <field name="use_existing_lots" position="after">
+                    <field name="skb"/>
+                </field>
+            </field>
+        </record>
+        <record id="view_stock_picking_skb_form" model="ir.ui.view">
+            <field name="name">view.stock.picking.skb.form</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">25</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <field name="location_id" position="before">
+                    <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" domain="[('is_lhm','=',True)]" readonly="0" options="{'no_create_edit':True, 'no_create':True}"/>
+                    <field name="bpb_number"/>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="min_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="origin" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="location_dest_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('picking_type_code', '=', 'incoming')], 'readonly': [('picking_type_code', '=', 'plantation')]}</attribute>
+                </field>
+                <field name="min_date" position="before">
+                    <field name="skb" invisible="1"/>
+                    <field name="organization_type" required="1"/>
+                    <field name="afdeling_id" attrs="{'invisible': [('organization_type','!=','afdeling')]}"/>
+                    <field name="division_id" attrs="{'invisible': [('organization_type','!=','division')]}"/>
+                </field>
+                <xpath expr="//field[@name='move_lines']" position="replace">
+                    <field name="move_lines" attrs="{'readonly': [('state', 'in', ('cancel', 'partially_available', 'assigned', 'done'))]}" options="{'reload_on_button': True}" mode="tree,kanban" context="{'address_in_id': partner_id, 'form_view_ref':'stock.view_move_picking_form', 'tree_view_ref':'stock.view_move_picking_tree', 'default_picking_type_id': picking_type_id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id}">
+                        <kanban class="o_kanban_mobile">
+                            <field name="product_id"/>
+                            <field name="availability"/>
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="location_dest_id"/>
+                            <field name="scrapped"/>
+                            <field name="state"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-8 text-muted">
+                                                <span><t t-esc="record.availability.value"/> on <t t-esc="record.product_uom_qty.value"/> <t t-esc="record.product_uom.value"/></span>
+                                            </div>
+                                            <div class="col-xs-4 text-muted">
+                                                <span class="pull-right text-right"><t t-esc="record.location_dest_id.value"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                        <tree decoration-muted="scrapped == True" string="Stock Moves" editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="name" invisible="1"/>
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom" options="{'no_open': True, 'no_create': True}" string="Unit of Measure" groups="product.group_uom"/>
+                            <field name="location_id" invisible="1"/>
+                            <field name="create_date" invisible="1" />
+                            <field name="date_expected" invisible="1" />
+                            <field name="picking_type_id" invisible="1"/>
+                            <field name="scrapped" invisible="1"/>
+                            <field name="availability" invisible="1"/>
+                            <field name="reserved_availability" invisible="1"/>
+                            <field name="location_dest_id" invisible="1"/>
+                            <field name="remaining_qty" invisible="1"/>
+                            <field name="plantation_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                            <field name="plantation_location_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                            <field name="plantation_activity_id" domain="[('type_id','=',plantation_location_type_id)]" attrs="{'readonly': [('plantation_validator', '=', True)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                            <field name="plantation_activity_name" readonly="1"/>
+                            <field name="account_id" attrs="{'readonly': [('plantation_validator', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                            <field name="plantation_validator" invisible="1"/>
+                            <field name="note" invisible="0"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        <record id="action_stock_picking_skb" model="ir.actions.act_window">
+            <field name="name">Slip Keluar Barang</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="domain">[('skb','=',True)]</field>
+            <field name="context">{'readonly_by_pass': True,'default_skb': True,'skb' : True}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Slip Keluar Barang.
+              </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_stock_picking_skb_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="stock.vpicktree"/>
+            <field name="act_window_id" ref="action_stock_picking_skb"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_stock_picking_skb_form">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_stock_picking_skb_form"/>
+            <field name="act_window_id" ref="action_stock_picking_skb"/>
+        </record>
+        <menuitem id="menu_stock_picking_skb" name="Slip Keluar Barang" action="action_stock_picking_skb" parent="stock.menu_stock_warehouse_mgmt" groups="stock.group_stock_manager,stock.group_stock_user" sequence="20"/>
+
+        <record id="stock.action_picking_tree_all" model="ir.actions.act_window">
+            <field name="name">Stock Operations</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain">[('skb','!=',True)]</field>
+            <field name="context">{
+                    'contact_display': 'partner_address',
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click here to create a new transfer.
+              </p><p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+              </p>
+            </field>
+        </record>
+    </data>
+</odoo>

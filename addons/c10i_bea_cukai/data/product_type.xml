@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="default_product_type_1" model="product.type">
+            <field name="name">Barang Jadi</field>
+            <field name="code">finish_good</field>
+            <!-- <field name="company_id" ref="base.main_company"/> -->
+            <field name="active">1</field>
+        </record>
+        <record id="default_product_type_2" model="product.type">
+            <field name="name">Bahan Baku dan Bahan Penolong</field>
+            <field name="code">raw_material</field>
+            <!-- <field name="company_id" ref="base.main_company"/> -->
+            <field name="active">1</field>
+        </record>
+        <record id="default_product_type_3" model="product.type">
+            <field name="name">Scrap dan Barang Waste</field>
+            <field name="code">waste</field>
+            <!-- <field name="company_id" ref="base.main_company"/> -->
+            <field name="active">1</field>
+        </record>
+        <record id="default_product_type_4" model="product.type">
+            <field name="name">Mesin dan Peralatan</field>
+            <field name="code">asset</field>
+            <!-- <field name="company_id" ref="base.main_company"/> -->
+            <field name="active">1</field>
+        </record>
+    </data>
+</odoo>

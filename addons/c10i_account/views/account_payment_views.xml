@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Cash &amp; Bank" id="menu_finance_payment_bank_cash" parent="account.menu_finance" 
+        	sequence="4"/>
+        <menuitem action="account.action_account_payments" id="menu_action_account_payments_receivable2" parent="menu_finance_payment_bank_cash" sequence="1" name="Customer Payments"
+            groups="account.group_account_user"/>
+        <menuitem action="account.action_account_payments_payable" id="menu_action_account_payments_payable2" parent="menu_finance_payment_bank_cash" sequence="1" name="Vendor Payments"
+            groups="account.group_account_user"/>
+
+		<record id="c10i_view_account_payment_search" model="ir.ui.view">
+            <field name="name">c10i.account.payment.search</field>
+            <field name="model">account.payment</field>
+		    <field name="inherit_id" ref="account.view_account_payment_search"/>
+		    <field name="arch" type="xml">
+			    <field name="company_id" position="after">
+                    <filter string="Advance" domain="[('advance_type','=','advance')]"/>
+		        </field>		
+		    </field>
+		</record>
+		<record id="view_account_payment_form_inherit_payment" model="ir.ui.view">
+                <field name="name">view.account.payment.form.inherit.payment</field>
+                <field name="model">account.payment</field>
+                <field name="inherit_id" ref="payment.view_account_payment_form_inherit_payment"/>
+                <field name="arch" type="xml">
+                        <field name="payment_transaction_id" position="replace"/>
+                </field>
+        </record>
+		<record id="c10i_payment_cancel_form" model="ir.ui.view">
+            <field name="name">c10i.payment.cancel.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_cancel.payment_cancel_form_inherit"/>
+            <field name="arch" type="xml">
+                <button name="cancel" position="attributes">
+                	<attribute name="attrs">{'invisible': [('state', 'in', 'draft')]}</attribute>
+                </button>
+            </field>
+        </record>
+        
+		<record id="c10i_view_account_payment_form" model="ir.ui.view">
+            <field name="name">c10i.account.payment.form</field>
+            <field name="model">account.payment</field>
+		    <field name="inherit_id" ref="account.view_account_payment_form"/>
+		    <field name="arch" type="xml">	
+		    	<button name="post" position="after">
+                    <button name="confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <button name="create_report" string="Print" icon="fa-print" type="object" />
+                </button>
+                <xpath expr="//sheet/div[1]" position="attributes">
+                    <attribute name="attrs">{'invisible': False}</attribute>
+                </xpath>
+		    	<div name="button_box" position="inside">
+		    		<button class="oe_stat_button" name="button_outstanding"
+                        string="Invoices" type="object" states="draft" 
+                        attrs="{'invisible': ['|',('state','!=','draft'),('advance_type','!=','invoice')]}" icon="fa-refresh"/>
+		    	</div>
+		    	<button name="post" position="attributes">
+		    		<attribute name="string">Validate</attribute>
+		    		<attribute name="states">confirm</attribute>
+		    	</button>
+		    	<div name="amount_div" position="after">
+		    		<label for="force_rate" groups="base.group_multi_currency"/>
+			    	<div name="amount_curr_div" class="o_row" groups="base.group_multi_currency">
+                    	<field name="is_force_curr"/>
+	                    <field name="force_rate" attrs="{'invisible': [('is_force_curr','=',False)], 'readonly': [('state', '!=', 'draft')]}" options="{'currency_field': 'company_currency_id'}"/>
+	                    <field name="company_currency_id" invisible="1" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+	                </div>
+                    <field name="notes" placeholder="Comment..." class="oe_left"/>
+		    	</div>
+		    	<field name="state" position="attributes">
+		    		<attribute name="statusbar_visible">confirm,posted,reconciled</attribute>
+		    	</field>				
+		    	<field name="payment_date" position="attributes">
+		    		<attribute name="attrs">{'required': [('state','=','confirm')], 'readonly': [('state', 'not in', ('draft','confirm'))]}</attribute>
+		    	</field>	
+			    <xpath expr="//field[@name='partner_type']" position="attributes">
+		        	<attribute name="attrs">{'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}</attribute>
+		        	<attribute name="nolabel">0</attribute>
+		        	<attribute name="invisible">1</attribute>
+		        </xpath>							
+			    <xpath expr="//field[@name='partner_id']" position="attributes">
+		        	<attribute name="attrs">{'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}</attribute>
+		        	<attribute name="nolabel">0</attribute>
+		        	<attribute name="options">{'no_create': True}</attribute>
+		        </xpath>							
+			    <xpath expr="//field[@name='payment_date']" position="before">
+		        	<field name="advance_type" readonly="1" widget="radio" attrs="{'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}"/>
+		        	<field name="customer_account_id" options="{'no_create': True}" attrs="{'invisible': [('advance_type','=','invoice')], 'readonly': [('state', '!=', 'draft')], 'required': [('partner_id','=',False),('payment_type', '=', 'inbound')], 'invisible': [('payment_type', '!=', 'inbound')]}"/>
+		        	<field name="supplier_account_id" options="{'no_create': True}" attrs="{'invisible': [('advance_type','=','invoice')], 'readonly': [('state', '!=', 'draft')], 'required': [('partner_id','=',False),('payment_type', '=', 'outbound')], 'invisible': [('payment_type', '!=', 'outbound')]}"/>
+                    <field name="register_date" attrs="{'required': [('state','=','draft')], 'readonly': [('state', '!=', 'draft')]}"/>
+		        </xpath>
+		        <field name="communication" position="attributes">
+		        	<attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
+                </field>
+		        <field name="communication" position="after">
+		        	<label for="amount_charges"/>
+                    <div name="amount_charges_div" class="o_row">
+                        <field name="amount_charges" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="charge_account_id" attrs="{'required': [('amount_charges','&gt;',0.0)], 'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="memo_charges" placeholder="Memo Charges"/>
+                    </div>
+                    <field name="payment_adm" invisible="1"/>
+                    <label for="card_type" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}"/>
+                    <div name="card_type_div" class="o_row" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}">
+                        <field name="card_type"/>
+                        <field name="card_number" placeholder="Card Number"/>
+                    </div>
+                    <field name="journal_report_type" invisible="1"/>
+                </field>
+                <xpath expr="//sheet/group" position="after">
+                	<notebook>
+	                	<page string="Outstanding Invoices" attrs="{'invisible': [('register_ids','=',[])]}">
+	                    	<field name="register_ids"/>
+	                    </page>
+                    </notebook>
+                </xpath>
+		        <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread" options='{"thread_level": 1}'/>
+                    </div>
+                </xpath>
+		    </field>
+		</record>
+		
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="name">Customer Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'default_payment_type': 'inbound', 'default_advance_type': 'invoice'}</field>
+            <field name="domain">[('payment_type','=','inbound'),('partner_type', '=', 'customer'),('advance_type','=','invoice')]</field>
+            <field name="view_id" ref="account.view_account_payment_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to register a payment
+                </p><p>
+                  Payments are used to register liquidity movements (send, collect or transfer money).
+                  You can then process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+		<menuitem action="account.action_account_payments" 
+            id="account.menu_action_account_payments_receivable" 
+			parent="account.menu_finance_receivables" sequence="20" groups="account.group_account_user"/>
+
+        <record id="action_account_payments_advance" model="ir.actions.act_window">
+            <field name="name">Down Payment</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'default_payment_type': 'inbound', 'default_advance_type': 'advance'}</field>
+            <field name="domain">[('advance_type','=','advance')]</field>
+            <field name="view_id" ref="account.view_account_payment_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to register a payment advance
+                </p><p>
+                  Payments are used to register liquidity movements (send, collect or transfer money).
+                  You can then process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+		<!-- <menuitem action="action_account_payments_advance" 
+            id="menu_action_account_payments_receivable_advance" 
+			parent="menu_finance_payment_bank_cash" sequence="5" 
+			groups="account.group_account_user"/> -->
+
+        <record id="action_account_payments_transfer" model="ir.actions.act_window">
+            <field name="name">Internal Transfer</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'default_payment_type': 'transfer'}</field>
+            <field name="domain">[('payment_type','=','transfer')]</field>
+            <field name="view_id" ref="account.view_account_payment_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to register a payment advance
+                </p><p>
+                  Payments are used to register liquidity movements (send, collect or transfer money).
+                  You can then process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_account_payments_transfer" 
+            id="menu_action_account_payments_transfer" 
+            parent="menu_finance_payment_bank_cash" sequence="8" 
+            groups="account.group_account_user"/>
+        
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="name">Vendor Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'default_payment_type': 'outbound', 'default_advance_type': 'invoice'}</field>
+            <field name="domain">[('payment_type','=','outbound'),('partner_type', '=', 'supplier'),('advance_type','=','invoice')]</field>
+            <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to register a payment
+                </p><p>
+                  Payments are used to register liquidity movements (send, collect or transfer money).
+                  You can then process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+        <menuitem action="account.action_account_payments_payable" id="account.menu_action_account_payments_payable" parent="account.menu_finance_payables" sequence="20" 
+        	groups="account.group_account_user"/>
+
+		<record id="c10i_view_account_payment_invoice_form" model="ir.ui.view">
+            <field name="name">c10i.account.payment.invoice</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="communication" position="after">
+		        	<label for="amount_charges"/>
+                    <div name="amount_charges_div" class="o_row">
+                        <field name="amount_charges" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="charge_account_id" attrs="{'required': [('amount_charges','&gt;',0.0)], 'readonly': [('state', '!=', 'draft')]}"/>
+                    </div>                    
+                    <field name="payment_adm" invisible="1"/>
+                    <label for="card_type" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}"/>
+                    <div name="card_type_div" class="o_row" attrs="{'invisible':[('payment_adm','not in',('cc','dc'))]}">
+                        <field name="card_type"/>
+                        <field name="card_number" placeholder="Card Number"/>
+                    </div>
+                </field>
+            </field>
+        </record>
+
+        <record id="c10i_view_account_payment_line_tree" model="ir.ui.view">
+            <field name="name">account.payment.line.tree</field>
+            <field name="model">account.payment.line</field>
+            <field name="arch" type="xml">
+    			<tree string="Invoice to Pay" editable="bottom" create="false">
+    				<field name="move_line_id" string="Move #" invisible="1"/>
+    				<field name="invoice_id" string="Invoice #" readonly="1"/>
+    				<!-- <field name="reconciled" readonly="1"/> -->
+    				<field name="move_currency_id" string="Curr #" invisible="1"/>
+    				<!-- <field name="amount_currency"/> -->
+    				<field name="name" />
+                    <field name="origin" />
+    				<field name="date" readonly="1"/>
+    				<field name="date_due" readonly="1"/>
+    				<field name="type" readonly="1" invisible="1"/>
+    				<field name="payment_currency_id" invisible="1"/>
+    				<field name="amount_total" options="{'currency_field': 'payment_currency_id'}" readonly="1"/>
+    				<field name="currency_id" invisible="1"/> 				
+    				<field name="reconcile"/>
+    				<field name="residual" options="{'currency_field': 'payment_currency_id'}" readonly="1"/>
+                    <!-- <field name="action"/>	 -->
+    				<field name="amount_to_pay" sum="Total Allocation" options="{'currency_field': 'currency_id'}"/>
+    				<field name="payment_difference"/>
+                    <!-- <field name="payment_difference_handling"/> -->
+                    <field name="writeoff_account_id"/>
+    			</tree>
+            </field>
+        </record>
+
+        <!-- ========== Spesifikasi Report ========== -->
+        <report string	= "Report Payment"
+				model	= "account.payment"
+				auto	= "True"
+				name	= "report_payment_cash_bank"
+				rml		= "c10i_account/report/report_voucher_payment.jrxml"
+				id		= "report_payment_cash_bank"
+                menu    = "False"
+        />
+    </data>
+</odoo>

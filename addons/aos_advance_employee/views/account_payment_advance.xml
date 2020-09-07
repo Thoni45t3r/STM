@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_payment_advance_emp_tree" model="ir.ui.view">
+            <field name="name">account.payment.tree</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state=='confirm';red:state=='advance';" decoration-info="state=='draft'" decoration-muted="state=='reconciled'" edit="false">
+                    <field name="name"/>
+                    <field name="partner_id" string="Employee"/>
+                    <field name="communication"/>
+                    <field name="register_date" string="Advance"/>
+                    <field name="payment_date" string="Settled"/>
+                    <field name="payment_method_id" invisible="1"/>
+                    <field name="journal_id" string="Journal"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_account_payment_advance_emp_form" model="ir.ui.view">
+            <field name="name">account.payment.form</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <form string="Cash Advances">
+                    <header>                        
+	                    <button name="confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                        <button name="post_advance" class="oe_highlight" states="confirm" string="Advance" type="object"/>
+                        <button name="post_settle" class="oe_highlight" states="advance" string="Settlement" type="object"/>
+                        <button name="cancel_advance" states="confirm,sent,advance,settled" string="Cancel" type="object"/>
+                        <button name="%(action_wizard_report_account_payment_advance)d" type="action"  string="Print Advance Voucher" class="oe_highlight"/>
+                        <button name="%(action_wizard_report_account_payment_settle)d" type="action"  string="Print Settlement Voucher" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="confirm,advance,settled"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="button_journal_entries"
+                                    string="Journal Items" type="object"
+                                    groups="account.group_account_manager"
+                                    attrs="{'invisible':[('move_line_ids','=',[])]}" icon="fa-bars"/>
+                            <field name="move_line_ids" invisible="1"/>
+                        </div>
+                        <field name="id" invisible="1"/>
+                        <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="payment_type" widget="radio" readonly="1"/>
+                                <field name="advance_type" invisible="1"/>
+                                <field name="partner_id" string="Employee" options="{'no_create': True}" attrs="{'required': [('payment_type', '=', 'transfer')], 'readonly': [('state', '!=', 'draft')]}" domain="[('employee','=',True)]"/>
+                    			<field name="destination_journal_id" required="1" string="Journal Type" options="{'no_create': True}" domain="[('type','=','general')]" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="journal_id" string="Transfer from" options="{'no_create': True}" widget="selection" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+	               				<field name="hide_payment_method" invisible="1"/>
+                                <field name="payment_method_id" widget="radio" attrs="{'invisible': [('hide_payment_method', '=', True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="payment_method_code" invisible="1"/>
+                                <label for="amount" string="Advance Amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </div>
+                            </group>
+                            <group>
+                    			<field name="register_date" string="Advance Date" attrs="{'required': [('state','=','draft')], 'readonly': [('state', '!=', 'draft')]}"/>
+                    			<field name="due_date" string="Due Date" attrs="{'required': [('state','=','draft')], 'readonly': [('state', '!=', 'draft')]}"/>
+                    			<field name="settlement_date" string="Settled Date" attrs="{'readonly': [('state', '!=', 'advance')], 'required': [('state','=','advance')]}"/>
+                                <field name="communication" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="customer_account_id" string="Advance Account" options="{'no_create': True}" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <label for="amount_charges" string="Amount Difference"/>
+                                <div name="amount_charges_div" class="o_row">
+                                    <field name="amount_charges" attrs="{'readonly': [('state', '!=', 'advance')]}"/>
+                                    <field name="residual_account_id" attrs="{'required': [('amount_charges','&lt;&gt;',0.0)], 'readonly': [('state', '!=', 'advance')]}"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook>
+                        	<page string="Advance Details">
+		                        <field name="advance_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+			            			<tree string="Advance Details" editable="bottom">
+			            				<field name="name" string="Description"/>
+			            				<field name="amount_to_pay" string="Amount Advance" options="{'currency_field': 'settlement_currency_id'}"/>
+			            			</tree>
+			            		</field>
+			            		<field name="advance_comment" placeholder="Advance Description..."/>
+                        	</page>
+                        	<page string="Declaration Details">
+		                        <field name="settlement_ids" attrs="{'invisible': [('state','not in',('advance','settled'))], 'readonly': [('state', '!=', 'advance')]}">
+			            			<tree string="Settlement Details" editable="bottom">
+			            				<field name="name" string="Description"/>
+			            				<!-- <field name="settlement_currency_id" invisible="1"/> -->
+			            				<field name="account_id" options="{'no_open': True}"/>
+			            				<field name="account_analytic_id" domain="[('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting"/>
+                            			<!-- <field name="company_id" groups="base.group_multi_company"/> -->
+			            				<field name="amount_to_pay" string="Amount Settled" options="{'currency_field': 'settlement_currency_id'}"/>
+			            			</tree>
+			            		</field>
+                            	<field name="settled_comment" placeholder="Settlement Comment..."/>
+                        	</page>
+                        </notebook>                        
+	            		<group class="oe_subtotal_footer oe_right">
+                            <field name="advance_total"/>
+                            <field name="settled_total"/>
+                            <field name="residual_total" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread" options='{"thread_level": 1}'/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_account_payments_advance_emp" model="ir.actions.act_window">
+            <field name="name">Cash Advances</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'default_hide_payment_method': True, 'default_payment_type': 'transfer', 'default_advance_type': 'advance_emp'}</field>
+            <field name="domain">[('payment_type', '=', 'transfer'),('advance_type','=','advance_emp')]</field>
+            <field name="view_id" ref="view_account_payment_advance_emp_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to register a bank transfer
+                </p><p>
+                  Payments are used to register liquidity movements (send, collect or transfer money).
+                  You can then process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_account_payments_advance_emp_view1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_account_payment_advance_emp_tree"/>
+            <field name="act_window_id" ref="action_account_payments_advance_emp"/>
+        </record>
+
+        <record id="action_account_payments_advance_emp_view2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_account_payment_advance_emp_form"/>
+            <field name="act_window_id" ref="action_account_payments_advance_emp"/>
+        </record>    
+        
+        <menuitem action="action_account_payments_advance_emp" id="menu_action_account_payments_advance_emp" 
+        	parent="aos_account_payment.menu_finance_payment_bank_cash" sequence="50"/>
+
+    </data>
+</openerp>

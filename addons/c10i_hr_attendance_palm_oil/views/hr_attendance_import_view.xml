@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--HR Attendance Import-->
+        <record id="view_hr_attendance_import_form" model="ir.ui.view">
+            <field name="name">view.hr.attendance.import.form</field>
+            <field name="model">hr.attendance.import</field>
+            <field name="priority">11</field>
+            <field name="inherit_id" ref="c10i_hr_attendance.view_hr_attendance_import_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//page/field[@name='line_ids']/tree/field[@name='overtime']" position="after">
+                        <field name="employee_salary"/>
+                        <field name="overtime_hours_total"/>
+                        <field name="overtime_hours_value"/>
+                        <field name="hk"/>
+                        <field name="holiday"/>
+                        <field name="note"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        <!--End Of HR Attendance Import Type-->
+    </data>
+</odoo>

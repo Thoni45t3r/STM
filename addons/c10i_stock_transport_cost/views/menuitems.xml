@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_palm_oil_mill" name="Palm Oil Mills" sequence="5" web_icon="c10i_palm_oil_mill,static/description/mill.png"/>
+    <menuitem id="transaction_mills_menu" parent="menu_palm_oil_mill" name="Mill Operations" sequence="5"/>
+    <menuitem id="master_mills_menu" parent="menu_palm_oil_mill" name="Master Data" sequence="10"/>
+    <menuitem id="report_mills_menu" parent="menu_palm_oil_mill" name="Reporting" sequence="40"/>
+    <menuitem id="config_mills_menu" parent="menu_palm_oil_mill" name="Configuration" sequence="50"/>
+
+    <menuitem id="menu_mill_product_form"
+            name="Products"
+            action="mrp.product_template_action"
+            parent="master_mills_menu"
+            sequence="4"/>
+
+    <menuitem id="menu_mill_bom_form_action"
+            action="mrp.mrp_bom_form_action"
+            parent="master_mills_menu"
+            sequence="5"/>
+
+</odoo>

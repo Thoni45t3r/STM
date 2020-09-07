@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="asset_confirm_view" model="ir.ui.view">
+            <field name="name">wizard.asset.confirm.form</field>
+            <field name="model">wizard.asset.confirm</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Draft Asset">
+                    <p class="oe_grey">
+                        Once draft Asset are confirmed, you will not be able
+                        to modify them.
+                    </p>
+                    <footer>
+                        <button string="Confir" name="confirm" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_asset_confirm"
+            multi="True"
+            key2="client_action_multi" name="Confirm Draft Assets"
+            res_model="wizard.asset.confirm" src_model="account.asset.asset"
+            view_mode="form" target="new" view_type="form" />
+    </data>
+</odoo>

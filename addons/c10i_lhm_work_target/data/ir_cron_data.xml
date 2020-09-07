@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- <record model="ir.cron" id="lhm_nab_afkir_cron">
+            <field name="name">Automatic Update LHM Work Target Quantity and Salary based on Link between LHM and NAB</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'lhm.transaction'"/>
+            <field name="function" eval="'_cron_update_lhm_line'"/>
+            <field name="args" eval="'()'" />
+        </record> -->
+    </data>
+</odoo>

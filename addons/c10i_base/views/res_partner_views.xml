@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_form_base_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.view.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="fax" position="after" groups="base.group_no_one">
+                    <label string="VAT" groups="base.group_no_one"/>
+                    <div name="vat_info" class="o_row" groups="base.group_no_one">
+                        <field name="vat" placeholder="00.000.000.0-000.000" string="VAT" groups="base.group_no_one"/>
+                    </div>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

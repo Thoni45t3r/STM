@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.ui.menu" id="hr_public_holidays.menu_create_next_year_public_holidays">
+            <field name="groups_id" eval="[(6,0,[ref('c10i_base.menu_make_invisible')])]"/>
+        </record>
+    </data>
+</odoo>

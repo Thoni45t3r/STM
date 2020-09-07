@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.cron" id="move_employee_cron">
+            <field name="name">Move Plantation Employee</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'hr.foreman.movement'"/>
+            <field name="function" eval="'cron_move_employee'"/>
+            <field name="args" eval="'()'" />
+        </record>
+        <record model="ir.cron" id="lhm_plant_block_cron">
+            <field name="name">Automatic Update Block Status</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'lhm.plant.block'"/>
+            <field name="function" eval="'_cron_update_tahun_tanam'"/>
+            <field name="args" eval="'()'" />
+        </record>
+        <record model="ir.cron" id="lhm_nab_cron">
+            <field name="name">Automatic Update Link between NAB and LHM</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'lhm.nab.line'"/>
+            <field name="function" eval="'_cron_linked_to_nab'"/>
+            <field name="args" eval="'()'" />
+        </record>
+        <record model="ir.cron" id="lhm_nab_afkir_cron">
+            <field name="name">Automatic Update Link between NAB Afkir and LHM</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="model" eval="'lhm.nab.afkir.line'"/>
+            <field name="function" eval="'_cron_linked_to_nab'"/>
+            <field name="args" eval="'()'" />
+        </record>
+    </data>
+</odoo>

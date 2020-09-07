@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_stock_cancel" model="ir.ui.view">
+        <field name="name">wizard.stock.cancel.form</field>
+        <field name="model">stock.cancel</field>
+        <field name="arch" type="xml">
+            <form string="Stock Void or Cancel">
+                <group attrs="{'invisible': True}">
+                    <p>
+                        You have processed less products than the initial demand.
+                    </p><p class="text-muted">
+                        Create a backorder, if you expect to process the remaining
+                        products later.  Do not create a backorder if you will not
+                        supply the remaining products.
+                    </p>
+                </group>
+                <footer>
+                    <button name="void" string="Void" type="object" class="oe_highlight"/>
+                    <button name="cancel_and_copy" string="Cancel and Copy" type="object" class="btn-primary"/>
+                    <button string="_Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

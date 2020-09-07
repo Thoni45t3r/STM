@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_running_account_report' model="ir.ui.view">
+            <field name="name">Laporan Running Account</field>
+            <field name="model">wizard.running.account.report</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Running Account">
+                    <group>
+                        <group>
+                            <field name="account_period_id" />
+                            <field name="report_type"  />
+                        </group>
+                        <group>
+                            <field name="company_id" widget="selection"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_running_account_report">
+            <field name="name">Laporan Running Account</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.running.account.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_running_account_report"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Laporan Running Account" parent="menu_plantation_report" action="action_running_account_report" id="menu_running_account_report" icon="fa-print" sequence="9"/>
+        <!--====================Specifying the report========================-->
+        <report string="Laporan Running Account"
+            model="wizard.running.account.report"
+            auto="True"
+            name="running_account_report"
+            rml="c10i_lhm/report/report_running_account.jrxml"
+            id="running_account_report"
+            menu="False"
+            />
+
+		<report string="Laporan Running Account Excel Edition"
+			model="wizard.running.account.report"
+			auto="True"
+			name="running_account_report_xls"
+			rml="c10i_lhm/report/report_running_account.jrxml"
+			id="running_account_report_xls"
+			menu="False"
+			/>
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_purchase_configuration_landed_cost" model="ir.ui.view">
+            <field name="name">purchase.res.config.landed.view</field>
+            <field name="model">purchase.config.settings</field>
+            <field name="inherit_id" ref="purchase.view_purchase_configuration"/>
+            <field name="arch" type="xml">
+            	<field name="group_costing_method" position="after">
+            		<field name="group_purchase_inland_costs" widget="radio"/>
+            	</field>
+            	<field name="group_warning_purchase" position="after">
+                    <field name="purchase_landed_cost_calculate" widget="radio"/>
+                    <field name="group_landed_cost_by_weight_x" invisible="1"/>
+                    <field name="group_landed_cost_by_volume_x" invisible="1"/>
+                    <field name="group_landed_cost_by_quantity_x" invisible="1"/>
+                    <field name="group_landed_cost_by_amount_x" invisible="1"/>
+            	</field>
+            </field>
+        </record>
+
+</odoo>

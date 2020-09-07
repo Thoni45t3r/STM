@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--====================Defining the Wizard View==================-->
+        <record id='wizard_report_price_approval_request_form_view' model="ir.ui.view">
+            <field name="name">wizard.report.price.approval.request.form.view</field>
+            <field name="model">wizard.report.price.approval.request</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report Price Approval Request">
+                    <group invisible="1">
+                        <group>
+                            <field name="report_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id" widget="selection" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook tabpos="up" colspan="4">
+                        <page string="Purchase Request" >
+                            <field name="purchase_request_ids" domain="[('rfq_count','=',0)]" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_report_price_approval_request">
+            <field name="name">Report Price Approval Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.report.price.approval.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_report_price_approval_request_form_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Price Approval Request" parent="purchase.root_purchase_request_report" action="action_report_price_approval_request" id="menu_report_price_approval_request" icon="fa-print" sequence="10"/>
+        <!--====================Specifying the report========================-->
+		<report string="Report Price Approval Request Excel Edition"
+			model="wizard.report.price.approval.request"
+			auto="True"
+			name="report_price_approval_request"
+			rml="c10i_purchase_request/report/report_price_approval_request.jrxml"
+			id="report_price_approval_request"
+			menu="False"
+			/>		
+    </data>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+<!--====================Defining the wizard View==================-->
+
+        <record id='wizard_aging' model="ir.ui.view">
+            <field name="name">Report Aging</field>
+            <field name="model">report.aging</field>
+         	<field name="type">form</field>
+            <field name="arch" type="xml">
+            	
+          	<form string="Report Detail Aged Partner Balance" version="7.0">
+      		   	<notebook tabpos="up" colspan="4">
+ 		   			<page string="Account" >
+ 		   				<group>
+	 		   				<group>
+				               	<field name="from_date" required='1'/>
+				               	<field name="Partner_type" required='1' />
+			    	           	<field name="invoice" required='1' />
+	 		   				</group>
+	 		   				<group>
+				               	<field name="usia" required='1' />
+				               	<field name="company" required='1' />
+			      			   	<field name="report_type"  />
+	 		   				</group>
+			      		 </group>
+	                </page>
+	                <page string="Journal" >
+	                        <field name="journal" colspan="4" nolabel="1"/>
+	                </page>
+	                <page string="Partner" >
+	                        <field name="partner" colspan="4" nolabel="1"/>
+	                </page>
+                </notebook>
+                <footer>
+				<button icon="fa-print" name="create_report" string="Print" type="object" colspan="2" default_focus="1" />
+                    or 
+                <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+         	 </form>
+            </field>
+        </record>
+   <record model="ir.actions.act_window" id="action_report_aging">
+            <field name="name">Report Aging</field>
+            <field name="res_model">report.aging</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>  
+<!--====================Specifying the report========================-->
+        <report string="Report Aging"
+		model="report.aging"
+		auto="True"
+		name="report_aging"
+		rml="c10i_account/report/report_aging.jrxml"
+		id="report_aging"
+		menu="False"
+		/>
+
+        <report string="Report Aging XLS"
+		model="report.aging"
+		auto="True"
+		name="report_aging_xls"
+		rml="c10i_account/report/report_aging_excel.jrxml"
+		id="report_aging_xls"
+		menu="False"
+		/>
+
+        <menuitem
+            name="Aged Partner Balance"
+            parent="account.menu_finance_reports"
+            action="action_report_aging"
+            id="account.menu_aged_trial_balance"/>
+             
+    </data>
+</openerp>

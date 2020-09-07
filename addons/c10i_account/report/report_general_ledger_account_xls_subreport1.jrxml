@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_general_ledger_account_subreport1" pageWidth="1975" pageHeight="594" orientation="Landscape" columnWidth="1975" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="82ed9ccd-0509-4040-b74c-1508b268cecb">
+	<property name="ireport.zoom" value="0.8264462809917373"/>
+	<property name="ireport.x" value="491"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="STI Lokal Server"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="account_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="openbalance" class="java.math.BigDecimal" isForPrompting="false">
+		<defaultValueExpression><![CDATA[BigDecimal.ZERO]]></defaultValueExpression>
+	</parameter>
+	<parameter name="target_move" class="java.lang.String">
+		<parameterDescription><![CDATA[target_move]]></parameterDescription>
+		<defaultValueExpression><![CDATA["'posted'"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT am.company_id
+, am.journal_id
+, aa."id" account_id
+, aa.code
+, aa."name" account_name
+, aaa.name AS analytic_name
+, am."id" move_id
+, am."date"
+, am."name" move_name
+, am."ref" move_ref
+, aml."id" moveline_id
+, aml."name" moveline_name
+, aml."ref" moveline_ref
+, rp."id" partner_id
+, rp."ref" partner_ref
+, rp."name" partner_name
+, aml.debit
+, aml.credit
+, curr.name AS curr_name
+, curr.symbol
+, aml.amount_currency
+, aj."name" journalname
+FROM account_move_line aml
+
+LEFT OUTER JOIN account_move am ON aml.move_id = am."id"
+LEFT OUTER JOIN res_currency curr ON aml.currency_id = curr."id"
+LEFT OUTER JOIN account_journal aj ON aj."id" = aml.journal_id
+LEFT OUTER JOIN res_partner rp ON rp."id" = aml.partner_id
+LEFT OUTER JOIN account_account aa ON aa."id" = aml.account_id
+LEFT OUTER JOIN account_analytic_account aaa ON aaa."id" = aml.analytic_account_id
+WHERE am."state" in  ($P!{target_move})
+AND aa.id = $P{account_id}
+AND aml."date" between $P{from_date}::date and $P{to_date}::date
+
+ORDER BY am.date, am."name",aml."name"]]>
+	</queryString>
+	<field name="company_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="company_id"/>
+	</field>
+	<field name="journal_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="journal_id"/>
+	</field>
+	<field name="account_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="account_id"/>
+	</field>
+	<field name="code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="code"/>
+	</field>
+	<field name="account_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="account_name"/>
+	</field>
+	<field name="analytic_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="analytic_name"/>
+	</field>
+	<field name="move_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="move_id"/>
+	</field>
+	<field name="date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+	</field>
+	<field name="move_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="move_name"/>
+	</field>
+	<field name="move_ref" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="move_ref"/>
+	</field>
+	<field name="moveline_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="moveline_id"/>
+	</field>
+	<field name="moveline_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="moveline_name"/>
+	</field>
+	<field name="moveline_ref" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="moveline_ref"/>
+	</field>
+	<field name="partner_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="partner_id"/>
+	</field>
+	<field name="partner_ref" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="partner_ref"/>
+	</field>
+	<field name="partner_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="partner_name"/>
+	</field>
+	<field name="debit" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="debit"/>
+	</field>
+	<field name="credit" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="credit"/>
+	</field>
+	<field name="curr_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="curr_name"/>
+	</field>
+	<field name="symbol" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="symbol"/>
+	</field>
+	<field name="amount_currency" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="amount_currency"/>
+	</field>
+	<field name="journalname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="journalname"/>
+	</field>
+	<variable name="Balance" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[($V{Balance}.add( $F{debit} )).subtract( $F{credit} )]]></variableExpression>
+		<initialValueExpression><![CDATA[$P{openbalance}]]></initialValueExpression>
+	</variable>
+	<variable name="Total_Debit_Account" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{debit}]]></variableExpression>
+	</variable>
+	<variable name="Total_Credit_Account" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{credit}]]></variableExpression>
+	</variable>
+	<variable name="Total_Amount_currency" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount_currency}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField pattern="dd-MM-yyyy">
+				<reportElement mode="Transparent" x="270" y="0" width="70" height="14" uuid="ccefeaa0-e55e-481b-91b0-20fd96f59bd7">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date} == null ? "-" : $F{date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="490" y="0" width="350" height="14" uuid="7b0af964-1dc0-4ad2-9dd5-53d7e31c8f5a">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{moveline_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="340" y="0" width="150" height="14" isPrintWhenDetailOverflows="true" uuid="c87ab427-735b-4b4f-b1db-8982f79f72e8">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{move_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1135" y="0" width="240" height="14" uuid="11947ca9-935f-4e0a-99fb-639d3299176b"/>
+				<box leftPadding="5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partner_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Transparent" x="1375" y="0" width="150" height="14" uuid="8070e6f8-5145-4310-820a-4cc57d77cb00"/>
+				<box leftPadding="3" rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{debit}==null || $F{debit}.doubleValue() == 0  ? "-" : $F{debit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Transparent" x="1525" y="0" width="150" height="14" uuid="f0984a30-6911-4ce5-8fc5-50cd129ca78c"/>
+				<box leftPadding="3" rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{credit}==null || $F{credit}.doubleValue() == 0  ? "-" : $F{credit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="840" y="0" width="95" height="14" uuid="7b0af964-1dc0-4ad2-9dd5-53d7e31c8f5a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{journalname} == null ? "-" : $F{journalname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="0" width="70" height="14" uuid="ccefeaa0-e55e-481b-91b0-20fd96f59bd7"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}.contains(".")||$F{code}.contains(".")||
+$F{code}.contains("A")||$F{code}.contains("a")||
+$F{code}.contains("B")||$F{code}.contains("b")||
+$F{code}.contains("C")||$F{code}.contains("c")||
+$F{code}.contains("D")||$F{code}.contains("d")||
+$F{code}.contains("E")||$F{code}.contains("e")||
+$F{code}.contains("F")||$F{code}.contains("f")||
+$F{code}.contains("G")||$F{code}.contains("g")||
+$F{code}.contains("H")||$F{code}.contains("h")||
+$F{code}.contains("I")||$F{code}.contains("i")||
+$F{code}.contains("J")||$F{code}.contains("j")||
+$F{code}.contains("K")||$F{code}.contains("k")||
+$F{code}.contains("L")||$F{code}.contains("l")||
+$F{code}.contains("M")||$F{code}.contains("m")||
+$F{code}.contains("N")||$F{code}.contains("n")||
+$F{code}.contains("O")||$F{code}.contains("o")||
+$F{code}.contains("P")||$F{code}.contains("p")||
+$F{code}.contains("Q")||$F{code}.contains("q")||
+$F{code}.contains("R")||$F{code}.contains("r")||
+$F{code}.contains("S")||$F{code}.contains("s")||
+$F{code}.contains("T")||$F{code}.contains("t")||
+$F{code}.contains("U")||$F{code}.contains("u")||
+$F{code}.contains("V")||$F{code}.contains("v")||
+$F{code}.contains("W")||$F{code}.contains("w")||
+$F{code}.contains("X")||$F{code}.contains("x")||
+$F{code}.contains("Y")||$F{code}.contains("y")||
+$F{code}.contains("Z")||$F{code}.contains("z")?
+($F{code} == null? "-" : $F{code}):Integer.parseInt($F{code})]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy">
+				<reportElement mode="Transparent" x="70" y="0" width="200" height="14" uuid="ccefeaa0-e55e-481b-91b0-20fd96f59bd7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account_name} == null? " - " : $F{account_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Transparent" x="1675" y="0" width="150" height="14" uuid="f0984a30-6911-4ce5-8fc5-50cd129ca78c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Balance}==null || $V{Balance}.equals(BigDecimal.ZERO)  ? "-" :$V{Balance}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Transparent" x="1825" y="0" width="150" height="14" uuid="c92ebf25-04bb-425a-913c-9c0a9dfe94ff"/>
+				<box leftPadding="3" rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount_currency}==null || $F{amount_currency}.doubleValue() == 0  ? "-" : $F{amount_currency}]]></textFieldExpression>
+				<patternExpression><![CDATA[($F{symbol}) + "#,##0.00;("+($F{symbol}) +"#,##0.00)"]]></patternExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="935" y="0" width="200" height="14" uuid="c29fdc04-1930-4cfb-9d61-d7eab8ac96ac"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{analytic_name} == null ? "-" : $F{analytic_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="18">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" positionType="Float" mode="Opaque" x="1375" y="0" width="150" height="18" forecolor="#000000" backcolor="#E0DCDC" uuid="d7a96afa-2dd4-4402-8fd5-992adfd0a889"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Total_Debit_Account}==null || $V{Total_Debit_Account}.doubleValue() == 0  ? "-" : $V{Total_Debit_Account}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" positionType="Float" mode="Opaque" x="0" y="0" width="1375" height="18" forecolor="#000000" backcolor="#E0DCDC" uuid="d7a96afa-2dd4-4402-8fd5-992adfd0a889"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total " + ($F{account_name} == null ? "-" : $F{account_name})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" positionType="Float" mode="Opaque" x="1525" y="0" width="150" height="18" forecolor="#000000" backcolor="#E0DCDC" uuid="d7a96afa-2dd4-4402-8fd5-992adfd0a889"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Total_Credit_Account}==null || $V{Total_Credit_Account}.doubleValue() == 0  ? "-" : $V{Total_Credit_Account}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" positionType="Float" mode="Opaque" x="1675" y="0" width="150" height="18" forecolor="#000000" backcolor="#E0DCDC" uuid="6ddb6aa4-0ae2-473e-b4fb-834dcf46b49f">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" positionType="Float" mode="Opaque" x="1825" y="0" width="150" height="18" forecolor="#000000" backcolor="#E0DCDC" uuid="2b3ca2b9-1dd5-4e48-8b10-df1c6cb1604e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

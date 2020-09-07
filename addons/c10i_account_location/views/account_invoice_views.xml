@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="invoice_supplier_form_inherit_plantation">
+        <field name="name">invoice.supplier.form.inherit.plantation</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="replace">
+                <field name="account_id" groups="account.group_account_user" domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other'), ('deprecated', '=', False),('id', 'in', account_account_location_ids[0][2])]" options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="before">
+                <field name="account_location_type_id" options="{'no_create_edit':True, 'no_create':True}"/>
+                <field name="account_location_id" domain="[('type_id','=',account_location_type_id)]" attrs="{'readonly': [('account_location_type_no_location', '=', True)], 'required': [('account_location_type_no_location', '=', False)]}" options="{'no_create_edit':True, 'no_create':True}"/>
+                <field name="account_location_type_no_location" invisible="1"/>
+                <field name="account_account_location_ids" widget="many2many_tags" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="invoice_supplier_form_inherit_cost_center">
+        <field name="name">invoice.supplier.form.inherit.cost.center</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account_cost_center.invoice_supplier_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='cost_center_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="invoice_form_inherit_cost_center">
+        <field name="name">invoice.form.inherit.cost.center</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account_cost_center.invoice_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='cost_center_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='cost_center_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

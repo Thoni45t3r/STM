@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report string	= "Unadjusted Advance"
+			model	= "wizard.invoice.advance.balance"
+			auto	= "True"
+			name	= "invoice_advance_balance"
+			rml		= "c10i_account_invoice_advance/reports/invoice_advance_balance.jrxml"
+			id		= "invoice_advance_balance"/>
+    </data>
+</odoo>

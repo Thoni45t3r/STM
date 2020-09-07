@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="c10i_sale_order_form_doc_inherit_view" model="ir.ui.view">
+            <field name="name">c10i.sale.order.form.doc.inherit.view</field>
+            <field name="model">sale.order</field>
+            <field name="priority">19</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[4]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[7]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <button name="action_confirm" position="before">
+                    <field name="auto_downpayment" invisible="1"/>
+                    <button name="create_downpayment" string="Create DP" class="btn-primary o_sale_confirm" type="object" attrs="{'invisible':['|',('auto_downpayment', '!=', True),('advance_invoice_id', '!=', False)]}"/>
+                    <button name="print_report_sale" string="Print" type="object" icon="fa-print"/>
+                </button>
+                <field name="partner_id" position="after">
+                    <field name="doc_type_id" required="1" domain="[('sales','=',True)]" options='{"always_reload": True, "no_create": True, "no_open": True}'/>
+                </field>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}">
+                        <label for="downpayment_value"/>
+                    </div>
+                    <field name="downpayment_value" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="c10i_sale_stock_order_form_inherit_view" model="ir.ui.view">
+            <field name="name">c10i.sale.stock.order.form.inherit.view</field>
+            <field name="model">sale.order</field>
+            <field name="priority">19</field>
+            <field name="inherit_id" ref="c10i_sale.c10i_sale_order_form_view"/>
+            <field name="arch" type="xml">
+                <field name="incoterm" position="after">
+                    <label for="downpayment" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    <div class="o_row">
+                        <field name="downpayment" attrs="{'required':[('auto_downpayment', '=', True)], 'invisible':[('auto_downpayment', '!=', True)]}"/>
+                        <label string="%" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    </div>
+                    <field name="downpayment_date" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                    <field name="advance_invoice_id" context="{'form_view_ref':'c10i_account_invoice_advance.invoice_advance_supplier_form'}" readonly="1" attrs="{'invisible':[('auto_downpayment', '!=', True)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_sale_order_document_type_filter" model="ir.ui.view">
+            <field name="name">view.sale.order.document.type.filter</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@expand='0']" position="after">
+                    <filter name="document_type_group" string="Document Type" context="{'group_by':'doc_type_id'}"/>
+                </xpath>
+                <field name="partner_id" position="after">
+                    <field name="doc_type_id" string="Document Type"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="name">Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+            <field name="context">{'readonly_by_pass': True, 'search_default_document_type_group':1}</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Once the quotation is confirmed, it becomes a sales order.
+                    You'll be able to invoice it and collect payments.
+                    From the <i>Sales Orders</i> menu, you can track delivery
+                    orders or services.
+                </p>
+            </field>
+        </record>
+
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="context">{'readonly_by_pass': True, 'search_default_document_type_group':1, 'hide_sale': True}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a Quotation, the first step of a new sale.
+              </p><p>
+                Your next actions should flow efficiently: confirm the Quotation
+                to a Sale Order, then create the Invoice and collect the Payment.
+              </p><p>
+                Note that once a Quotation becomes a Sale Order, it will be moved
+                from the Quotations list to the Sales Order list.
+              </p>
+            </field>
+        </record>
+        <!-- Menu Configuration -->
+        <menuitem id="menu_document_type_sales_config" parent="sales_team.menu_sale_config" action="c10i_document_type.action_res_document_type" sequence="1" groups="sales_team.group_sale_manager"/>
+    </data>
+</odoo>

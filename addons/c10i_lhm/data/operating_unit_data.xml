@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Plantation Operating Unit  -->
+        <record id="operating_unit.main_operating_unit" model="operating.unit">
+            <field name="name">Operating Unit Head Office</field>
+            <field name="code">OUHO</field>
+            <field name="partner_id" ref="base.main_partner"/>
+        </record>
+        <record id="site_operating_unit" model="operating.unit">
+            <field name="name">Operating Unit Site</field>
+            <field name="code">OUS</field>
+            <field name="partner_id" ref="base.main_partner"/>
+        </record>
+
+        <record model="res.users" id="base.user_root">
+            <field name="default_operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="operating_unit_ids"
+                   eval="[(4, ref('operating_unit.main_operating_unit')),(4, ref('site_operating_unit'))]"/>
+            <field name="groups_id"
+                   eval="[(4,ref('operating_unit.group_multi_operating_unit'))]"/>
+        </record>
+        <record model="res.users" id="template_user_plantation_operator">
+            <field name="default_operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="operating_unit_ids"
+                   eval="[(4, ref('operating_unit.main_operating_unit')),(4, ref('site_operating_unit'))]"/>
+            <field name="groups_id"
+                   eval="[(4,ref('operating_unit.group_multi_operating_unit'))]"/>
+        </record>
+        <record model="res.users" id="template_user_plantation_supervisor">
+            <field name="default_operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="operating_unit_ids"
+                   eval="[(4, ref('operating_unit.main_operating_unit')),(4, ref('site_operating_unit'))]"/>
+            <field name="groups_id"
+                   eval="[(4,ref('operating_unit.group_multi_operating_unit'))]"/>
+        </record>
+        <record model="res.users" id="template_user_plantation_manager">
+            <field name="default_operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="operating_unit_ids"
+                   eval="[(4, ref('operating_unit.main_operating_unit')),(4, ref('site_operating_unit'))]"/>
+            <field name="groups_id"
+                   eval="[(4,ref('operating_unit.group_multi_operating_unit'))]"/>
+        </record>
+        <record model="res.users" id="template_user_plantation_super">
+            <field name="default_operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="operating_unit_ids"
+                   eval="[(4, ref('operating_unit.main_operating_unit')),(4, ref('site_operating_unit'))]"/>
+            <field name="groups_id"
+                   eval="[(4,ref('operating_unit.group_multi_operating_unit'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="c10i_view_company_purchase">
+        <field name="name">c10i.res.company.purchase</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook/page[last()]" position="after">
+                <page string="Sales &amp; Purchase">
+                    <group>
+                        <group string="Purchase">
+                            <field name='default_purchase_shipping_partner_id'/>
+                            <field name='default_purchase_invoice_partner_id'/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

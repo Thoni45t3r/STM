@@ -1,0 +1,51 @@
+<odoo>
+	<!-- Product Category -->
+	<record id="product_category_asset_form" model="ir.ui.view">
+		<field name="name">Asset Product Category (form)</field>
+		<field name="model">product.category</field>
+		<field name="inherit_id" ref="stock_account.view_category_property_form"/>
+		<field name="arch" type="xml">
+			<!-- Asset Category -->
+			<xpath expr="//div[@class='oe_title']/h1" position="after">
+				<div>
+					<div>
+						<field name="asset_category" attrs="{'readonly': [('asset_category_id','!=',False)]}"/>
+						<label for="asset_category"/>
+						<field name="asset_category_id" invisible="1"/>
+					</div>
+				</div>
+            </xpath>
+			
+			<!-- Asset Configuration -->
+			<group name="account_property" position="after">
+				<group name="asset_configuration" attrs="{'invisible': [('asset_category','=',False)]}">
+					<group string="Depreciation Method">
+						<field name="depreciation_start_control" widget="radio"/>
+						<field name="method" widget="radio"/>
+					</group>
+					<group string="Periodicity">
+						<field name="method_time" string="Time Method Based On" widget="radio"/>
+						<field name="method_number" string="Number of Entries"/>
+						<field name="method_period" string="One Entry Every" />
+						<field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')]}"/>
+					</group>
+				</group>
+			</group>
+			
+			<!-- Account Properties -->
+			<field name="property_account_income_categ_id" position="attributes">
+				<attribute name="attrs">{'invisible':[('asset_category','!=',False)]}</attribute>
+			</field>
+			<field name="property_account_expense_categ_id" position="attributes">
+				<attribute name="attrs">{'invisible':[('asset_category','!=',False)]}</attribute>
+			</field>
+			<field name="property_account_expense_categ_id" position="after">
+				<field name="asset_journal_id" attrs="{'invisible':[('asset_category','=',False)]}"/>
+				<field name="account_asset_id" domain="[('deprecated', '=', False)]" attrs="{'invisible':[('asset_category','=',False)]}"/>
+				<field name="account_depreciation_id" domain="[('deprecated', '=', False)]" attrs="{'invisible':[('asset_category','=',False)]}"/>
+				<field name="account_depreciation_expense_id" domain="[('deprecated', '=', False)]" attrs="{'invisible':[('asset_category','=',False)]}"/>
+			</field>
+
+		</field>
+	</record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    	<template id="assets_backend_table_header_freeze" name="Table header freeze assets backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/table_header_freeze/static/js/widget.js"></script>
+            </xpath>
+        </template>
+
+        <template id="assets_common_table_header_freeze" name="Table header freeze assets common"   
+            inherit_id="web.assets_common">
+            <xpath expr="." position="inside">
+            	 <link rel="stylesheet" href="/table_header_freeze/static/css/header_freeze.css"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

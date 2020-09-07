@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <record model="ir.ui.view" id="purchase_order_form_inherit">
+          <field name="name">purchase.order.inherit</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="/form/sheet/notebook/page[last()]" position="after">
+                  <page string="PR &amp; RFQ">
+                      <group>
+                          <group>
+                              <field name="purchase_request_ids" string="Purchase Request" widget="many2many_tags" readonly="1"/>
+                              <field name="purchase_rfq_ids" string="RFQ" widget="many2many_tags" readonly="1"/>
+                              <field name="service_order" readonly="1" attrs="{'invisible':[('service_order','=',False)]}"/>
+                          </group>
+                      </group>
+                  </page>
+              </xpath>
+              <xpath expr="/form/sheet/notebook/page[1]/field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                  <field name="request_id" invisible="1"/>
+                  <field name="request_line_id" invisible="1"/>
+                  <field name="rfq_id" invisible="1"/>
+                  <field name="rfq_line_id" invisible="1"/>
+              </xpath>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="view_purchase_order_filter_inherit">
+          <field name="name">purchase.order.filter.inherit</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+          <field name="arch" type="xml">
+              <field name="name" position="after">
+                  <field name="purchase_request_ids" string="PR"/>
+                  <field name="purchase_rfq_ids" string="RFQ"/>
+              </field>
+              <field name="name" position="after">
+                    <filter name="service" string="Service Order" domain="[('service_order','=',True)]"/>
+              </field>
+          </field>
+      </record>
+
+      <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+            <field name="domain">[]</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order.
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+        <!-- Override Menu -->
+        <record model="ir.ui.menu" id="purchase.menu_purchase_rfq">
+            <field name="groups_id" eval="[(6,0,[ref('c10i_base.menu_make_invisible')])]"/>
+        </record>
+  </data>
+</odoo>

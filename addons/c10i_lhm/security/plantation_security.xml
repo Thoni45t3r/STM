@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="calendar.mail_menu_calendar" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6,0,[ref('hr.group_hr_user'),ref('hr.group_hr_manager')])]"/>
+        </record>
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6,0,[ref('hr.group_hr_user'),ref('hr.group_hr_manager')])]"/>
+        </record>
+        <record id="hr_holidays.menu_hr_holidays_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6,0,[ref('hr.group_hr_user'),ref('hr.group_hr_manager')])]"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record model="ir.module.category" id="module_category_c10i_plantation">
+            <field name="name">Plantation</field>
+            <field name="description">Management Plantation User.</field>
+            <field name="sequence">500</field>
+        </record>
+        <record model="ir.module.category" id="module_category_c10i_plantation_extra">
+            <field name="name">Plantation - Extra</field>
+            <field name="description">Management Plantation User with extra access.</field>
+            <field name="sequence">501</field>
+        </record>
+        <record id="group_plantation_operator" model="res.groups">
+            <field name="name">Operator</field>
+            <field name="category_id" ref="module_category_c10i_plantation"/>
+            <field name="comment">Group Untuk Operator Plantation</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_operator_all" model="res.groups">
+            <field name="name">Operator All</field>
+            <field name="category_id" ref="module_category_c10i_plantation"/>
+            <field name="comment">Group Untuk Operator Plantation Membaca Semua Dokumen</field>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_operator_employee" model="res.groups">
+            <field name="name">Plantation - Operator with Master Employee</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Group Untuk Operator Plantation Akses ke Master Karyawan</field>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_reporting_all" model="res.groups">
+            <field name="name">Plantation - Reporting Only</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Akses ke Laporan Saja</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_reporting_production" model="res.groups">
+            <field name="name">Plantation - Reporting Production</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Akses ke Laporan Produksi Saja</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_operator_can_see_salary" model="res.groups">
+            <field name="name">Plantation - Operator can Monitor DU</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Group Untuk Operator Plantation Akses ke Laporan Daftar Upah</field>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_supervisor" model="res.groups">
+            <field name="name">Supervisor</field>
+            <field name="comment">Group Untuk Supervisor Plantation.</field>
+            <field name="category_id" ref="module_category_c10i_plantation"/>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_running_allocation" model="res.groups">
+            <field name="name">Running and Allocation Account</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Group Untuk Operator Plantation</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="comment">Group Untuk Manager Plantation.</field>
+            <field name="category_id" ref="module_category_c10i_plantation"/>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_supervisor'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_super" model="res.groups">
+            <field name="name">Super User</field>
+            <field name="comment">Group Untuk Super User Plantation.</field>
+            <field name="category_id" ref="module_category_c10i_plantation"/>
+            <field name="implied_ids" eval="[(4, ref('group_plantation_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_plantation_approve_afkir" model="res.groups">
+            <field name="name">Plantation - Approve Afkir</field>
+            <field name="category_id" ref="module_category_c10i_plantation_extra"/>
+            <field name="comment">Group Untuk user yang bisa approve Afkir</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <!-- Access Rule LHM-->
+        <record id="lhm_transaction_own_rule" model="ir.rule">
+            <field name="name">Own Transaction Report Foreman</field>
+            <field ref="model_lhm_transaction" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="lhm_transaction_all_rule" model="ir.rule">
+            <field name="name">All Transaction Report Foreman</field>
+            <field ref="model_lhm_transaction" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="ir_rule_plantation_lhm_allowed_operating_units" model="ir.rule">
+            <field name="model_id" ref="model_lhm_transaction"/>
+            <field name="domain_force">['|', ('operating_unit_id','=',False), ('operating_unit_id','in',[x.id for x in user.operating_unit_ids])]</field>
+            <field name="name">OU Transaction Report Foreman</field>
+            <field name="global" eval="True"/>
+            <field eval="0" name="perm_unlink"/>
+            <field eval="0" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="0" name="perm_create"/>
+        </record>
+
+        <!-- Access Rule Machine Book -->
+        <record id="lhm_machine_own_rule" model="ir.rule">
+            <field name="name">Own Machine Book</field>
+            <field ref="model_lhm_machine" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="lhm_machine_all_rule" model="ir.rule">
+            <field name="name">All Machine Book</field>
+            <field ref="model_lhm_machine" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="ir_rule_plantation_machine_allowed_operating_units" model="ir.rule">
+            <field name="model_id" ref="model_lhm_machine"/>
+            <field name="domain_force">['|', ('operating_unit_id','=',False), ('operating_unit_id','in',[x.id for x in user.operating_unit_ids])]</field>
+            <field name="name">OU Machine Book</field>
+            <field name="global" eval="True"/>
+            <field eval="0" name="perm_unlink"/>
+            <field eval="0" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="0" name="perm_create"/>
+        </record>
+
+        <!-- Access Rule Vehicle Book -->
+        <record id="lhm_vehicle_own_rule" model="ir.rule">
+            <field name="name">Own Vehicle Book</field>
+            <field ref="model_lhm_vehicle" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="lhm_vehicle_all_rule" model="ir.rule">
+            <field name="name">All Vehicle Book</field>
+            <field ref="model_lhm_vehicle" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="ir_rule_plantation_vehicle_allowed_operating_units" model="ir.rule">
+            <field name="model_id" ref="model_lhm_machine"/>
+            <field name="domain_force">['|', ('operating_unit_id','=',False), ('operating_unit_id','in',[x.id for x in user.operating_unit_ids])]</field>
+            <field name="name">OU Vehicle Book</field>
+            <field name="global" eval="True"/>
+            <field eval="0" name="perm_unlink"/>
+            <field eval="0" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="0" name="perm_create"/>
+        </record>
+
+        <!-- Access Rule Workshop Book -->
+        <record id="lhm_workshop_own_rule" model="ir.rule">
+            <field name="name">Own Workshop Book</field>
+            <field ref="model_lhm_workshop" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="lhm_workshop_all_rule" model="ir.rule">
+            <field name="name">All Workshop Book</field>
+            <field ref="model_lhm_workshop" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="ir_rule_plantation_workshop_allowed_operating_units" model="ir.rule">
+            <field name="model_id" ref="model_lhm_workshop"/>
+            <field name="domain_force">['|', ('operating_unit_id','=',False), ('operating_unit_id','in',[x.id for x in user.operating_unit_ids])]</field>
+            <field name="name">OU Workshop Book</field>
+            <field name="global" eval="True"/>
+            <field eval="0" name="perm_unlink"/>
+            <field eval="0" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="0" name="perm_create"/>
+        </record>
+
+        <!-- Access Rule Contractor Book -->
+        <record id="lhm_contractor_own_rule" model="ir.rule">
+            <field name="name">Own Contractor Book</field>
+            <field ref="model_lhm_contractor" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="lhm_contractor_all_rule" model="ir.rule">
+            <field name="name">All Contractor Book</field>
+            <field ref="model_lhm_contractor" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_plantation_operator_all'))]"/>
+            <field eval="1" name="perm_unlink"/>
+            <field eval="1" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="1" name="perm_create"/>
+        </record>
+
+        <record id="ir_rule_plantation_contractor_allowed_operating_units" model="ir.rule">
+            <field name="model_id" ref="model_lhm_contractor"/>
+            <field name="domain_force">['|', ('operating_unit_id','=',False), ('operating_unit_id','in',[x.id for x in user.operating_unit_ids])]</field>
+            <field name="name">OU Contractor Book</field>
+            <field name="global" eval="True"/>
+            <field eval="0" name="perm_unlink"/>
+            <field eval="0" name="perm_write"/>
+            <field eval="1" name="perm_read"/>
+            <field eval="0" name="perm_create"/>
+        </record>
+    </data>
+</odoo>

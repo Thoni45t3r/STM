@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Transaksi LHM -->
+        <record id="c10i_lhm.action_lhm_transaction" model="ir.actions.act_window">
+            <field name="name">Laporan Harian Mandor</field>
+            <field name="res_model">lhm.transaction</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="c10i_lhm.view_lhm_transaction_filter"/>
+            <field name="domain">[('lhm_input_type','=','reguler')]</field>
+            <field name="context">{'readonly_by_pass': True, 'lhm_input_type': 'reguler', 'search_default_date_monthly': 1}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Laporan Harian Mandor.
+              </p>
+            </field>
+        </record>
+
+        <record id="view_lhm_transaction_work_target_form" model="ir.ui.view">
+            <field name="name">view.lhm.transaction.work.target.form</field>
+            <field name="model">lhm.transaction</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Harian Mandor">
+                    <header>
+                        <button name="run_progress" string="Proses" states="draft" type="object" class="oe_highlight" groups="c10i_lhm.group_plantation_operator"/>
+                        <button name="button_confirm" string="Confirm" states="in_progress" type="object" class="oe_highlight" groups="c10i_lhm.group_plantation_operator" confirm="Apakah anda yakin akan dikonfirmasi?"/>
+                        <button name="button_approve" string="Approve" states="confirmed" type="object" class="oe_highlight" groups="c10i_lhm.group_plantation_manager" confirm="Apakah anda menyetujui dokumen ini?"/>
+                        <button name="button_reject" string="Reject" states="confirmed" type="object" class="oe_highlight" groups="c10i_lhm.group_plantation_manager" confirm="Apakah anda menolak dokumen ini?"/>
+                        <button name="button_draft" string="Set Draft" states="in_progress,done" type="object" groups="c10i_lhm.group_plantation_operator"/>
+                        <button name="get_material" string="Material" states="in_progress,done" type="object" class="oe_highlight" groups="c10i_lhm.group_plantation_operator"/>
+                        <button name="recalculate_plantation" class="oe_stat_button" icon="fa-refresh" string="Recalculate" type="object" groups="base.group_no_one"/>
+                        <button name="reprogress_plantation" class="oe_stat_button" icon="fa-refresh" string="Reprogress" states="in_progress,done" type="object" groups="base.group_no_one"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,cancel,in_progress,confirmed,done,close"/>
+                    </header>
+                    <field name="doc_type_id" invisible="1"/><field name="approval" invisible="1"/>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group name="lhm_transaction">
+                            <group>
+                                <field name="date" attrs="{'required':[('state','=','draft')],'readonly': [('state','!=','draft')]}"/>
+                                <field name="kemandoran_id" attrs="{'required':[('state','=','draft')],'readonly': [('state','!=','draft')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="asisten_mandor_id" readonly="1" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="mandor_id" readonly="1" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="kerani_id" readonly="1" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="account_period_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="operating_unit_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <group>
+                                <field name="date_start" readonly="1" invisible="1"/>
+                                <field name="date_stop" readonly="1" invisible="1"/>
+                                <field name="kemandoran_code" readonly="1"/>
+                                <field name="location" readonly="1"/>
+                                <field name="nik_mandor_1" readonly="1"/>
+                                <field name="nik_mandor" readonly="1"/>
+                                <field name="nik_kerani" readonly="1"/>
+                                <field name="company_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="user_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="lhm_input_type" invisible="0"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Daftar Karyawan">
+                                <group>
+                                    <button name="%(c10i_lhm.action_wizard_add_employee)d" class="oe_stat_button" icon="fa-users" string="Tambah Karyawan" states="draft" type="action" groups="c10i_lhm.group_plantation_operator"/>
+                                </group>
+                                <field name="lhm_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" options='{"always_reload": True}' context="{'readonly_by_pass': True, 'lhm_input_type': lhm_input_type, 'form_view_ref': 'c10i_lhm_work_target.view_lhm_transaction_line_form_target'}">
+                                    <tree editable="bottom" create="false" class="table_header_freeze">
+                                        <field name="sequence" string="" readonly="1" invisible="1"/>
+                                        <field name="lhm_input_type" invisible="0"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="date" invisible="1"/>
+                                        <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" domain="[('is_lhm','=',True)]" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="attendance_id" domain="[('type','not in',['in','out'])]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="doc_activity_ids" widget="many2many_tags" invisible="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="location_type_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" attrs="{'required': [('attendance_type','in',['kj','na'])]}"/>
+                                        <field name="no_line" invisible="1" />
+                                        <field name="location_id" domain="[('type_id','=',location_type_id)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" attrs="{'readonly': [('attendance_type','not in',['kj','na'])], 'required': [('attendance_type','in',['kj','na']), ('no_line', '=', False)]}"/>
+                                        <field name="activity_id" domain="[('type_id','=',location_type_id),('id','in',doc_activity_ids[0][2])]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" attrs="{'readonly': [('attendance_type','not in',['kj','na'])], 'required': [('attendance_type','in',['kj','na']), ('no_line','=',False)]}"/>
+                                        <field name="work_day" readonly="1" />
+                                        <field name="non_work_day" readonly="1" invisible="1" />
+                                        <field name="satuan_id" attrs="{'readonly': ['|' ,('panen','=',False), ('attendance_type','not in',['kj','na'])]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <!-- <field name="work_result" attrs="{'readonly': ['|' ,('panen','=',False), ('attendance_type','not in',['kj'])]}"/> -->
+                                        <field name="work_result" attrs="{'readonly': [('attendance_type','not in',['kj','na'])]}"/>
+                                        <field name="unit_price" readonly="1" />
+                                        <field name="premi" readonly="1"/>
+                                        <field name="premi_other" />
+                                        <!-- <field name="overtime_hour" attrs="{'readonly': ['|' ,('overtime','=',False), ('attendance_type','not in',['kj','na'])]}"/> -->
+                                        <field name="overtime_value" invisible="1" groups="base.group_no_one"/>
+                                        <field name="penalty" readonly="1"/>
+                                        <field name="penalty_nab" readonly="1"/>
+                                        <field name="penalty_other" />
+                                        <field name="panen" invisible="0" string="P" groups="base.group_no_one"/>
+                                        <field name="overtime" invisible="0" string="O" groups="base.group_no_one"/>
+                                        <field name="progressive" invisible="0" string="M" groups="base.group_no_one"/>
+                                        <field name="attendance_type" invisible="0" string="A" groups="base.group_no_one"/>
+                                        <field name="valid" invisible="0" string="V" groups="base.group_no_one"/>
+                                        <field name="kontanan" invisible="1"/>
+                                        <field name="transfer_id" invisible="1"/>
+                                        <field name="min_wage_id" invisible="0" groups="base.group_no_one"/>
+                                        <field name="total_hke" invisible="0" groups="base.group_no_one"/>
+                                        <field name="total_hkne" invisible="0" groups="base.group_no_one"/>
+                                        <field name="min_wage_value" invisible="0" groups="base.group_no_one"/>
+                                        <field name="min_wage_value_date" invisible="0" groups="base.group_no_one"/>
+                                        <field name="min_wage_value_hkne" invisible="0" groups="base.group_no_one"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Progress" attrs="{'invisible': ['|',('process_line_ids','=',[]),('state','=','draft')]}">
+                                <field name="process_line_ids" nolabel="1" attrs="{'readonly': [('state','not in',['draft','in_progress']),('approval','=',True)]}">
+                                    <tree editable="bottom" create="false" colors="red:deleted==True;blue:updated==True">
+                                        <field name="sequence" string="" readonly="1" invisible="1"/>
+                                        <field name="date" readonly="1"/>
+                                        <field name="activity_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="nilai" attrs="{'readonly': [('uom_id','=',False)]}"/>
+                                        <field name="uom_id" attrs="{'readonly': [('uom_id','=',False)]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="nilai2" attrs="{'readonly': [('uom2_id','=',False)]}"/>
+                                        <field name="uom2_id" attrs="{'readonly': [('uom2_id','=',False)]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="work_day" readonly="1"/>
+                                        <field name="non_work_day" readonly="1"/>
+                                        <field name="premi" readonly="1" groups="base.group_no_one"/>
+                                        <field name="realization" readonly="1"/>
+                                        <field name="realization_date" readonly="1" groups="base.group_no_one"/>
+                                        <field name="deleted" invisible="1"/>
+                                        <field name="updated" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Material">
+                                <field name="material_line_ids" nolabel="1" attrs="{'readonly': [('state','not in',['draft','in_progress']),('approval','=',True)]}">
+                                    <tree editable="bottom" create="false">
+                                        <field name="date" readonly="1" groups="base.no_one"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="product_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="activity_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="activity_name" readonly="1"/>
+                                        <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="move_id" invisible="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="picking_id" invisible="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="product_uom_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="real_stock_qty" readonly="1"/>
+                                        <field name="stock_qty" readonly="1"/>
+                                        <field name="realization"/>
+                                        <field name="residual_qty" readonly="1"/>
+                                        <field name="progress_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="History" attrs="{'invisible': [('emp_out_ids','=',[]),('emp_in_ids','=',[])]}">
+                                <group string="Keluar">
+                                    <field name="emp_out_ids" nolabel="1" readonly="1"/>
+                                </group>
+                                <group string="Masuk">
+                                    <field name="emp_in_ids" nolabel="1" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        <field name="note" placeholder="Tulis Catatan Disini..." nolabel="1" colspan="8"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_lhm_transaction_work_target" model="ir.actions.act_window">
+            <field name="name">LHM Target Kerja</field>
+            <field name="res_model">lhm.transaction</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="c10i_lhm.view_lhm_transaction_filter"/>
+            <field name="domain">[('lhm_input_type','=','work_target')]</field>
+            <field name="context">{'readonly_by_pass': True, 'lhm_input_type': 'work_target', 'search_default_date_monthly': 1}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Laporan Harian Mandor.
+              </p>
+            </field>
+        </record>
+        <record id="action_lhm_transaction_work_target_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="c10i_lhm.view_lhm_transaction_tree"/>
+            <field name="act_window_id" ref="action_lhm_transaction_work_target"/>
+        </record>
+        <record id="action_lhm_transaction_work_target_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_lhm_transaction_work_target_form"/>
+            <field name="act_window_id" ref="action_lhm_transaction_work_target"/>
+        </record>
+        <menuitem id="submenu_lhm_transaction_work_target" action="action_lhm_transaction_work_target" parent="c10i_lhm.menu_plantation_transaction" groups="c10i_lhm.group_plantation_operator" sequence="9"/>
+        <!-- End Of Transaksi LHM -->
+
+        <!-- LHM Transaction Line-->
+        <record id="view_lhm_transaction_line_filter" model="ir.ui.view">
+            <field name="name">view.lhm.transaction.line.filter</field>
+            <field name="model">lhm.transaction.line</field>
+            <field name="arch" type="xml">
+                <search string="Detail LHM">
+                    <!-- <field name="mandor_id" string="Mandor" filter_domain="['|',('mandor_id','ilike',self),('nik_mandor','ilike',self)]"/> -->
+                    <field name="name" string="NIK"/>
+                    <field name="lhm_id" string="LHM"/>
+                    <field name="location_id" />
+                    <field name="activity_id" />
+                    <separator/>
+                    <filter name="draft" string="New" domain="[('state','=','draft')]"/>
+                    <filter name="unallocated" string="Unallocated" domain="[('state','=','unallocated')]"/>
+                    <filter name="outstanding" string="Pending" domain="[('state','=','outstanding')]"/>
+                    <filter name="done" string="Done" domain="[('state','=','done')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="target_state" string="Status" domain="[]" context="{'group_by':'target_state'}"/>
+                        <filter string="Karyawan" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Lokasi" domain="[]" context="{'group_by':'location_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="view_lhm_transaction_line_form_target" model="ir.ui.view">
+            <field name="name">view.lhm.transaction.line.form.target</field>
+            <field name="model">lhm.transaction.line</field>
+            <field name="arch" type="xml">
+                <form string="Daftar Aktivitas LHM">
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group name="lhm_transaction">
+                            <group string="Emlpoyee">
+                                <field name="sequence" string="" invisible="1"/>
+                                <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" domain="[('is_lhm','=',True)]" string="Nama Karyawan" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="attendance_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <group string="Location &amp; Activity">
+                                <field name="location_type_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="location_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="activity_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <group string="Detail Pekerjaan">
+                                <field name="panen" invisible="1"/>
+                                <field name="work_day"/>
+                                <field name="satuan_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="work_result"/>
+                                <field name="unit_price" invisible="1"/>
+                                <field name="premi"/>
+                                <field name="overtime_hour"/>
+                                <field name="overtime_value" invisible="1"/>
+                                <field name="penalty"/>
+                                <field name="kontanan" invisible="1"/>
+                                <field name="min_wage_id" groups="base.group_no_one" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="min_wage_value" groups="base.group_no_one"/>
+                            </group>
+                            <group string="Detail NAB" attrs="{'invisible':[('panen','=',False)]}">
+                                <field name='lhm_nab_ids' nolabel="1" readonly="1" >
+                                    <tree string="Link NAB Line" >
+                                        <field name="nab_id" />
+                                        <field name="nab_date" />
+                                        <field name="nab_date_pks" />
+                                        <field name="date" />
+                                        <field name="nilai" sum="nilai"/>
+                                        <field name="uom_id" />
+                                        <field name="nilai2" sum="nilai2"/>
+                                        <field name="uom_id2" />
+                                        <field name="unit_price" invisible="0"/>
+                                        <field name="amount" sum="amount" />
+                                        <field name="penalty_nab" sum="penalty_nab" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="lhm_transaction_line_form_target_pending" model="ir.ui.view">
+            <field name="name">lhm.transaction.line.form.target.pending</field>
+            <field name="model">lhm.transaction.line</field>
+            <field name="arch" type="xml">
+                <form string="Daftar Aktivitas LHM" edit="false" create="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="No." />
+                            <h1><field name="lhm_id" readonly="1"/></h1>
+                        </div>
+                        <group name="basic_information">
+                            <group string="Emlpoyee">
+                                <field name="name" readonly="1"/>
+                                <field name="employee_id" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}" domain="[('is_lhm','=',True)]" string="Nama Karyawan" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="attendance_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <group name="work_result">
+                            <group string="Location &amp; Activity">
+                                <field name="location_type_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="location_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="activity_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="panen" invisible="1"/>
+                            </group>
+                            <group string="Detail Pekerjaan">
+                                <field name="work_result"/>
+                                <field name="satuan_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <!-- <field name="unit_price" invisible="1"/> -->
+                                <field name="work_day"/>
+                                <field name="overtime_hour" invisible="1"/>
+                                <field name="overtime_value" invisible="1"/>
+                                <field name="premi"/>
+                                <field name="penalty"/>
+                                <field name="min_wage_value" />
+                                <field name="min_wage_id" groups="base.group_no_one" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <label for="lhm_nab_ids" />
+                        <field name='lhm_nab_ids' nolabel="1" readonly="1" >
+                            <tree string="Link NAB Line" >
+                                <field name="nab_id" />
+                                <field name="nab_date" invisible="1"/>
+                                <field name="nab_date_pks" />
+                                <field name="date" />
+                                <field name="nilai" sum="nilai"/>
+                                <field name="uom_id" />
+                                <field name="nilai2" sum="nilai2"/>
+                                <field name="uom_id2" />
+                                <field name="unit_price" />
+                                <field name="amount" sum="amount" />
+                                <field name="penalty_nab" sum="penalty_nab" />
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="lhm_transaction_line_tree_target_pending" model="ir.ui.view">
+            <field name="name">lhm.transaction.line.tree.target.pending</field>
+            <field name="model">lhm.transaction.line</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Aktivitas LHM" edit="false" create="false">
+                    <field name="lhm_id" />
+                    <field name="name" />
+                    <field name="employee_id" />
+                    <field name="attendance_id" />
+                    <field name="work_day" />
+                    <field name="location_type_id" />
+                    <field name="location_id" />
+                    <field name="activity_id" />
+                    <field name="work_result" />
+                    <field name="satuan_id" />
+                    <field name="pending_work_result" />
+                    <field name="target_state" />
+                </tree>
+            </field>
+        </record>
+        <record id="action_lhm_transaction_line_target_pending" model="ir.actions.act_window">
+            <field name="name">O/S LHM Panen Target</field>
+            <field name="res_model">lhm.transaction.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lhm_transaction_line_filter"/>
+            <field name="domain">[('lhm_input_type','=','work_target'),('panen','=',True),
+                ('target_state','in',['draft','unallocated','outstanding'])]</field>
+            <field name="context">{'search_default_target_state': 1}</field>
+        </record>
+        <record id="action_lhm_transaction_line_target_pending_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="lhm_transaction_line_tree_target_pending"/>
+            <field name="act_window_id" ref="action_lhm_transaction_line_target_pending"/>
+        </record>
+        <record id="action_lhm_transaction_line_target_pending_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lhm_transaction_line_form_target_pending"/>
+            <field name="act_window_id" ref="action_lhm_transaction_line_target_pending"/>
+        </record>
+        <menuitem id="menu_panen_target_outstanding" action="action_lhm_transaction_line_target_pending" parent="c10i_lhm.menu_plantation_transaction" groups="c10i_lhm.group_plantation_operator" sequence="12"/>
+        <!-- End Of LHM Transaction Line -->
+        <!-- Nota Angkut Buah -->
+        <record id="view_lhm_nab_form_target" model="ir.ui.view">
+            <field name="name">view.lhm.nab.form.target</field>
+            <field name="model">lhm.nab</field>
+            <field name="inherit_id" ref="c10i_lhm.view_lhm_nab_form" />
+            <field name="arch" type="xml">
+                <!-- <field name="date_pks" position="after">
+                    <field name="force_date" />
+                </field> -->
+                <!-- <xpath expr="//field[@name='line_ids']/tree/field[@name='qty_nab']" position="before">
+                    <field name="force_date" />
+                </xpath> -->
+                <xpath expr="//field[@name='line_ids']" position="replace">
+                    <field name="line_ids">
+                        <tree>
+                            <field name="block_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="tgl_panen"/>
+                            <field name="force_date" />
+                            <field name="qty_nab" sum="qty_nab"/>
+                            <field name="qty_panen_lhm"/>
+                            <field name="qty_akum_nab"/>
+                            <field name="qty_sisa_panen"/>
+                        </tree>
+                        <form string="Detail NAB">
+                            <group>
+                                <group>
+                                    <field name="block_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" required="1"/>
+                                    <field name="tgl_panen" required="1"/>
+                                    <field name="force_date" />
+                                </group>
+                                <group>
+                                    <field name="qty_nab" string="Qty NAB (Janjang)" required="1" invisible="1"/>
+                                </group>
+                            </group>
+                            <label for="pemanen_line_ids" />
+                            <field name="pemanen_line_ids" nolabel="1" required="1">
+                                <tree editable="bottom" create="false">
+                                    <field name="no_induk" readonly="True"/>
+                                    <field name="employee_id" />
+                                    <field name="partner_id" />
+                                    <field name="work_result_pending"/>
+                                    <field name="work_result" sum="work_result"/>
+                                </tree>
+                            </field>
+                            <label for="lhm_progress_ids" attrs="{'invisible': [('lhm_progress_ids','=',[])]}"/>
+                            <field name="lhm_progress_ids" nolabel="1" readonly="1" attrs="{'invisible': [('lhm_progress_ids','=',[])]}">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="lhm_id" readonly="1"/>
+                                    <field name="date" readonly="1"/>
+                                    <field name="activity_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                    <field name="location_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                    <field name="nilai" attrs="{'readonly': [('uom_id','=',False)]}"/>
+                                    <field name="uom_id" attrs="{'readonly': [('uom_id','=',False)]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                    <field name="nilai2" attrs="{'readonly': [('uom2_id','=',False)]}"/>
+                                    <field name="uom2_id" attrs="{'readonly': [('uom2_id','=',False)]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                </tree>
+                            </field>
+                            <label for="lhm_line_ids" attrs="{'invisible': [('lhm_line_ids','=',[])]}"/>
+                            <field name="lhm_line_ids" nolabel="1" readonly="1" attrs="{'invisible': [('lhm_line_ids','=',[])]}">
+                                <tree string="Link LHM Line" >
+                                    <field name="lhm_id" />
+                                    <field name="employee_id" />
+                                    <field name="date" />
+                                    <field name="nilai" sum="nilai"/>
+                                    <field name="uom_id" />
+                                    <field name="nilai2" sum="nilai2"/>
+                                    <field name="uom_id2" />
+                                    <field name="unit_price" />
+                                    <field name="amount" sum="amount" />
+                                    <field name="penalty_nab" sum="penalty_nab" />
+                                </tree>
+                            </field>
+                        </form>
+                    </field>
+                </xpath>
+                <xpath expr="//notebook/page[1]" position="after">
+                    <page name="pemanen_line_ids" string="Detail Pemanen" attrs="{'invisible': [('pemanen_line_ids','=',[])]}">
+                        <field name="pemanen_line_ids">
+                            <tree delete="false" create="false" editable="bottom" >
+                                <field name="employee_id" readonly="True"/>
+                                <field name="partner_id" readonly="True"/>
+                                <field name="block_id" readonly="True"/>
+                                <field name="tgl_panen" readonly="True"/>
+                                <field name="work_result" readonly="True"/>
+                                <field name="afkir_qty" />
+                                <field name="amount_afkir" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <!-- END of Nota Angkut Buah -->
+        <!-- Buku Kontraktor -->
+        <record id="view_lhm_contractor_form_target" model="ir.ui.view">
+            <field name="name">view.lhm.contractor.form.target</field>
+            <field name="model">lhm.contractor</field>
+            <field name="inherit_id" ref="c10i_lhm.view_lhm_contractor_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="before">
+                    <field name="panen" invisible="True"/>
+                    <field name="compute_from" required="True"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='total']" position="before">
+                    <field name="premi" />
+                    <field name="penalty" />
+                    <field name="penalty_nab" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='nilai2']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('panen','=',True)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_lhm_contractor_line_form_target" model="ir.ui.view">
+            <field name="name">view.lhm.contractor.line.form.target</field>
+            <field name="model">lhm.contractor.line</field>
+            <field name="inherit_id" ref="c10i_lhm.view_lhm_contractor_line_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]" position="before">
+                    <field name="nab_line_ids" nolabel="1" />
+                </xpath>
+            </field>
+        </record>
+        <!-- END of Buku Kontraktor -->
+    </data>
+</odoo>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ##################### MUTASI ###################### -->
+    <record id="view_beacukai_stock_mutation_form" model="ir.ui.view">
+        <field name="name">view.beacukai.stock.mutation.form</field>
+        <field name="model">beacukai.stock.mutation</field>
+        <field name="arch" type="xml">
+            <form string="Mutasi Stok" create="false" delete="false">
+                <header>
+                    <button name="action_generate_value" type="object" string="Generate" class="oe_highlight" />
+                    <button name="print_report" type="object" string="Print"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_type" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                            <field name="report_type" />
+                        </group>
+                        <group>
+                            <field name="date_start" />
+                            <field name="date_stop" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mutasi Barang">
+                            <field name="line_ids" readonly="1">
+                                <tree>
+                                    <field name="product_code" />
+                                    <field name="product_name" />
+                                    <field name="product_uom" />
+                                    <field name="opening_qty" sum="opening" />
+                                    <field name="incoming_qty" sum="incoming" />
+                                    <field name="outgoing_qty" sum="outgoing" />
+                                    <field name="adjustment_qty" sum="adjustment" />
+                                    <field name="closing_qty" sum="closing" />
+                                    <field name="opname_qty" sum="opname" />
+                                    <field name="diff_qty" sum="selisih" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_beacukai_stock_mutation" model="ir.actions.act_window">
+        <field name="name">Laporan Mutasi Barang</field>
+        <field name="res_model">beacukai.stock.mutation</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_beacukai_stock_mutation_form"/>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_beacukai_stock_mutation" parent="menu_bea_cukai_report" action="action_beacukai_stock_mutation" sequence="5" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+    <report string  = "Laporan Mutasi Stok"
+            model   = "beacukai.stock.mutation"
+            auto    = "True"
+            name    = "beacukai_laporan_mutasi"
+            rml     = "c10i_bea_cukai/report/bc_laporan_mutasi_stock.jrxml"
+            id      = "beacukai_laporan_mutasi"
+            menu    = "False"
+		/>
+
+    <report string  = "Laporan Mutasi Stok"
+            model   = "beacukai.stock.mutation"
+            auto    = "True"
+            name    = "beacukai_laporan_mutasi_xls"
+            rml     = "c10i_bea_cukai/report/bc_laporan_mutasi_stock_xls.jrxml"
+            id      = "beacukai_laporan_mutasi_xls"
+            menu    = "False"
+        />
+
+    <!-- ##################### WIP ###################### -->
+    <record id="view_beacukai_stock_wip_form" model="ir.ui.view">
+        <field name="name">view.beacukai.stock.wip.form</field>
+        <field name="model">beacukai.stock.wip</field>
+        <field name="arch" type="xml">
+            <form string="Posisi WIP" create="false" delete="false">
+                <header>
+                    <button name="action_generate_value" type="object" string="Generate" class="oe_highlight" />
+                    <button name="print_report" type="object" string="Print"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="report_type" />
+                        </group>
+                        <group>
+                            <field name="date_start" />
+                            <field name="date_stop" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Posisi WIP">
+                            <field name="line_ids" readonly="1">
+                                <tree>
+                                    <field name="product_code" />
+                                    <field name="product_name" />
+                                    <field name="product_uom" />
+                                    <field name="product_qty" sum="total_qty" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_beacukai_stock_wip" model="ir.actions.act_window">
+        <field name="name">Laporan Posisi WIP</field>
+        <field name="res_model">beacukai.stock.wip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_beacukai_stock_wip_form"/>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_beacukai_stock_wip" parent="menu_bea_cukai_report" action="action_beacukai_stock_wip" sequence="6" groups="c10i_bea_cukai.group_bea_cukai_user"/>
+
+    <report string  = "Laporan WIP"
+            model   = "beacukai.stock.wip"
+            auto    = "True"
+            name    = "beacukai_laporan_wip"
+            rml     = "c10i_bea_cukai/report/bc_laporan_wip.jrxml"
+            id      = "beacukai_laporan_wip"
+            menu    = "False"
+        />
+
+    <report string  = "Laporan WIP"
+            model   = "beacukai.stock.wip"
+            auto    = "True"
+            name    = "beacukai_laporan_wip_xls"
+            rml     = "c10i_bea_cukai/report/bc_laporan_wip_xls.jrxml"
+            id      = "beacukai_laporan_wip_xls"
+            menu    = "False"
+        />
+</odoo>

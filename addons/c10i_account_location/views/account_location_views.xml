@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Account Location Type -->
+    <record id="view_account_location_type_form" model="ir.ui.view">
+        <field name="name">view.account.location.type.form</field>
+        <field name="model">account.location.type</field>
+        <field name="arch" type="xml">
+            <form string="Tipe Lokasi">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title">
+                        <label string="Nama" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Biaya Umum" required="1"/></h1>
+                    </div>
+                    <group name="location_type">
+                        <group string="Informasi">
+                            <field name="code" string="Kode" required="1"/>
+                            <field name="account_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="no_location" />
+                        </group>
+                        <group string="Group" invisible="1">
+                            <field name="general_charge" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="location" string="Daftar Lokasi">
+                            <field name="location_ids" nolabel="1"/>
+                        </page>
+                        <page name="account" string="Daftar Account">
+                            <field name="account_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_location_type_tree" model="ir.ui.view">
+        <field name="name">view.account.location.type.tree</field>
+        <field name="model">account.location.type</field>
+        <field name="arch" type="xml">
+            <tree string="Tipe Lokasi">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_location_type_filter" model="ir.ui.view">
+        <field name="name">view.account.location.type.filter</field>
+        <field name="model">account.location.type</field>
+        <field name="arch" type="xml">
+            <search string="Tipe Lokasi">
+                <field name="name" string="Tipe Lokasi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_location_type" model="ir.actions.act_window">
+        <field name="name">Location Type</field>
+        <field name="res_model">account.location.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_account_location_type_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Create for add a new Location Type.
+          </p>
+        </field>
+    </record>
+    
+    <!-- <menuitem id="menu_account_location_type_config"
+          name="Location Type"
+          parent="c10i_palm_oil_mill.config_mills_menu"
+          action="action_account_location_type"
+          groups="base.group_no_one" 
+          sequence="10"/> -->
+    <!-- End Of Account Location Type -->
+
+    <!-- Account Location -->
+    <record id="view_account_location_form" model="ir.ui.view">
+        <field name="name">view.account.location.form</field>
+        <field name="model">account.location</field>
+        <field name="arch" type="xml">
+            <form string="Lokasi" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title">
+                        <label string="Nama" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Pabrik" required="1" readonly="1"/></h1>
+                    </div>
+                    <group name="location">
+                        <group>
+                            <field name="code" string="Kode" required="1" readonly="1"/>
+                            <field name="type_id" required="1" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_location_tree" model="ir.ui.view">
+        <field name="name">view.account.location.tree</field>
+        <field name="model">account.location</field>
+        <field name="arch" type="xml">
+            <tree string="Lokasi" create="false" edit="false" delete="false">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_location_filter" model="ir.ui.view">
+        <field name="name">view.account.location.filter</field>
+        <field name="model">account.location</field>
+        <field name="arch" type="xml">
+            <search string="Lokasi">
+                <field name="name" string="Lokasi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tipe" domain="[]" context="{'group_by':'type_id'}"/>
+                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_location" model="ir.actions.act_window">
+        <field name="name">Location</field>
+        <field name="res_model">account.location</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_account_location_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Create to add a new Location
+          </p>
+        </field>
+    </record>
+    <!-- <menuitem id="menu_account_location_config"
+          name="Location"
+          parent="c10i_palm_oil_mill.config_mills_menu"
+          action="action_account_location"
+          sequence="11"/> -->
+    <!-- End Of Account Location -->
+
+</odoo>

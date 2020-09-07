@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_plasma_profit_sharing_form" model="ir.ui.view">
+            <field name="name">view.lhm.plasma.profit.sharing.form</field>
+            <field name="model">lhm.plasma.profit.sharing</field>
+            <field name="arch" type="xml">
+                <form string="Formual Bagi Hasil TBS Plasma">
+                    <sheet>
+                        <group name="basic_info">
+                            <group>
+                                <field name="partner_id" required="1"/>
+                                <field name="date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <field name="line_ids" >
+                            <tree string="Percentage Profit Sharing" editable="bottom">
+                                <field name='name' />
+                                <field name='account_id' />
+                                <field name='to_pay' />
+                                <field name='percentage_value' />
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_plasma_profit_sharing_tree" model="ir.ui.view">
+            <field name="name">view.lhm.plasma.profit.sharing.tree</field>
+            <field name="model">lhm.plasma.profit.sharing</field>
+            <field name="arch" type="xml">
+                <tree string="Formula Bagi Hasil">
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_plasma_profit_sharing_filter" model="ir.ui.view">
+            <field name="name">view.lhm.plasma.profit.sharing.filter</field>
+            <field name="model">lhm.plasma.profit.sharing</field>
+            <field name="arch" type="xml">
+                <search string="Formula Bagi Hasil">
+                    <field name="partner_id" string="Partner" />
+                    <separator/>
+                    <!-- <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group> -->
+                </search>
+            </field>
+        </record>
+
+        <record id="action_plasma_profit_sharing" model="ir.actions.act_window">
+            <field name="name">Formula Bagi Hasil</field>
+            <field name="res_model">lhm.plasma.profit.sharing</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_plasma_profit_sharing_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Formula Bagi Hasil atas Panen TBS Plasma.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_config_profit_sharing" action="action_plasma_profit_sharing" parent="menu_plantation_config" groups="group_plantation_manager" sequence="121"/>
+
+        <record model='ir.ui.view' id='wizard_lhm_bill_plasma_view'>
+            <field name="name">wizard.lhm.bill.plasma.view</field>
+            <field name="model">wizard.lhm.bill.plasma</field>
+            <field name="arch" type="xml">
+                <form string="Generate Bill Plasma" version="7.0" create="false" edit="false">
+                    <header>
+                        <button name="generate_detail" class="oe_highlight" string="Generate" type="object"/>
+                        <button name="create_bill" class="oe_highlight" string="Create Invoice" type="object"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="period_id" domain="[('special','=',False)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="sharing_profit_id" invisible="1" required="1"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="date_invoice"/>
+                            <field name="product_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                    </group>
+                    <separator string="Total Penghitungan" colspan="4"/>
+                    <field name="header_nab_ids" mode="tree" readonly="1">
+                        <tree string="Header NAB" editable="bottom" create="false">
+                            <field name="name"/>
+                            <field name="year"/>
+                            <field name="afdeling_id"/>
+                            <field name="qty" sum="qty"/>
+                            <field name="price_unit" />
+                            <field name="subtotal" sum="qty"/>
+                        </tree>
+                    </field>
+
+                    <separator string="Detail Nota Angkut Buah" colspan="4"/>
+                    <field name="line_nab_ids" mode="tree" readonly="1">
+                        <tree string="Detail NAB" editable="bottom" create="false">
+                            <field name="date_pks"/>
+                            <field name="block_id"/>
+                            <field name="qty_nab"/>
+                            <field name="janjang_jml" />
+                            <field name="nilai_bjr"/>
+                            <field name="netto" invisible="1"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_lhm_bill_plasma'>
+            <field name="name">Generate Bill TBS Plasma</field>
+            <field name="res_model">wizard.lhm.bill.plasma</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_lhm_bill_plasma_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="menu_lhm_bill_plasma" 
+                  action="action_lhm_bill_plasma" parent="submenu_lhm_nab" groups="group_plantation_operator" sequence="31"/>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='lhm_salary_bill_wizard_view'>
+            <field name="name">lhm.salary.bill.wizard.view</field>
+            <field name="model">lhm.salary.bill.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generate Invoice" version="7.0" create="false" edit="false">
+                    <header>
+                        <button name="create_invoice" class="oe_highlight" string="Create Invoice" type="object"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="payroll_partner_id" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="insurance_partner_id" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="insurance_partner_id2" domain="[('supplier','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="account_period_id" domain="[('special','=',False)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                        <group>
+                            <field name="date_invoice"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_lhm_salary_bill'>
+            <field name="name">Generate Payroll Invoice</field>
+            <field name="res_model">lhm.salary.bill.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lhm_salary_bill_wizard_view"/>
+            <!-- <field name="target">current</field> -->
+            <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem id="menu_lhm_salary_bill" 
+                  action="action_lhm_salary_bill" parent="menu_plantation_transaction" groups="group_plantation_operator" sequence="51"/> -->
+    </data>
+</odoo>

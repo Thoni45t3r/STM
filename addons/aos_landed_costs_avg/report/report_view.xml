@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+        <report string  = "Stock Mutation"
+		        model   = "wizard.report.stock.mutation"
+                auto    = "True"
+		        name    = "report_stock_mutation"
+		        rml     = "aos_landed_costs_avg/report/report_stock_mutation_landed.jrxml"
+		        id      = "c10i_stock.report_stock_mutation"
+		        menu    = "False"
+		/>
+    </data>
+</odoo>

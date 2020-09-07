@@ -1,0 +1,1048 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu LHM -->
+        <menuitem id="main_menu_lhm" name="Plantation" web_icon="c10i_lhm,static/description/farmer.png" groups="group_plantation_operator,group_plantation_reporting_all" sequence="1"/>
+        <!--SubMenu LHM -->
+        <menuitem id="menu_lhm_transaction" name="Transaksi" parent="main_menu_lhm" groups="group_plantation_operator" sequence="10"/>
+        <menuitem id="menu_lhm_running" name="Running" parent="main_menu_lhm" groups="group_plantation_super" sequence="11"/>
+        <menuitem id="menu_lhm_transaction_all" name="Transaksi All" parent="main_menu_lhm" groups="group_plantation_super" sequence="11"/>
+        <menuitem id="menu_plantation_transaction" name="Plantation" parent="menu_lhm_transaction" groups="group_plantation_operator" sequence="10"/>
+        <menuitem id="menu_plantation_transaction_all" name="Plantation" parent="menu_lhm_transaction_all" groups="group_plantation_operator" sequence="10"/>
+        <menuitem id="menu_lhm_karyawan" name="Karyawan" parent="main_menu_lhm" groups="group_plantation_supervisor,group_plantation_operator_employee" sequence="19"/>
+        <menuitem id="menu_lhm_master" name="Master Data" parent="main_menu_lhm" groups="group_plantation_supervisor,group_plantation_operator_employee" sequence="20"/>
+        <menuitem id="menu_lhm_activity" name="Aktivitas" parent="main_menu_lhm" groups="group_plantation_supervisor" sequence="21"/>
+        <menuitem id="menu_lhm_rawat" name="Rawat" parent="main_menu_lhm" groups="group_plantation_operator" sequence="30"/>
+        <menuitem id="menu_lhm_closing" name="Closing" parent="main_menu_lhm" groups="group_plantation_manager" sequence="40"/>
+        <menuitem id="menu_lhm_report" name="Laporan" parent="main_menu_lhm" groups="group_plantation_operator,group_plantation_operator_can_see_salary,group_plantation_reporting_all,group_plantation_reporting_production" sequence="50"/>
+        <menuitem id="menu_plantation_report" name="Plantation" parent="menu_lhm_report" groups="group_plantation_supervisor,group_plantation_reporting_all" sequence="10"/>
+        <menuitem id="menu_lhm_config" name="Konfigurasi" parent="main_menu_lhm" groups="base.group_no_one" sequence="60"/>
+        <menuitem id="menu_running_config" name="Running Account" parent="menu_lhm_config" groups="base.group_no_one" sequence="10"/>
+        <menuitem id="menu_plantation_config" name="Plantation" parent="menu_lhm_config" groups="base.group_no_one" sequence="11"/>
+        <menuitem id="menu_plantation_ptkp" action="c10i_hr.action_ptkp" parent="menu_lhm_karyawan" groups="group_plantation_manager" sequence="45"/>
+        <menuitem id="menu_plantation_insurance" action="c10i_hr.action_insurance" parent="menu_lhm_karyawan" groups="group_plantation_manager" sequence="55" name="Asuransi/BPJS"/>
+        <menuitem id="menu_plantation_overtime" action="c10i_hr.action_overtime" parent="menu_lhm_karyawan" groups="group_plantation_manager" sequence="60"/>
+        <menuitem id="menu_plantation_employee_religion" action="c10i_hr.action_employee_religion" parent="menu_lhm_karyawan" groups="group_plantation_manager" sequence="70"/>
+        <menuitem id="menu_plantation_nature" action="c10i_hr.action_nature" parent="menu_lhm_karyawan" groups="group_plantation_manager" sequence="49"/>
+        <menuitem id="menu_partner_kontraktor" name="Kontraktor" parent="menu_lhm_master" action="base.action_partner_supplier_form" sequence="10" groups="group_plantation_supervisor"/>
+        <!-- Menu From HR Base -->
+        <!-- HR Employee Movement Form -->
+        <record id="view_hr_foreman_movement_form" model="ir.ui.view">
+            <field name="name">view.hr.foreman.movement.form</field>
+            <field name="model">hr.foreman.movement</field>
+            <field name="arch" type="xml">
+                <form string="Pindah Kemandoran">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="cancel,ongoing,moved" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group name="employee_movement_type">
+                            <group>
+                                <field name="employee_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="date" readonly="1"/>
+                                <field name="moved_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="src_foreman_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="dest_foreman_id" readonly="1" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your company settings."/>
+                </form>
+            </field>
+        </record>
+        <!-- End Of HR Employee Movement Form -->
+        <!-- Employee Form -->
+        <record id="view_karyawan_ho_form" model="ir.ui.view">
+            <field name="name">view.karyawan.ho.form</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">22</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="sub_department_id"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Employee Form -->
+        <record id="view_karyawan_form" model="ir.ui.view">
+            <field name="name">view.karyawan.form</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button
+                            name    = "%(action_wizard_move_employee)d"
+                            string  = "Pindah"
+                            type    = "action"
+                            icon    = "fa-sign-out"
+                            help    = "Memindahkan Karyawan ke Kemandoran Lain"
+                            class   = "oe_stat_button"
+                            context = "{'from_karyawan': True}"
+                            attrs   = "{'invisible':[('move_state','=','ongoing')]}"/>
+                </div>
+                <!-- Invisible Field -->
+                <xpath expr="//field[@name='category_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='work_location']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='coach_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@name='education_information']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//page[@name='license_information']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//page[@name='experience_information']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <!-- End Of Invisible Field -->
+                <!-- Required Field -->
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='sub_department_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <!-- End Of Required Field -->
+                <!-- Inject Group -->
+                <xpath expr="//page[@name='hr_settings']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_super</attribute>
+                </xpath>
+                <xpath expr="//page[@name='education_information']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//page[@name='license_information']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//page[@name='experience_information']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//field[@name='passport_id']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//field[@name='identification_id']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <xpath expr="//button[@name='toggle_active']" position="attributes">
+                    <attribute name="groups">hr.group_hr_user,c10i_lhm.group_plantation_supervisor,c10i_lhm.group_plantation_operator_employee</attribute>
+                </xpath>
+                <!-- End Of Inject Group -->
+
+                <!-- String Modification -->
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="string">Jabatan</attribute>
+                    <attribute name="domain">[('department_id','=',department_id),('is_lhm','=',True)]</attribute>
+                </xpath>
+                <!-- End Of String Modification -->
+                <xpath expr="//field[@name='job_id']" position="after">
+                    <field name="afdeling_id" invisible="1"/>
+                    <field name="division_id" invisible="1"/>
+                    <field name="cost_center_id"/>
+                    <field name="plantation_location_type_id"/>
+                    <field name="plantation_location_id"/>
+                    <field name="plantation_activity_hkne_id"/>
+                    <field name="plantation_activity_natura_id"/>
+                    <field name="plantation_activity_bpjs_tk_id"/>
+                    <field name="plantation_activity_bpjs_kes_id"/>
+                </xpath>
+                <xpath expr="//field[@name='no_induk']" position="before">
+                    <field name="type_id" options='{"no_create_edit": True}' required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='no_induk']" position="replace">
+                    <label for="no_induk"/>
+                    <div>
+                        <field name="no_induk" nolabel="1" style="width:60%;" attrs="{'required':[('custom_nik','=',True)],'readonly': [('no_induk', '!=', '/'),('custom_nik','=',False)]}"/>
+                        <field name="custom_nik" nolabel="1" attrs="{'invisible':[('auto_generate','!=',False)]}"/><label for="custom_nik" attrs="{'invisible':[('auto_generate','!=',False)]}"/>
+                    </div>
+                    <field name="basic_salary_type" required="1" widget="radio" options="{'horizontal': true}"/>
+                </xpath>
+                <xpath expr="//field[@name='bpjs_kesehatan']" position="replace">
+                    <label for="bpjs_kesehatan"/>
+                    <div>
+                        <field name="kesehatan" nolabel="1"/>
+                        <field name="bpjs_kesehatan" nolabel="1" style="width:90%;" attrs="{'required':[('kesehatan','=',True)],'readonly': [('kesehatan','=',False)]}"/>
+                        <field name="bpjs_kes_date_start" placeholder="Tanggal Daftar" attrs="{'required': [('kesehatan','=',True)],'readonly': [('kesehatan','=',False)]}"/>
+
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='npwp']" position="replace">
+                    <label for="npwp"/>
+                    <div>
+                        <field name="is_npwp" nolabel="1"/>
+                        <field name="npwp" nolabel="1" style="width:90%;" attrs="{'required':[('is_npwp','=',True)],'readonly': [('is_npwp','=',False)]}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='bpjs_ketenagakerjaan']" position="replace">
+                    <label for="bpjs_ketenagakerjaan"/>
+                    <div>
+                        <field name="ketenagakerjaan" nolabel="1"/>
+                        <field name="bpjs_ketenagakerjaan" nolabel="1" style="width:90%;" attrs="{'required':[('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)]}"/>
+                        <field name="bpjs_tk_date_start" placeholder="Tanggal Daftar" attrs="{'required': [('ketenagakerjaan','=',True)],'readonly': [('ketenagakerjaan','=',False)]}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//group[@name='employee_authority']" position="inside">
+                    <field name="mandor"/>
+                    <field name="kerani"/>
+                    <field name="auto_generate" groups="base.group_no_one"/>/>
+                    <field name="noedit_foreman" groups="base.group_no_one"/>
+                </xpath>
+                <xpath expr="//group[@name='employee_authority']" position="before">
+                    <group string="Kontrak Kerja">
+                        <field name="contract_type" options='{"no_open": True}' invisible="1"/>
+                        <label string="Periode Kontrak" invisible="1"/>
+                        <div invisible="1">
+                            <field name="start_date_contract" class="oe_inline" nolabel="1" invisible="1"/> s/d
+                            <field name="end_date_contract" nolabel="1" class="oe_inline" invisible="1"/>
+                        </div>
+                        <field name="kemandoran_id" required="1" attrs="{'readonly':[('noedit_foreman','=',True)]}"/>
+                        <field name="mandor_id" readonly="1"/>
+                        <field name="work_start_date"/>
+                        <field name="appointment_date"/>
+                        <field name="work_end_date"/>
+                        <field name="move_state" invisible="0"/>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']" position="after">
+                    <page string="History">
+                        <group coslpan="8" string="Pindah Kemandoran">
+                            <field name="movement_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="src_foreman_id"/>
+                                    <field name="dest_foreman_id"/>
+                                    <field name="moved_date"/>
+                                    <field name="note"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group coslpan="8" attrs="{'invisible': [('basic_salary_type','!=','employee')]}" string="UMR" groups="c10i_lhm.group_plantation_manager">
+                            <field name="umr_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="umr_month"/>
+                                    <field name="year"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='calendar_id']" position="after">
+                    <field name="is_lhm" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <tree string="Employees" decoration-bf="message_needaction==True">
+                    <field name="name"/>
+                    <field name="no_induk"/>
+                    <field name="department_id"/>
+                    <field name="sub_department_id"/>
+                    <field name="job_id"/>
+                    <field name="kemandoran_id"/>
+                    <field name="mandor_id" invisible="0"/>
+                    <field name="message_needaction" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_karyawan_view" model="ir.actions.act_window">
+            <field name="name">Karyawan</field>
+            <field name="res_model">hr.employee</field>
+            <field name="context">{"default_is_lhm":1}</field>
+            <field name="domain">[('is_lhm','=',True)]</field>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik untuk menambahkan karyawan baru.
+                </p>
+                <p>
+                    Hanya dengan klik menu karyawan anda dapat mengetahui semua informasi tentang karyawan tersebut.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_karyawan_view_kanban">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="hr.hr_kanban_view_employees"/>
+            <field name="act_window_id" ref="action_karyawan_view"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_karyawan_view_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="c10i_lhm.view_employee_tree"/>
+            <field name="act_window_id" ref="action_karyawan_view"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_karyawan_view_form">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_karyawan_form"/>
+            <field name="act_window_id" ref="action_karyawan_view"/>
+        </record>
+
+        <menuitem id="menu_karyawan" name="Karyawan" action="action_karyawan_view" parent="menu_lhm_karyawan" sequence="10" groups="group_plantation_supervisor,group_plantation_operator_employee"/>
+        <!--End Of Employee Form -->
+
+        <!-- HR Job Form -->
+        <record id="view_hr_job_lhm_form" model="ir.ui.view">
+            <field name="name">view.hr.job.lhm.form</field>
+            <field name="model">hr.job</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='set_recruit']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='set_open']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="is_lhm" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='no_of_recruitment']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/sheet[1]/div[1]" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_hr_lhm_job" model="ir.actions.act_window">
+            <field name="name">Posisi</field>
+            <field name="res_model">hr.job</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr.view_job_filter"/>
+            <field name="context">{"default_is_lhm":1}</field>
+            <field name="domain">[('is_lhm','=',True)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan posisi pekerjaan baru di LHM.
+              </p><p>
+                Digunakan untuk mendefinisikan pekerjaan dan kebutuhan mereka. Anda dapat melacak jumlah karyawan yang Anda miliki per posisi pekerjaan dan ikuti perubahan sesuai dengan apa yang anda rencanakan untuk kedepannya.
+              </p><p>
+                Anda dapat melampirkan survei ke posisi pekerjaan. Ini akan digunakan diproses rekrutmen untuk mengevaluasi pelamar untuk posisi pekerjaan.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_hr_lhm_job_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr.view_hr_job_tree"/>
+            <field name="act_window_id" ref="action_hr_lhm_job"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_hr_lhm_job_form">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hr_job_lhm_form"/>
+            <field name="act_window_id" ref="action_hr_lhm_job"/>
+        </record>
+
+        <menuitem id="menu_posisi_lhm_config" name="Posisi" action="action_hr_lhm_job" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="30"/>
+        <!-- End Of HR Job Form -->
+
+        <!-- HR Minimum Wage -->
+        <record id="view_hr_minimum_wage_plantation_form" model="ir.ui.view">
+            <field name="name">view.hr.minimum.wage.plantation.form</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="c10i_hr.view_minimum_wage_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_from']" position="before">
+                    <field name="basic_salary_type" required="1"/>
+                    <field name="work_day" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='date_to']" position="before">
+                    <field name="employee_type_id" attrs="{'invisible':[('basic_salary_type','!=','employee_type')], 'required':[('basic_salary_type','=','employee_type')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                    <field name="employee_id" attrs="{'invisible':[('basic_salary_type','!=','employee')], 'required':[('basic_salary_type','=','employee')]}" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" domain="[('basic_salary_type','=','employee')]"/>
+                    <field name="umr_day" required="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_minimum_wage_plantation_tree" model="ir.ui.view">
+            <field name="name">view.hr.minimum.wage.plantation.tree</field>
+            <field name="model">hr.minimum.wage</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="c10i_hr.view_minimum_wage_tree"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="umr_day"/>
+                    <field name="employee_type_id"/>
+                    <field name="employee_id"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="action_hr_minimum_wage_plantation" model="ir.actions.act_window">
+            <field name="name">UMR</field>
+            <field name="res_model">hr.minimum.wage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="c10i_hr.view_minimum_wage_filter"/>
+            <field name="context">{'readonly_by_pass': True}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk membuat UMR baru.
+              </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_hr_minimum_wage_plantation_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_minimum_wage_plantation_tree"/>
+            <field name="act_window_id" ref="action_hr_minimum_wage_plantation"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="aaction_hr_minimum_wage_plantation_form">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hr_minimum_wage_plantation_form"/>
+            <field name="act_window_id" ref="action_hr_minimum_wage_plantation"/>
+        </record>
+        <menuitem id="submenu_hr_minimum_wage_plantation" name="UMR" action="action_hr_minimum_wage_plantation" parent="menu_lhm_karyawan" sequence="50" groups="group_plantation_manager"/>
+        <!-- End Of HR Minimum Wage -->
+
+        <!-- HR Department -->
+        <record id="view_department_lhm_form" model="ir.ui.view">
+            <field name="name">view.department.lhm.form</field>
+            <field name="model">hr.department</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="is_lhm" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_departement_lhm_view" model="ir.actions.act_window">
+            <field name="name">Departments</field>
+            <field name="res_model">hr.department</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="hr.view_department_filter"/>
+            <field name="context">{"default_is_lhm":1}</field>
+            <field name="domain">[('is_lhm','=',True)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk membuat departemen baru.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_departement_lhm_view_kanban">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="hr.hr_department_view_kanban"/>
+            <field name="act_window_id" ref="action_departement_lhm_view"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_departement_lhm_view_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr.view_department_tree"/>
+            <field name="act_window_id" ref="action_departement_lhm_view"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="action_departement_lhm_view_form">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_department_lhm_form"/>
+            <field name="act_window_id" ref="action_departement_lhm_view"/>
+        </record>
+
+        <menuitem id="menu_departemen_lhm_config" name="Departemen" action="action_departement_lhm_view" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="25"/>
+        <!--End Of HR Department -->
+
+        <!--HR Employee Sub Departement -->
+        <record id="view_sub_department_form" model="ir.ui.view">
+            <field name="name">view.sub.department.form</field>
+            <field name="model">hr.sub.department</field>
+            <field name="arch" type="xml">
+                <form string="Pangkat">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Asisten" required="1"/></h1>
+                        </div>
+                        <group name="employee_sub_department">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sub_department_tree" model="ir.ui.view">
+            <field name="name">view.sub.department.tree</field>
+            <field name="model">hr.sub.department</field>
+            <field name="arch" type="xml">
+                <tree string="Pangkat">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_sub_department_filter" model="ir.ui.view">
+            <field name="name">view.sub.department.filter</field>
+            <field name="model">hr.sub.department</field>
+            <field name="arch" type="xml">
+                <search string="Pangkat">
+                    <field name="name" string="Pangkat" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sub_department" model="ir.actions.act_window">
+            <field name="name">Pangkat</field>
+            <field name="res_model">hr.sub.department</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_sub_department_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan pangkat.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_sub_departemen_lhm_config" action="action_sub_department" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="30"/>
+        <!--End Of HR Employee Sub Departement -->
+
+        <!--HR Employee Division -->
+        <record id="view_division_form" model="ir.ui.view">
+            <field name="name">view.division.form</field>
+            <field name="model">hr.division</field>
+            <field name="arch" type="xml">
+                <form string="Divisi">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Teknik Sipil" required="1"/></h1>
+                        </div>
+                        <group name="employee_division">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_division_tree" model="ir.ui.view">
+            <field name="name">view.division.tree</field>
+            <field name="model">hr.division</field>
+            <field name="arch" type="xml">
+                <tree string="Divisi">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_division_filter" model="ir.ui.view">
+            <field name="name">view.division.filter</field>
+            <field name="model">hr.division</field>
+            <field name="arch" type="xml">
+                <search string="Divisi">
+                    <field name="name" string="Divisi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_division_lhm" model="ir.actions.act_window">
+            <field name="name">Divisi</field>
+            <field name="res_model">hr.division</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_division_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan pangkat.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_division_lhm_config" name="Divisi" action="action_division_lhm" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="24"/>
+        <!--End Of HR Employee Division -->
+
+        <!--HR Employee Type -->
+        <record id="view_employee_type_form" model="ir.ui.view">
+            <field name="name">view.employee.type.form</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipe Karyawan">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Bulanan" required="1"/></h1>
+                        </div>
+                        <group name="employee_type">
+                            <group string="General Information">
+                                <field name="code" string="Kode" placeholder="Bulanan" required="1"/>
+                                <field name="status_id" string="Status" required="1"/>
+                                <field name="company_id" string="Company" readonly="1"/>
+                                <field name="sequence_id" string="No. Urut" required="0"/>
+                            </group>
+                            <group string="Salary Calculation">
+                                <group>
+                                    <field name="overtime_calc"/>
+                                    <field name="monthly_employee"/>
+                                    <field name="sku_employee"/>
+                                </group>
+                                <group>
+                                    <field name="bhl_employee"/>
+                                    <field name="contract_employee"/>
+                                    <field name="other_employee"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group string="History UMR" coslpan="8" attrs="{'invisible': [('monthly_employee','=',True)]}" groups="c10i_lhm.group_plantation_manager">
+                            <field name="umr_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="umr_month"/>
+                                    <field name="umr_day"/>
+                                    <field name="work_day"/>
+                                    <field name="year"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_type_tree" model="ir.ui.view">
+            <field name="name">view.employee.type.tree</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipe Karyawan">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="status_id"/>
+                    <field name="overtime_calc"/>
+                    <field name="monthly_employee"/>
+                    <field name="sku_employee"/>
+                    <field name="bhl_employee"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_employee_type_filter" model="ir.ui.view">
+            <field name="name">view.employee.type.filter</field>
+            <field name="model">hr.employee.type</field>
+            <field name="arch" type="xml">
+                <search string="Tipe Karyawan" filter_domain="['|',('code','ilike',self),('name','ilike',self)]">
+                    <field name="name" string="Tipe Karyawan"/>
+                    <field name="status_id" string="Status Karyawan"/>
+                    <separator/>
+                    <filter name="overtime" string="Overtime" domain="[('overtime_calc','=',True)]"/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status Karyawan" domain="[]" context="{'group_by':'status_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_employee_type_lhm" model="ir.actions.act_window">
+            <field name="name">Tipe Karyawan</field>
+            <field name="res_model">hr.employee.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_employee_type_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Tipe Karyawan.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_employee_type_lhm_config" name="Tipe Karyawan" action="action_employee_type_lhm" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="15"/>
+        <!--End Of HR Employee Type -->
+
+        <!--HR Employee Status -->
+        <record id="view_employee_status_form" model="ir.ui.view">
+            <field name="name">view.employee.status.form</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <form string="Status Karyawan">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Staff" required="1"/></h1>
+                        </div>
+                        <group name="employee_type">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_status_tree" model="ir.ui.view">
+            <field name="name">view.employee.status.tree</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <tree string="Status Karyawan">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_employee_status_filter" model="ir.ui.view">
+            <field name="name">view.employee.status.filter</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <search string="Status Karyawan">
+                    <field name="name" string="Tipe Status" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_employee_status_lhm" model="ir.actions.act_window">
+            <field name="name">Status Karyawan</field>
+            <field name="res_model">hr.employee.status</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_employee_status_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Status Karyawan.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_employee_status_lhm_config" action="action_employee_status_lhm" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="40"/>
+        <!--End Of HR Employee Status -->
+
+        <!-- Kemandoran Form -->
+        <record id="view_hr_foreman_form" model="ir.ui.view">
+            <field name="name">view.hr.foreman.form</field>
+            <field name="model">hr.foreman</field>
+            <field name="arch" type="xml">
+                <form string="Kemandoran">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Teknik Transport" required="1"/></h1>
+                        </div>
+                        <group name="foreman_information">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                                <field name="afdeling_id" attrs="{'readonly': [('division_id','!=',False)]}"/>
+                                <field name="foreman_id_1" domain="[('mandor','=',True)]" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}"/>
+                                <field name="foreman_id" domain="[('mandor','=',True)]" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}"/>
+                                <field name="admin_id_1" domain="[('kerani','=',True)]" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}"/>
+                                <field name="admin_id" domain="[('kerani','=',True)]" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}"/>
+                                <field name="user_input_id"/>
+                            </group>
+                            <group>
+                                <field name="department_id" required="0"/>
+                                <field name="division_id" attrs="{'readonly': [('afdeling_id','!=',False)]}"/>
+                                <field name="nik_mandor_1" readonly="1"/>
+                                <field name="nik_mandor" readonly="1"/>
+                                <field name="nik_kerani_1" readonly="1"/>
+                                <field name="nik_kerani" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="daftar_karyawan" string="Daftar Karyawan">
+                                <field name="employee_ids" nolabel="1" readonly="0" context="{'form_view_ref':'c10i_lhm.view_karyawan_form'}">
+                                    <tree edit="false" create="false">
+                                        <field name="name"/>
+                                        <field name="no_induk"/>
+                                        <field name="department_id"/>
+                                        <field name="sub_department_id"/>
+                                        <field name="job_id"/>
+                                        <field name="afdeling_id"/>
+                                        <field name="division_id"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_foreman_tree" model="ir.ui.view">
+            <field name="name">view.hr.foreman.tree</field>
+            <field name="model">hr.foreman</field>
+            <field name="arch" type="xml">
+                <tree string="Kemandoran">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="foreman_id_1"/>
+                    <field name="nik_mandor_1" invisible="1"/>
+                    <field name="foreman_id"/>
+                    <field name="nik_mandor" invisible="1"/>
+                    <field name="admin_id"/>
+                    <field name="nik_kerani" invisible="1"/>
+                    <field name="afdeling_id"/>
+                    <field name="department_id"/>
+                    <field name="division_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_foreman_filter" model="ir.ui.view">
+            <field name="name">view.hr.foreman.filter</field>
+            <field name="model">hr.foreman</field>
+            <field name="arch" type="xml">
+                <search string="Kemandoran">
+                    <field name="name" string="Kemandoran" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <field name="foreman_id_1" string="Mandor 1" filter_domain="['|',('nik_mandor_1','ilike',self),('foreman_id_1','ilike',self)]"/>
+                    <field name="foreman_id" string="Mandor" filter_domain="['|',('nik_mandor','ilike',self),('foreman_id','ilike',self)]"/>
+                    <field name="admin_id" string="Kerani" filter_domain="['|',('nik_kerani','ilike',self),('admin_id','ilike',self)]"/>
+                    <field name="afdeling_id"/>
+                    <field name="department_id"/>
+                    <field name="division_id"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Mandor 1" domain="[]" context="{'group_by':'foreman_id_1'}"/>
+                        <filter string="Mandor" domain="[]" context="{'group_by':'foreman_id'}"/>
+                        <filter string="Kerani" domain="[]" context="{'group_by':'admin_id'}"/>
+                        <filter string="Afdeling" domain="[]" context="{'group_by':'afdeling_id'}"/>
+                        <filter string="Department" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter string="Divisi" domain="[]" context="{'group_by':'division_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hr_foreman_lhm" model="ir.actions.act_window">
+            <field name="name">Kemandoran</field>
+            <field name="res_model">hr.foreman</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_foreman_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Kemandoran.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_hr_foreman_lhm" name="Kemandoran" action="action_hr_foreman_lhm" parent="menu_lhm_master" groups="group_plantation_supervisor" sequence="20"/>
+        <!--End Of LHM Kemandoran -->
+
+        <!--HR Attendance Type -->
+        <record id="view_attendance_type_form" model="ir.ui.view">
+            <field name="name">view.attendance.type.form</field>
+            <field name="model">hr.attendance.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipe Absensi">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_button_box" name="button_box"/>
+                        <div class="oe_title">
+                            <label string="Nama" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Cuti Tahunan" required="1"/></h1>
+                        </div>
+                        <group name="attendance_type">
+                            <group>
+                                <field name="code" string="Kode" required="1"/>
+                                <field name="type_hk"/>
+                                <field name="special"/>
+                                <field name="type" attrs="{'invisible': [('special','!=',True)]}"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_attendance_type_tree" model="ir.ui.view">
+            <field name="name">view.attendance.type.tree</field>
+            <field name="model">hr.attendance.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipe Absensi">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="type_hk"/>
+                    <field name="special"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_attendance_type_filter" model="ir.ui.view">
+            <field name="name">view.attendance.type.filter</field>
+            <field name="model">hr.attendance.type</field>
+            <field name="arch" type="xml">
+                <search string="Tipe Absensi">
+                    <field name="name" string="Tipe Absensi" filter_domain="['|',('code','ilike',self),('name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                    <filter name="special" string="Spesial" domain="[('special','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hr_attendance_type" model="ir.actions.act_window">
+            <field name="name">Absensi</field>
+            <field name="res_model">hr.attendance.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_attendance_type_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Klik untuk menambahkan Tipe Absensi.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_hr_attendance_type_config" action="action_hr_attendance_type" parent="menu_lhm_karyawan" groups="base.group_no_one,group_plantation_manager" sequence="20"/>
+        <!--End Of HR Attendance Type -->
+
+        <!-- Daftar Transfer Kemandoran-->
+        <record id="view_hr_employee_foreman_transfer_tree" model="ir.ui.view">
+            <field name="name">view.hr.employee.foreman.transfer.tree</field>
+            <field name="model">hr.employee.foreman.transfer</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Transfer Kemandoran" colors="blue:type=='in';red:type=='out';">
+                    <field name="name" invisible="1"/>
+                    <field name="date" invisible="0"/>
+                    <field name="lhm_id" invisible="1"/>
+                    <field name="lhm_line_id" invisible="1"/>
+                    <field name="other_lhm_id" invisible="1"/>
+                    <field name="other_lhm_line_id" invisible="1"/>
+                    <field name="employee_id"/>
+                    <field name="kemandoran_from_id"/>
+                    <field name="kemandoran_to_id"/>
+                    <field name="type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <!-- End Of Daftar Transfer Kemandoran-->
+    </data>
+</odoo>
